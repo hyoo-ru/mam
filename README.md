@@ -14,8 +14,8 @@ Simple PMS project
 # Serving
 
 1. Execute `npm start serve` to serve this repo.
-2. Open http://localhost/mol/ to view all mol(ecule)s.
-2. Open http://localhost/mol/app/todo/ to view simple todo application.
+2. Open `http://localhost/mol/` to view all mol(ecule)s.
+2. Open `http://localhost/mol/app/todo/` to view simple todo application.
 
 # Custom project
 
@@ -27,4 +27,4 @@ Simple PMS project
 6. Build your application. `npm start build my/app` in example.
 7. Create application web entry point. `my/app/index.html` with content `<script src="-mix/index.env=web.stage=test.js"></script>` in example.
 8. Start static web server. `npm start serve` in example.
-9. Open your application. http://localhost/my/app/ in example.
+9. Open your application. `http://localhost/my/app/` in example.
