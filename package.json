@@ -1,0 +1,32 @@
+{
+  "name": "pms-stub",
+  "version": "1.0.0",
+  "description": "Simple PMS project",
+  "main": "index.js",
+  "dependencies": {
+    "concat-with-sourcemaps": "^1.0.4",
+    "cssnext": "^1.8.4",
+    "npm": "^3.7.1",
+    "postcss": "^5.0.14"
+  },
+  "devDependencies": {
+	  "pms" : "*"
+  },
+  "scripts": {
+    "start": "pms"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nin-jin/pms-stub.git"
+  },
+  "keywords": [
+    "pms",
+    "stub"
+  ],
+  "author": "jin",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/nin-jin/pms-stub/issues"
+  },
+  "homepage": "https://github.com/nin-jin/pms-stub#readme"
+}
