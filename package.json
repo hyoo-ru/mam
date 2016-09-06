@@ -5,7 +5,7 @@
   "dependencies": {},
   "scripts": {
     "pms": "pms",
-    "start": "npm update && pms mol/build && node ./mol/build/-/node.js"
+    "start": "git submodule update --init --recursive --remote && npm install && pms mol/build && node ./mol/build/-/node.js"
   },
   "repository": {
     "type": "git",
