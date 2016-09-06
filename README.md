@@ -4,18 +4,20 @@ Simple PMS project
 # Installation
 
 1. Checkout this repo
-2. Execute `npm install` to install builder
+2. Checkout https://github.com/eigenmethod/mol to `mol` directory
+3. Checkout https://github.com/nin-jin/pms-jin to `jin` directory
+4. Checkout https://github.com/nin-jin/pms-node to `node` directory
 
-# Building
+# Develeper server
 
-1. Execute `npm start build mol` to download [mol](https://github.com/nin-jin/mol) project and build them.
-2. Or execute `npm start build mol/app/todo` to build only todo demo application.
+1. Execute `npm start` to start dev server with auto building.
+2. Open `http://localhost/mol/` to view all demos.
+3. Open `http://localhost/mol/app/todomvc/` to view simple ToDoMVC application.
 
-# Serving
+# Manual building
 
-1. Execute `npm start serve` to serve this repo.
-2. Open `http://localhost/mol/` to view all mol(ecule)s.
-2. Open `http://localhost/mol/app/todo/` to view simple todo application.
+1. Execute `npm start mol` to build all demos application.
+2. Execute `npm start mol/app/todomvc` to build ToDoMVC application.
 
 # Custom project
 
@@ -24,7 +26,6 @@ Simple PMS project
 3. Create module source file. `my/alert/alert.ts` with content `var $my_alert = msg => alert( msg )` in example.
 4. Create dir for your application module. `my/app` in example.
 5. Create application source file. `my/app/app.ts` with content `$my_alert( 'Hello, World!' )` in example.
-6. Build your application. `npm start build my/app` in example.
-7. Create application web entry point. `my/app/index.html` with content `<script src="-mix/index.env=web.stage=test.js"></script>` in example.
-8. Start static web server. `npm start serve` in example.
-9. Open your application. `http://localhost/my/app/` in example.
+6. Create application web entry point. `my/app/index.html` with content `<script src="-/web.js"></script><script src="-/web.test.js"></script>` in example.
+7. Start developer server: `npm start`
+8. Open your application. `http://localhost/my/app/` in example.

@@ -1,19 +1,11 @@
 {
   "name": "pms-stub",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Simple PMS project",
-  "main": "index.js",
-  "dependencies": {
-    "concat-with-sourcemaps": "^1.0.4",
-    "cssnext": "^1.8.4",
-    "npm": "^3.7.1",
-    "postcss": "^5.0.14"
-  },
-  "devDependencies": {
-	  "pms" : "*"
-  },
+  "dependencies": {},
   "scripts": {
-    "start": "pms"
+    "pms": "pms",
+    "start": "npm install && pms mol/build && node ./mol/build/-/node.js"
   },
   "repository": {
     "type": "git",
@@ -28,5 +20,15 @@
   "bugs": {
     "url": "https://github.com/nin-jin/pms-stub/issues"
   },
-  "homepage": "https://github.com/nin-jin/pms-stub#readme"
+  "homepage": "https://github.com/nin-jin/pms-stub#readme",
+  "devDependencies": {
+    "body-parser": "^1.15.2",
+    "compression": "^1.6.2",
+    "concat-with-sourcemaps": "^1.0.4",
+    "cssnext": "^1.8.4",
+    "express": "^4.14.0",
+    "pms": "^5.0.1",
+    "postcss": "^5.1.2",
+    "typescript": "^2.0.2"
+  }
 }
