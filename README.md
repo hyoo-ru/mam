@@ -1,5 +1,5 @@
-# pms-stub
-Simple PMS project
+# pms
+Base PMS project
 
 # Installation
 
@@ -10,7 +10,7 @@ git clone --recursive "https://github.com/nin-jin/pms-stub.git" ./pms && cd pms
 
 # Develeper server
 
-**Install node modules, build dev server and start that (~2m):**
+**Install node modules, build dev server and start that (first ~2m, second ~30s):**
 ```sh
 npm start
 ```
