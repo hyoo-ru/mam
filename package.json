@@ -5,7 +5,7 @@
   "dependencies": {},
   "scripts": {
     "pms": "pms",
-    "start": "npm install && pms mol/build && node ./mol/build/-/node.js"
+    "start": "npm update && pms mol/build && node ./mol/build/-/node.js"
   },
   "repository": {
     "type": "git",
