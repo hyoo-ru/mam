@@ -4,20 +4,17 @@ Simple PMS project
 # Installation
 
 1. Checkout this repo
-2. Checkout https://github.com/eigenmethod/mol to `mol` directory
-3. Checkout https://github.com/nin-jin/pms-jin to `jin` directory
-4. Checkout https://github.com/nin-jin/pms-node to `node` directory
 
 # Develeper server
 
 1. Execute `npm start` to start dev server with auto building.
-2. Open `http://localhost/mol/` to view all demos.
-3. Open `http://localhost/mol/app/todomvc/` to view simple ToDoMVC application.
+2. Open `http://localhost/mol/app/todomvc/` to view simple ToDoMVC application.
+3. Open `http://localhost/mol/` to view all demos.
 
 # Manual building
 
-1. Execute `npm start mol` to build all demos application.
-2. Execute `npm start mol/app/todomvc` to build ToDoMVC application.
+1. Execute `npm start mol/app/todomvc` to build ToDoMVC application.
+2. Execute `npm start mol` to build all demos application.
 
 # Custom project
 
