@@ -5,7 +5,7 @@ Simple PMS project
 
 **Checkout this repo (~40s):**
 ```sh
-git.exe clone --recursive "https://github.com/nin-jin/pms-stub.git" ./pms && cd pms
+git clone --recursive "https://github.com/nin-jin/pms-stub.git" ./pms && cd pms
 ```
 
 # Develeper server
