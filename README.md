@@ -3,20 +3,27 @@ Simple PMS project
 
 # Installation
 
-1. Checkout this repo
+**Checkout this repo (~40s):**
+```sh
+git.exe clone --recursive "https://github.com/nin-jin/pms-stub.git" ./pms
+```
 
 # Develeper server
 
-1. Execute `npm start` to start dev server with auto building.
-2. Open `http://localhost/mol/app/todomvc/` to view simple ToDoMVC application.
-3. Open `http://localhost/mol/` to view all demos.
+**Install node modules, build dev server and start that (~2m):**
+```sh
+npm start
+```
+
+* **Open simple ToDoMVC application:** http://localhost/mol/app/todomvc/
+* **Open $mol demos application:** http://localhost/mol/
 
 # Manual building
 
-1. Execute `npm start mol/app/todomvc` to build ToDoMVC application.
-2. Execute `npm start mol` to build all demos application.
+* Execute `npm start mol/app/todomvc` to build ToDoMVC application.
+* Execute `npm start mol` to build $mol demos application.
 
-# Custom project
+# Custom package
 
 1. Create dir for your namespace. `my` in example.
 2. Create dir for your module. `my/alert` in example.
