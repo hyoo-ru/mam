@@ -1,7 +1,9 @@
 {
 	"compilerOptions": {
 		"target": "ES5",
-		"experimentalDecorators": true
+		"experimentalDecorators": true,
+		"noImplicitAny": true,
+		"allowJS" : true
 	},
 	"filesGlob": [
 		"**/*.ts"
