@@ -3,25 +3,25 @@ Base PMS project
 
 # Installation
 
-**Checkout this repo (~40s):**
+**Checkout this repo (~2s):**
 ```sh
-git clone --recursive "https://github.com/nin-jin/pms-stub.git" ./pms && cd pms
+git clone https://github.com/nin-jin/pms.git ./pms && cd pms
 ```
 
 # Develeper server
 
-**Install node modules, build dev server and start that (first ~2m, second ~30s):**
+**Install node modules, build dev server and start that (first ~1m, second ~10s):**
 ```sh
 npm start
 ```
 
-* **Open simple ToDoMVC application:** http://localhost/mol/app/todomvc/
-* **Open $mol demos application:** http://localhost/mol/
+* **Open simple ToDoMVC application (first ~4s, second ~.3s):** http://localhost/mol/app/todomvc/
+* **Open $mol demos application (first ~11s, second ~.5s):** http://localhost/mol/
 
 # Manual building
 
-* Execute `npm start mol/app/todomvc` to build ToDoMVC application.
-* Execute `npm start mol` to build $mol demos application.
+* Execute `npm start mol/app/todomvc` to build ToDoMVC application (~13s).
+* Execute `npm start mol` to build $mol demos application (~15s).
 
 # Custom package
 
