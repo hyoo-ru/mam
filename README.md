@@ -15,8 +15,17 @@ git clone https://github.com/nin-jin/pms.git ./pms && cd pms
 npm start
 ```
 
-* **Open simple ToDoMVC application (first ~4s, second ~.3s):** http://localhost/mol/app/todomvc/
-* **Open $mol demos application (first ~11s, second ~.5s):** http://localhost/mol/
+**Open simple ToDoMVC application (first ~4s, second ~0.3s):**
+
+```sh
+start http://localhost/mol/app/todomvc/
+```
+
+**Open $mol demos application (first ~11s, second ~0.5s):**
+
+```sh
+start http://localhost/mol/
+```
 
 # Manual building
 
