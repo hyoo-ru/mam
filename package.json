@@ -4,9 +4,9 @@
   "description": "Simple PMS project",
   "dependencies": {},
   "scripts": {
-    "pms": "pms",
     "prestart": "npm install && pms mol/build" ,
-    "start": "node ./mol/build/-/node.js"
+    "start": "node ./mol/build/-/node.js",
+    "pms": "pms"
   },
   "repository": {
     "type": "git",
