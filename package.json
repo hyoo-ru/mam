@@ -4,7 +4,7 @@
   "description": "Simple PMS project",
   "dependencies": {},
   "scripts": {
-    "prestart": "npm install && pms mol/build" ,
+    "prestart": "npm install && pms mol/build",
     "start": "node ./mol/build/-/node.js",
     "pms": "pms"
   },
@@ -31,6 +31,7 @@
     "portastic": "^1.0.1",
     "postcss": "^5.1.2",
     "postcss-cssnext": "^2.8.0",
+    "source-map-support": "^0.4.2",
     "typescript": "^2.0.2"
   }
 }
