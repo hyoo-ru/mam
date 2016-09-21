@@ -6,7 +6,6 @@
   "scripts": {
     "prestart": "pms mol/build",
     "start": "node ./mol/build/-/node.test.js",
-    "test": "npm start mol",
     "pms": "pms"
   },
   "repository": {
