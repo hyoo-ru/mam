@@ -15,7 +15,7 @@ git clone https://github.com/nin-jin/pms.git ./pms && cd pms
 npm install
 ```
 
-**Build dev server and start that (first ~15s, second ~10s):**
+**Build dev server from scources and start that (first ~15s, second ~10s):**
 ```sh
 npm start
 ```
