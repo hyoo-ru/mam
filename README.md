@@ -10,7 +10,12 @@ git clone https://github.com/nin-jin/pms.git ./pms && cd pms
 
 # Develeper server
 
-**Install node modules, build dev server and start that (first ~1m, second ~10s):**
+**Install node modules**
+```sh
+npm install
+```
+
+**Build dev server and start that (first ~1m, second ~10s):**
 ```sh
 npm start
 ```
