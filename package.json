@@ -21,7 +21,9 @@
     "url": "https://github.com/nin-jin/pms-stub/issues"
   },
   "homepage": "https://github.com/nin-jin/pms-stub#readme",
-  "engines" : { "node" : ">=6.0.0" },
+  "engines": {
+    "node": ">=6.0.0"
+  },
   "devDependencies": {
     "body-parser": "^1.15.2",
     "compression": "^1.6.2",
@@ -31,6 +33,7 @@
     "portastic": "^1.0.1",
     "postcss": "^5.1.2",
     "postcss-cssnext": "^2.8.0",
+    "serve-index": "^1.8.0",
     "source-map-support": "^0.4.2",
     "typescript": "^2.0.2"
   }
