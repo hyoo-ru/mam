@@ -4,6 +4,7 @@
   "description": "Simple PMS project",
   "dependencies": {},
   "scripts": {
+    "postinstall": "echo Type 'npm start' to start dev server or 'npm start {relative/path}' to build some package.",
     "prestart": "pms mol/build",
     "start": "node ./mol/build/-/node.test.js",
     "pms": "pms"
