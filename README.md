@@ -1,11 +1,12 @@
-# pms
-Base PMS project
+# MAM
+Mam owns Agnostic Modules.
+This is base MAM project.
 
 # Installation
 
 **Checkout this repo (~2s):**
 ```sh
-git clone https://github.com/nin-jin/pms.git ./pms && cd pms
+git clone https://github.com/eigenmethod/mam.git ./mam && cd mam
 ```
 
 # Develeper server
