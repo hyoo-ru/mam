@@ -1,6 +1,6 @@
 # MAM
-Mam owns Agnostic Modules.
-This is base MAM project.
+**M**am owns **A**gnostic **M**odules.
+This is base **MAM** project.
 
 # Installation
 
