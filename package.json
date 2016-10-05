@@ -4,7 +4,7 @@
   "scripts": {
     "postinstall": "echo Type 'npm start' to start dev server or 'npm start {relative/path}' to build some package.",
     "prestart": "mam mol/build",
-    "start": "node ./mol/build/-/node.test.js",
+    "start": "node ./mol/build/-/node.js",
     "mam": "mam"
   },
   "repository": {
