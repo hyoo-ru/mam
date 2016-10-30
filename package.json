@@ -4,7 +4,7 @@
   "scripts": {
     "postinstall": "echo Type 'npm start' to start dev server or 'npm start {relative/path}' to build some package.",
     "prestart": "mam mol/build",
-    "start": "node ./mol/build/-/node.js",
+    "start": "node ./mol/build/-/node.test.js",
     "mam": "mam"
   },
   "repository": {
@@ -28,6 +28,7 @@
     "compression": "^1.6.2",
     "concat-with-sourcemaps": "^1.0.4",
     "express": "^4.14.0",
+    "jsdom": "^9.8.3",
     "mam": "^1.0.0",
     "portastic": "^1.0.1",
     "postcss": "^5.1.2",
