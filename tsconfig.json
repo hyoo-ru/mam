@@ -1,10 +1,10 @@
 {
-    "compilerOptions": {
-        "target": "ES5",
-        "experimentalDecorators": true,
-        "noImplicitAny": true,
-        "allowJs" : true
-    },
+	"compilerOptions": {
+		"target": "ES5",
+		"experimentalDecorators": true,
+		"noImplicitAny": true,
+		"allowJs" : true
+	},
 	"include": [
 		"**/*.ts"
 	],
@@ -12,8 +12,8 @@
 		"node_modules",
 		"**/-/*"
 	],
-    "atom": {
-        "rewriteTsconfig": false
-    },
-    "compileOnSave": false
+	"atom": {
+		"rewriteTsconfig": false
+	},
+	"compileOnSave": false
 }
