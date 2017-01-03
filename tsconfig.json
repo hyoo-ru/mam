@@ -1,6 +1,8 @@
 {
 	"compilerOptions": {
 		"target": "ES5",
+		"jsx": "react",
+		"jsxFactory": "$.$mol_dom_jsx",
 		"experimentalDecorators": true,
 		"noImplicitAny": true,
 		"removeComments" : true ,
