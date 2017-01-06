@@ -5,6 +5,7 @@
 		"jsxFactory": "$mol_dom_jsx",
 		"experimentalDecorators": true,
 		"noImplicitAny": true,
+		"suppressImplicitAnyIndexErrors": true,
 		"removeComments" : true ,
 		"sourceMap" : true ,
 		"inlineSources" : true ,
