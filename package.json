@@ -1,5 +1,5 @@
 {
-  "description": "Simple PMS project",
+  "description": "Simple MAM project",
   "dependencies": {},
   "scripts": {
     "postinstall": "echo Type 'npm start' to start dev server or 'npm start {relative/path}' to build some package.",
