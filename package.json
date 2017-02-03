@@ -23,6 +23,10 @@
   "engines": {
     "node": ">=6.0.0"
   },
+  "browserslist": [
+    "> 10%",
+    "last 1 versions"
+  ],
   "devDependencies": {
     "body-parser": "^1.15.2",
     "compression": "^1.6.2",
