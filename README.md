@@ -1,6 +1,5 @@
-# MAM [![david-dm](https://david-dm.org/eigenmethod/mam/dev-status.svg)](https://david-dm.org/eigenmethod/mam?type=dev)
+# MAM [![david-dm](https://david-dm.org/eigenmethod/mam/dev-status.svg)](https://david-dm.org/eigenmethod/mam?type=dev) [![Greenkeeper badge](https://badges.greenkeeper.io/eigenmethod/mam.svg)](https://greenkeeper.io/)
 
-[![Greenkeeper badge](https://badges.greenkeeper.io/eigenmethod/mam.svg)](https://greenkeeper.io/)
 **M**am owns **A**gnostic **M**odules.
 This is base **MAM** project.
 
