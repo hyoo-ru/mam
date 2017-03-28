@@ -90,6 +90,8 @@
         </codeStyleSettings>
         <codeStyleSettings language="TypeScript">
           <option name="LINE_COMMENT_ADD_SPACE" value="false" />
+          <option name="ALIGN_MULTILINE_PARAMETERS" value="false" />
+          <option name="ALIGN_MULTILINE_FOR" value="false" />
           <option name="SPACE_BEFORE_COMMA" value="true" />
           <option name="SPACE_BEFORE_SEMICOLON" value="true" />
           <option name="SPACE_WITHIN_METHOD_CALL_PARENTHESES" value="true" />
