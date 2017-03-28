@@ -1,4 +1,5 @@
-# MAM
+# MAM [![david-dm](https://david-dm.org/eigenmethod/mam/dev-status.svg)](https://david-dm.org/eigenmethod/mam?type=dev)
+
 **M**am owns **A**gnostic **M**odules.
 This is base **MAM** project.
 
