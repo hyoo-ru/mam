@@ -34,12 +34,12 @@
     "express": "^4.14.0",
     "jsdom": "^9.8.3",
     "mam": "^1.5.0",
+    "pdfjs-dist": "^1.8.374",
     "portastic": "^1.0.1",
     "postcss": "^5.1.2",
     "postcss-cssnext": "^2.8.0",
     "serve-index": "^1.8.0",
     "source-map-support": "^0.4.2",
-    "typescript": "^2.0.2",
-    "pdfjs-dist": "^1.8.374"
+    "typescript": "^2.0.2"
   }
 }
