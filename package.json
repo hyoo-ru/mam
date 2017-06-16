@@ -28,18 +28,18 @@
     "last 1 versions"
   ],
   "devDependencies": {
-    "body-parser": "^1.15.2",
+    "body-parser": "^1.17.2",
     "compression": "^1.6.2",
     "concat-with-sourcemaps": "^1.0.4",
-    "express": "^4.14.0",
+    "express": "^4.15.3",
     "jsdom": "^9.8.3",
     "mam": "^1.5.0",
-    "pdfjs-dist": "^1.8.374",
+    "pdfjs-dist": "^1.8.448",
     "portastic": "^1.0.1",
     "postcss": "^5.1.2",
-    "postcss-cssnext": "^2.8.0",
-    "serve-index": "^1.8.0",
+    "postcss-cssnext": "^2.11.0",
+    "serve-index": "^1.9.0",
     "source-map-support": "^0.4.2",
-    "typescript": "^2.0.2"
+    "typescript": "^2.4.0"
   }
 }
