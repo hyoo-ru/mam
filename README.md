@@ -17,7 +17,7 @@ git clone https://github.com/eigenmethod/mam.git ./mam && cd mam
 npm install
 ```
 
-**Build dev server from scources and start that (first ~15s, second ~10s):**
+**Build dev server from sources and start that (first ~15s, second ~10s):**
 ```sh
 npm start
 ```
