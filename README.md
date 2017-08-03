@@ -3,6 +3,15 @@
 **M**am owns **A**gnostic **M**odules.
 This is base **MAM** project.
 
+# Features
+
+* **Agnostic modules.** Module is directory with mixed source files (JS, TS, CSS, JSON, HTML, Tree, images etc).
+* **Automatic dependency tracking.** You don't need import/export - simply use namespaced names in accordance to directory structure, like `$mol_http_resource` or `$jin.time.moment`.
+* **PostCSS support.** Write a cutting age css code.
+* **Development server with automatic bundle building on request**. If you use it then it will be bundled.
+* **Build anyone module as standalone bundle**. You can develope thousand of modules in one project.
+* **Cordova project generation**. Simply add `config.xml` to module and `-cordova` will be generated.
+
 # Installation
 
 **Checkout this repo (~2s):**
