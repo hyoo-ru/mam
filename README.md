@@ -6,7 +6,7 @@ This is base **MAM** project.
 # Features
 
 * **Agnostic modules.** Module is directory with mixed source files (JS, TS, CSS, JSON, HTML, Tree, images etc).
-* **Automatic dependency tracking.** You don't need import/export - simply use namespaced names in accordance to directory structure, like `$mol_http_resource` / `$jin.time.moment` in *.JAM.JS/*.TS or `--mol_skin_light` / `[mol_page_title]` / `.my-header-avatar` in css.
+* **Automatic dependency tracking.** You don't need import/export - simply use namespaced names in accordance to directory structure, like `$mol_http_resource` / `$jin.time.moment` in `*.JAM.JS`/`*.TS` or `--mol_skin_light` / `[mol_page_title]` / `.my-header-avatar` in `*.CSS`.
 * **PostCSS support.** Write a cutting age css code.
 * **Development server with automatic bundle building on request**. If you use it then it will be bundled.
 * **Build anyone module as standalone bundle**. You can develope thousand of modules in one project.
