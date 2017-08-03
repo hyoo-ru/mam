@@ -50,6 +50,8 @@ start http://localhost/mol/
 
 # Custom package
 
+[Video tutorial](https://www.youtube.com/watch?v=PyK3if5sgN0)
+
 1. Create dir for your namespace. `my` in example.
 2. Create dir for your module. `my/alert` in example.
 3. Create module source file. `my/alert/alert.ts` with content `const $my_alert = msg => alert( msg )` in example.
