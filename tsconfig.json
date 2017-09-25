@@ -6,6 +6,8 @@
 		"experimentalDecorators": true,
 		"noImplicitAny": true,
 		"suppressImplicitAnyIndexErrors": true,
+		"alwaysStrict": true,
+		"allowUnusedLabels": true,
 		"removeComments" : true ,
 		"sourceMap" : true ,
 		"inlineSources" : true ,
