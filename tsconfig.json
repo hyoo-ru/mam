@@ -16,7 +16,8 @@
 		"declaration" : true
 	},
 	"include": [
-		"**/*.ts"
+		"**/*.ts",
+		"**/*.tsx"
 	],
 	"exclude": [
 		"node_modules",
