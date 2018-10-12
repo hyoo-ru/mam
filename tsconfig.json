@@ -23,6 +23,7 @@
 		"node_modules",
 		"**/-/*"
 	],
+	"types" : ["node"],
 	"atom": {
 		"rewriteTsconfig": false
 	},
