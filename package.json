@@ -5,8 +5,7 @@
     "postinstall": "echo Type 'npm start' to start dev server or 'npm start {relative/path}+' to build some packages.",
     "prestart": "mam mol/build",
     "start": "node ./mol/build/-/node.test.js",
-	"mam": "mam",
-	"lh": "lighthouse-ci"
+    "mam": "mam"
   },
   "repository": {
     "type": "git",
@@ -36,7 +35,6 @@
     "concat-with-sourcemaps": "^1.1.0",
     "express": "^4.16.4",
     "jsdom": "^9.8.3",
-    "lighthouse-ci": "git+https://github.com/ebidel/lighthouse-ci.git",
     "mam": "^1.5.0",
     "pdfjs-dist": "^1.10.100",
     "portastic": "^1.0.1",
