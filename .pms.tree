@@ -3,3 +3,4 @@ pack node git \https://github.com/nin-jin/pms-node.git
 pack mol git \https://github.com/eigenmethod/mol.git
 pack lib git \https://github.com/eigenmethod/mam-lib.git
 pack saprun git \https://bitbucket.org/jin-team/saprun.git
+pack piterjs git \https://github.com/piterjs/piterjs.git
