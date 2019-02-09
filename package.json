@@ -27,22 +27,22 @@
     "last 1 versions"
   ],
   "devDependencies": {
-    "@types/node": "^10.11.7",
-    "@types/webassembly-js-api": "^0.0.2",
-    "body-parser": "^1.18.3",
-    "chokidar": "^2.0.3",
-    "compression": "^1.7.3",
-    "concat-with-sourcemaps": "^1.1.0",
-    "express": "^4.16.4",
-    "jsdom": "^9.8.3",
-    "mam": "^1.5.0",
-    "pdfjs-dist": "^1.10.100",
-    "portastic": "^1.0.1",
+    "@types/node": "*",
+    "@types/webassembly-js-api": "*",
+    "body-parser": "*",
+    "chokidar": "*",
+    "compression": "*",
+    "concat-with-sourcemaps": "*",
+    "express": "*",
+    "jsdom": "*",
+    "mam": "*",
+    "pdfjs-dist": "*",
+    "portastic": "*",
     "postcss": "^5.2.18",
     "postcss-color-function": "^4.0.1",
     "postcss-custom-properties": "^7.0.0",
-    "serve-index": "^1.9.1",
-    "source-map-support": "^0.4.18",
-    "typescript": "^3.1.6"
+    "serve-index": "*",
+    "source-map-support": "*",
+    "typescript": "*"
   }
 }
