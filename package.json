@@ -1,6 +1,5 @@
 {
   "description": "Simple MAM project",
-  "dependencies": {},
   "scripts": {
     "postinstall": "echo Type 'npm start' to start dev server or 'npm start {relative/path}+' to build some packages.",
     "prestart": "mam mol/build",
@@ -29,6 +28,7 @@
   ],
   "devDependencies": {
     "@types/node": "^10.11.7",
+    "@types/webassembly-js-api": "^0.0.2",
     "body-parser": "^1.18.3",
     "chokidar": "^2.0.3",
     "compression": "^1.7.3",
