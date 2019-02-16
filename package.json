@@ -27,7 +27,7 @@
     "last 1 versions"
   ],
   "devDependencies": {
-    "@types/node": "*",
+    "@types/node": "9.*.*",
     "@types/webassembly-js-api": "*",
     "body-parser": "*",
     "chokidar": "*",
