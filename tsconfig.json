@@ -14,7 +14,7 @@
 		"sourceMap" : true ,
 		"inlineSources" : true ,
 		"declaration" : true,
-		"types" : ["node", "webassembly-js-api"]
+		"types" : ["node"]
 	},
 	"include": [
 		"**/*.ts",

@@ -28,7 +28,6 @@
   ],
   "devDependencies": {
     "@types/node": "9.*.*",
-    "@types/webassembly-js-api": "*",
     "body-parser": "*",
     "chokidar": "*",
     "compression": "*",
