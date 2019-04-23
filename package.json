@@ -41,6 +41,7 @@
     "postcss-color-function": "^4.0.1",
     "postcss-custom-properties": "^7.0.0",
     "serve-index": "*",
+    "source-map": "^0.7.0",
     "source-map-support": "*",
     "typescript": "*"
   }
