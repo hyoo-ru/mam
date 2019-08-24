@@ -20,7 +20,7 @@ This is base **MAM** project.
 git clone https://github.com/eigenmethod/mam.git ./mam && cd mam
 ```
 
-# Develepment server
+# Development server
 
 **Install node modules (~1m)**
 
