@@ -20,6 +20,17 @@ This is base **MAM** project.
 git clone https://github.com/eigenmethod/mam.git ./mam && cd mam
 ```
 
+## Linux limits
+
+$mol_build and typescript uses inotify by default on Linux to monitor directories for changes. It's not uncommon to encounter a system limit on the number of files you can monitor.
+
+/etc/sysctl.d/20-watch.conf
+
+```
+fs.inotify.max_user_watches=524288
+fs.file-max=500000
+```
+
 # Development server
 
 **Install node modules (~1m)**
