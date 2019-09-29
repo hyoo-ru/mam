@@ -26,22 +26,8 @@
     "> 10%",
     "last 1 versions"
   ],
-  "devDependencies": {
-    "@types/node": "9.*.*",
-    "body-parser": "*",
-    "chokidar": "*",
-    "compression": "*",
-    "concat-with-sourcemaps": "*",
-    "express": "*",
-    "jsdom": "*",
-    "mam": "*",
-    "pdfjs-dist": "*",
-    "portastic": "*",
-    "postcss": "^5.2.18",
-    "postcss-color-function": "^4.0.1",
-    "postcss-custom-properties": "^7.0.0",
-    "serve-index": "*",
-    "source-map-support": "*",
-    "typescript": "*"
+  "dependencies": {
+    "@types/node": "^12.7.7",
+    "mam": "*"
   }
 }

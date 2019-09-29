@@ -2,18 +2,19 @@
 	"compilerOptions": {
 		"target": "ES2017",
 		"jsx": "react",
-		"jsxFactory": "$mol_dom_jsx",
 		"module": "commonjs",
 		"moduleResolution": "node",
 		"experimentalDecorators": true,
 		"noImplicitAny": true,
 		"suppressImplicitAnyIndexErrors": true,
 		"alwaysStrict": true,
+		"strict": false,
 		"allowUnusedLabels": true,
-		"removeComments" : true ,
+		"removeComments" : false ,
 		"sourceMap" : true ,
 		"inlineSources" : true ,
 		"declaration" : true,
+		"skipLibCheck" : true,
 		"types" : ["node"]
 	},
 	"include": [
