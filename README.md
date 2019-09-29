@@ -20,7 +20,18 @@ This is base **MAM** project.
 git clone https://github.com/eigenmethod/mam.git ./mam && cd mam
 ```
 
-# Develepment server
+## Linux limits
+
+$mol_build and typescript uses inotify by default on Linux to monitor directories for changes. It's not uncommon to encounter a system limit on the number of files you can monitor.
+
+/etc/sysctl.d/20-watch.conf
+
+```
+fs.inotify.max_user_watches=524288
+fs.file-max=500000
+```
+
+# Development server
 
 **Install node modules (~1m)**
 
@@ -37,13 +48,13 @@ npm start
 **Open simple $mol based ToDoMVC application (first ~4s, second ~0.3s):**
 
 ```sh
-start http://localhost:8080/mol/app/todomvc/
+start http://localhost:9080/mol/app/todomvc/
 ```
 
 **Open $mol demos application (first ~11s, second ~0.5s):**
 
 ```sh
-start http://localhost:8080/mol/
+start http://localhost:9080/mol/
 ```
 
 # Manual building
@@ -63,4 +74,4 @@ start http://localhost:8080/mol/
 5. Create application source file. `my/app/app.ts` with content `$my_alert( 'Hello, World!' )` in example.
 6. Create application web entry point. `my/app/index.html` with content `<script src="-/web.js"></script><script src="-/web.test.js"></script>` in example.
 7. Start development server: `npm start`
-8. Open your application. `http://localhost:8080/my/app/` in example.
+8. Open your application. `http://localhost:9080/my/app/` in example.
