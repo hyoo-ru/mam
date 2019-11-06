@@ -75,3 +75,7 @@ start http://localhost:9080/mol/
 6. Create application web entry point. `my/app/index.html` with content `<script src="-/web.js"></script><script src="-/web.test.js"></script>` in example.
 7. Start development server: `npm start`
 8. Open your application. `http://localhost:9080/my/app/` in example.
+
+# MAM based projects
+
+- [eigenmethod/mol](https://github.com/eigenmethod/mol)
