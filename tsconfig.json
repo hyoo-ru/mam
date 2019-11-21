@@ -4,6 +4,7 @@
 		"jsx": "react",
 		"module": "commonjs",
 		"moduleResolution": "node",
+		"noEmitHelpers": true,
 		"experimentalDecorators": true,
 		"noImplicitAny": true,
 		"suppressImplicitAnyIndexErrors": true,
