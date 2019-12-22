@@ -1,8 +1,8 @@
 namespace $ {
 
-	export class $mam_source_js extends $mam_source {
+	export class $mam_load_ts extends $mam_load {
 
-		suffix = 'js'
+		suffix = 'ts'
 
 		@ $mol_mem_key
 		deps( source : $mol_file ) {

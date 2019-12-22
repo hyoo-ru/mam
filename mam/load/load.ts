@@ -1,9 +1,14 @@
 namespace $ {
 
-	export class $mam_source_tsx extends $mam_source_ts {
+	export class $mam_load extends $mol_object2 {
 
-		suffix = 'tsx'
+		@ $mol_mem
+		build() {
+			return undefined as any as $mam_build
+		}
 
+		suffix = ''
+		
 		@ $mol_mem_key
 		deps( source : $mol_file ) {
 			// extract dependencies
