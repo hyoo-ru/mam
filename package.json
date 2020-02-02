@@ -1,10 +1,8 @@
 {
   "description": "Simple MAM project",
   "scripts": {
-    "postinstall": "echo Type 'npm start' to start dev server or 'npm start {relative/path}+' to build some packages.",
-    "prestart": "mam mol/build",
-    "start": "node ./mol/build/-/node.test.js",
-    "mam": "mam"
+    "postinstall": "mam mol/build",
+    "start": "node ./mol/build/-/node.test.js"
   },
   "repository": {
     "type": "git",
