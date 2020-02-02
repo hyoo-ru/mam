@@ -27,6 +27,6 @@
     "mam": "*"
   },
   "optionalDependencies": {
-    "jsdom": "^16.0.1"
+    "jsdom": "16.0.1"
   }
 }
