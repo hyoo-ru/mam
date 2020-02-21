@@ -23,8 +23,5 @@
   "dependencies": {
     "@types/node": "^12.7.7",
     "mam": "*"
-  },
-  "optionalDependencies": {
-    "jsdom": "16.0.1"
   }
 }
