@@ -21,7 +21,7 @@
     "node": ">=6.0.0"
   },
   "dependencies": {
-    "@types/node": "^12.7.7",
+    "@types/node": "12.12.29",
     "mam": "1.10.7"
   }
 }
