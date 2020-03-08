@@ -2,7 +2,7 @@
   "description": "Simple MAM project",
   "scripts": {
     "postinstall": "mam mol/build",
-    "start": "node ./mol/build/-/node.test.js"
+    "start": "node ./mol/build/-/node.js"
   },
   "repository": {
     "type": "git",
