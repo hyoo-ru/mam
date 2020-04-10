@@ -22,6 +22,7 @@
   },
   "dependencies": {
     "@types/node": "*",
-    "mam": "*"
+	"@types/ws": "*",
+    "mam": "1.10.11"
   }
 }
