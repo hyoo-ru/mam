@@ -9,7 +9,7 @@
 		"noImplicitAny": true,
 		"suppressImplicitAnyIndexErrors": true,
 		"alwaysStrict": true,
-		"strict": false,
+		"strict": true,
 		"allowUnusedLabels": true,
 		"removeComments" : true ,
 		"sourceMap" : true ,

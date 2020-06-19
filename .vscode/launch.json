@@ -4,13 +4,14 @@
 	// Для получения дополнительной информации посетите: https://go.microsoft.com/fwlink/?linkid=830387
 	"version": "0.2.0",
 	"configurations": [
+	
 		{
 			"type": "node",
 			"request": "launch",
 			"name": "Dev Server",
 			"runtimeArgs": ["--inspect-brk=9229"],
 			"port": 9229,
-			"program": "${workspaceRoot}/mol/build/-/node.test.js"
+			"program": "${workspaceRoot}/mol/build/-/node.js"
 		},
 		{
 			"type": "chrome",
