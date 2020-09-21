@@ -14,6 +14,15 @@
 			"program": "${workspaceRoot}/mol/build/-/node.js"
 		},
 		{
+			"type": "node",
+			"request": "launch",
+			"name": "MAM start",
+			"runtimeArgs": ["--inspect-brk=9229"],
+			"port": 9229,
+			"program": "${workspaceRoot}/mam/start/-/node.js",
+			"args": ["mam/start"]
+		},
+		{
 			"type": "chrome",
 			"request": "launch",
 			"name": "Launch Chrome",

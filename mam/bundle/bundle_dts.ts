@@ -2,20 +2,23 @@ namespace $ {
 
 	export class $mam_bundle_dts extends $mam_bundle {
 
-		suffix() {
-			return '.d.ts'
-		}
-
 		@ $mol_mem
-		sources() {
-			return super.sources().filter(
-				file => /\.d.ts$/.test( file.name() )
-			)
-		}
-
 		generated() {
+
+			const prefix = this.prefix()
+			const script = this.pack().output().resolve( `${prefix}.d.ts` ) 
+			const map = this.pack().output().resolve( `${prefix}.d.ts.map` ) 
+
 			// generate bundle
-			return [ this.target() ]
+			
+			this.$.$mol_log3_done({
+				place : '$mam_bundle_dts.generated()' ,
+				message : 'Built',
+				file : script.relate(),
+				// sources : [ ... this.files() ].map(s=>s.relate()),
+			})
+			
+			return [ script , map ]
 		}
 
 	}

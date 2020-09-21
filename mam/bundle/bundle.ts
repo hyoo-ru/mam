@@ -1,31 +1,28 @@
 namespace $ {
 
+	/** Makes one bundle from all required sources. */
 	export class $mam_bundle extends $mol_object2 {
 
 		@ $mol_mem
-		build() {
-			return undefined as any as $mam_build
-		}
-		
-		sources() {
-			return this.build().sources_all()
+		slice() {
+			return undefined as any as $mam_slice
 		}
 
 		prefix() {
-			return ''
+			return this.slice().prefix()
 		}
-
-		suffix() {
-			return ''
+		
+		pack() {
+			return this.slice().pack()
 		}
 
 		@ $mol_mem
-		target() {
-			return this.build().output().resolve( this.prefix() + this.suffix() )
+		files() {
+			return [ ... this.slice().files() ]
 		}
-
+		
 		generated() {
-			return [ this.target() ]
+			return [] as $mol_file[]
 		}
 
 	}
