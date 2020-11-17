@@ -1,6 +1,6 @@
 pack hyoo git \https://github.com/hyoo-ru/hyoo.git
 pack jin git \https://github.com/nin-jin/pms-jin.git
-pack node git \https://github.com/nin-jin/pms-node.git
+pack node git \https://github.com/hyoo-ru/mam_node.git
 pack mol git \https://github.com/hyoo-ru/mol.git
 pack lib git \https://github.com/hyoo-ru/mam-lib.git
 pack piterjs git \https://github.com/piterjs/piterjs.git
