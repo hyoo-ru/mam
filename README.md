@@ -17,7 +17,7 @@ This is base **MAM** project.
 **Checkout this repo (~2s):**
 
 ```sh
-git clone https://github.com/hyoo-ru/mam_mol.git ./mam && cd mam
+git clone https://github.com/hyoo-ru/mam.git ./mam && cd mam
 ```
 
 ## Linux limits
