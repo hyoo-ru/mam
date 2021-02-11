@@ -17,7 +17,7 @@ This is base **MAM** project.
 **Checkout this repo (~2s):**
 
 ```sh
-git clone https://github.com/eigenmethod/mam.git ./mam && cd mam
+git clone https://github.com/hyoo-ru/mam.git ./mam && cd mam
 ```
 
 ## Linux limits
@@ -78,4 +78,4 @@ start http://localhost:9080/mol/
 
 # MAM based projects
 
-- [eigenmethod/mol](https://github.com/eigenmethod/mol)
+- https://github.com/hyoo-ru?q=hyoo.ru
