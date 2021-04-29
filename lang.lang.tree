@@ -1,0 +1,30 @@
+lang kind
+	[] [] keyword \exact
+	[] [: keyword \prefix
+	[] operator keyword
+	[] keyword keyword
+	[] comment keyword
+	[] string keyword
+	[] keyword keyword
+	[] number keyword
+	[] regexp keyword
+	[] operator keyword
+	[] namespace keyword
+	[] type keyword
+	[] struct keyword
+	[] class keyword
+	[] interface keyword
+	[] enum keyword
+	[] typeParameter keyword
+	[] function keyword
+	[] method keyword
+	[] macro keyword
+	[] variable keyword
+	[] parameter keyword
+	[] property keyword
+	[] label keyword
+	[] invalid keyword
+	[] \
+		string
+	[: \
+		struct
