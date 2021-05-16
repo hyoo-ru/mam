@@ -14,7 +14,7 @@ This is base **MAM** project.
 
 # Cloud usage
 
-[![Gitpod Ready-to-Code](https://img.shields.io/badge/Gitpod-ready--to--code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/hyoo-ru/mam) - online dev workspace
+[![Gitpod Online Dev Workspace](https://img.shields.io/badge/Gitpod-Online--Dev--Workspace-blue?logo=gitpod)](https://gitpod.io/#https://github.com/hyoo-ru/mam)
 
 
 # Installation
