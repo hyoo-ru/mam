@@ -1,4 +1,4 @@
-Error.stackTraceLimit = Infinity;
+Error.stackTraceLimit = 50;
 
 declare let _$_: { new(): {} } & typeof globalThis
 declare class $ extends _$_ {}
