@@ -2,13 +2,13 @@
     "typescript.tsdk": "node_modules/typescript/lib",
     "files.watcherExclude": {
         "**/node_modules": true,
-        "**/-*": true
+        "**/-*": false
     },
     "search.exclude": {
         "**/node_modules": true,
         "**/-*": true
     },
     "files.exclude": {
-        "**/-*": true
+        "**/-*": false
     }
 }
