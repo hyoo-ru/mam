@@ -3,6 +3,10 @@
 **M**am owns **A**gnostic **M**odules.
 This is base **MAM** project.
 
+# Articles
+
+- [MAM: сборка фронтенда без боли](https://habhub.hyoo.ru/#!author=nin-jin/repo=HabHub/article=18)
+
 # Features
 
 * **Agnostic modules.** Module is directory with mixed source files (JS, TS, CSS, JSON, HTML, Tree, images etc).
@@ -76,9 +80,9 @@ start http://localhost:9080/mol/
 3. Create module source file. `my/alert/alert.ts` with content `function $my_alert( msg : string ) { alert( msg ) }` in example.
 4. Create dir for your application module. `my/app` in example.
 5. Create application source file. `my/app/app.ts` with content `$my_alert( 'Hello, World!' )` in example.
-6. Create application web entry point. `my/app/index.html` with content `<script src="-/web.js"></script><script src="-/web.test.js"></script>` in example.
+6. Create application web entry point. `my/app/index.html` with content `<script src="-/web.js"></script>` in example.
 7. Start development server: `npm start`
-8. Open your application. `http://localhost:9080/my/app/` in example.
+8. Open your application. `http://localhost:9080/my/app/-/test.html` in example.
 
 # MAM based projects
 
