@@ -25,5 +25,7 @@
     "typescript.format.insertSpaceAfterTypeAssertion": true,
     "typescript.format.semicolons": "remove",
     "typescript.format.insertSpaceAfterKeywordsInControlFlowStatements": false,
-    "javascript.format.insertSpaceAfterKeywordsInControlFlowStatements": false
+    "javascript.format.insertSpaceAfterKeywordsInControlFlowStatements": false,
+    "typescript.format.insertSpaceBeforeFunctionParenthesis": false,
+    "javascript.format.insertSpaceBeforeFunctionParenthesis": false
 }
