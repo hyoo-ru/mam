@@ -1,6 +1,6 @@
 # MAM
 
-**M**am owns **A**gnostic **M**odules.
+**M**am owns language-**A**gnostic **M**odules.
 This is base **MAM** project.
 
 # Articles
