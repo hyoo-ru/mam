@@ -1,6 +1,6 @@
 # MAM
 
-**M**am owns **A**gnostic **M**odules.
+**M**am owns language-**A**gnostic **M**odules.
 This is base **MAM** project.
 
 # Articles
@@ -41,35 +41,70 @@ fs.file-max=500000
 
 # Development server
 
-**Install node modules (~1m)**
+**Install node modules and build dev server from actual sources**
 
 ```sh
 npm install
 ```
 
-**Build dev server from sources and start that (first ~15s, second ~10s):**
+**Start dev server:**
 
 ```sh
 npm start
 ```
 
-**Open simple $mol based ToDoMVC application (first ~4s, second ~0.3s):**
+**Open simple $mol based ToDoMVC application:**
 
 ```sh
-start http://localhost:9080/mol/app/todomvc/
+start http://localhost:9080/hyoo/todomvc/-/test.html
 ```
 
-**Open $mol demos application (first ~11s, second ~0.5s):**
+# Manual build
+
+* Execute `npm start hyoo/todomvc` to build standalone ToDoMVC application at `hyoo/todomvc/-`.
+* Execute `npm start mol/regexp` to build standalone $mol_regexp library at `mol/regexp/-`.
+
+# NPM Integration
+
+## Publish to NPM
 
 ```sh
-start http://localhost:9080/mol/
+npm start mol/regexp
+npm publish mol/regexp/-
 ```
 
-# Manual building
+## Usage from NPM
 
-* Execute `npm start mol/app/todomvc` to build ToDoMVC application (~13s).
-* Execute `npm start mol` to build $mol demos application (~15s).
-* Execute `npm start lib/pdfjs` to build PDFJS library (~1s).
+### Import to CJS
+
+```js
+const { $mol_regexp: RE } = require( 'mol_regexp' )
+```
+
+### Import to ESM
+
+```js
+iport { $mol_regexp as RE } from 'mol_regexp'
+```
+
+### NodeJS dependencies
+
+Using `$node` namespace you can auto-install and dynamically lazy load any NPM packages:
+
+```js
+const isOdd = $node['is-odd']( '123' )
+```
+
+### Bundling NPM dependencies
+
+It's better to use implementations from MAM ecosystem. But you can bundle NPM packages too through adapter like:
+
+```ts
+// lib/ramda/ramda.ts
+namespace $ {
+	export let $lib_ramda = require('ramda/src/index.js') as typeof import('ramda')
+}
+```
 
 # Custom package
 
