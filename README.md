@@ -6,6 +6,7 @@ This is base **MAM** project.
 # Articles
 
 - [MAM: сборка фронтенда без боли](https://habhub.hyoo.ru/#!author=nin-jin/repo=HabHub/article=18)
+- [Step-by-step tutorial](https://github.com/hyoo-ru/HabHub/issues/4)
 
 # Features
 
