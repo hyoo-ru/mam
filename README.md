@@ -85,7 +85,7 @@ const { $mol_regexp: RE } = require( 'mol_regexp' )
 ### Import to ESM
 
 ```js
-iport { $mol_regexp as RE } from 'mol_regexp'
+import { $mol_regexp as RE } from 'mol_regexp'
 ```
 
 ### NodeJS dependencies
