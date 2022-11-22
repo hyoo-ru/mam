@@ -20,6 +20,15 @@
   "engines": {
     "node": ">=14.0.0"
   },
+  "postAttachCommand": {
+    "server": "npm start",
+  },
+  "portsAttributes": {
+    "9080": {
+      "label": "DevServer",
+      "onAutoForward": "openPreview"
+    }
+  },
   "dependencies": {
     "@types/node-fetch": "^2.5.12",
     "mam": "*",
