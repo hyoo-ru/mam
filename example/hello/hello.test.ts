@@ -4,7 +4,7 @@ namespace $.$$ {
 
 		'Generating greeting message'() {
 
-			const app = new $my_hello
+			const app = new $example_hello
 			$mol_assert_equal( app.message() , '' )
 			
 			app.name( 'Jin' )
