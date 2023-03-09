@@ -15,6 +15,19 @@
 	// 	],
 	// 	"description": "Log output to console"
 	// }
+	"MAM class definition": {
+		"scope": "javascript,typescript",
+		"prefix": "class",
+		"body": [
+			"namespace $ {",
+			"\texport class $$1 extends $2 {",
+			"\t\t",
+			"\t\t$0",
+			"\t\t",
+			"\t}",
+			"}"
+		]
+	},
 	"$mol_view extend": {
 		"scope": "javascript,typescript",
 		"prefix": "logic",
@@ -29,15 +42,33 @@
 		],
 		"description": "Extend wih logic"
 	},
+	"$mol_style_define": {
+		"scope": "javascript,typescript",
+		"prefix": "styles",
+		"body": [
+			"namespace $.$$ {",
+			"\t",
+			"\t\\$mol_style_define( \\$$1, {",
+			"\t\t",
+			"\t\t$0",
+			"\t\t",
+			"\t} )",
+			"\t",
+			"}"
+		],
+		"description": "$mol_test defs"
+	},
 	"$mol_test defs": {
 		"scope": "javascript,typescript",
 		"prefix": "tests",
 		"body": [
 			"namespace $.$$ {",
 			"\t\\$mol_test({",
+			"\t\t",
 			"\t\t\"$1\"( $ ) {",
 			"\t\t\t$0",
-			"\t\t}",
+			"\t\t},",
+			"\t\t",
 			"\t})",
 			"}"
 		],
