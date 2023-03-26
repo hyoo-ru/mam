@@ -1,0 +1,11 @@
+meta kind
+	[: - comment \Disabled subtree
+	[] include keyword \Low priority dependency path
+	[] require keyword \High priority dependency path
+	[] deploy keyword \Copy resource by path to deploy directory
+	[] build keyword \Result of copiletie shell command as runtime constant
+	[] pack keyword \Inner repository remote info
+	[] \
+		string
+	[: \
+		struct
