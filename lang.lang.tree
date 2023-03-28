@@ -6,10 +6,8 @@ lang kind
 	[] keyword keyword
 	[] comment keyword
 	[] string keyword
-	[] keyword keyword
 	[] number keyword
 	[] regexp keyword
-	[] operator keyword
 	[] namespace keyword
 	[] type keyword
 	[] struct keyword
