@@ -1,20 +1,20 @@
 # MAM
 
 **M**am owns language-**A**gnostic **M**odules.
-This is base **MAM** project.
+This is the base **MAM** project.
 
 # Articles
 
-- [MAM: сборка фронтенда без боли](https://habhub.hyoo.ru/#!author=nin-jin/repo=HabHub/article=18)
-- [Step-by-step tutorial](https://github.com/hyoo-ru/HabHub/issues/4)
+- [MAM: сборка фронтенда без боли](https://habhub.hyoo.ru/#!author=nin-jin/repo=HabHub/article=18) (in Russian, see [automatic English translation](https://translate.google.com/translate?hl=ru&sl=ru&tl=en&u=https://habhub.hyoo.ru/#!author=nin-jin/repo=HabHub/article=18))
+- [Step-by-step tutorial](https://github.com/hyoo-ru/HabHub/issues/4) (in Russian, see [automatic English translation](https://translate.google.com/translate?hl=ru&sl=ru&tl=en&u=https://github.com/hyoo-ru/HabHub/issues/4))
 
 # Features
 
-* **Agnostic modules.** Module is directory with mixed source files (JS, TS, CSS, JSON, HTML, Tree, images etc).
-* **Automatic dependency tracking.** You don't need import/export - simply use namespaced names in accordance to directory structure, like `$mol_button_major` / `$jin.time.moment` in `*.JAM.JS`/`*.TS` or `--mol_theme_back` / `[mol_page_title]` / `.my-header-avatar` in `*.CSS`.
-* **Development server with automatic bundling on request**. Only if you use it then it will have bundled.
-* **Build any module as standalone bundle**. You can develope thousand of modules in one project.
-* **Cordova project generation**. Simply add `config.xml` to module and `-cordova` dir with cordova project will have generated.
+* **Agnostic modules.** Module is a directory with the mixed source files (JS, TS, CSS, JSON, HTML, Tree, images, etc).
+* **Automatic dependency tracking.** You don't need import/export - simply use the namespaced names according to the directory structure, like `$mol_button_major` / `$jin.time.moment` in `*.JAM.JS`/`*.TS` or `--mol_theme_back` / `[mol_page_title]` / `.my-header-avatar` in `*.CSS`.
+* **Development server with automatic bundling on request**. Will be bundled only if you use it.
+* **Build any module as standalone bundle**. You can develop thousand of modules in one project.
+* **Cordova project generation**. Simply add `config.xml` to the module, and `-cordova` dir with the cordova project will be generated.
 
 # Cloud usage
 
@@ -31,7 +31,7 @@ git clone https://github.com/hyoo-ru/mam.git ./mam && cd mam
 
 ## Linux limits
 
-$mol_build and typescript uses inotify by default on Linux to monitor directories for changes. It's not uncommon to encounter a system limit on the number of files you can monitor.
+`$mol_build` and typescript uses inotify by default on Linux to monitor directories for changes. It's not uncommon to encounter a system limit on the number of files you can monitor.
 
 /etc/sysctl.d/20-watch.conf
 
@@ -98,7 +98,7 @@ const isOdd = $node['is-odd']( '123' )
 
 ### Bundling NPM dependencies
 
-It's better to use implementations from MAM ecosystem. But you can bundle NPM packages too through adapter like:
+If possible, try to use the existing MAM ecosystem implementations. You can bundle the NPM packages as well via an adapter like:
 
 ```ts
 // lib/ramda/ramda.ts
@@ -111,16 +111,16 @@ namespace $ {
 
 [Video tutorial](https://www.youtube.com/watch?v=PyK3if5sgN0)
 
-1. Create dir for your namespace. `my` in example.
-2. Create dir for your module. `my/alert` in example.
-3. Create module source file. `my/alert/alert.ts` with content `function $my_alert( msg : string ) { alert( msg ) }` in example.
-4. Create dir for your application module. `my/app` in example.
-5. Create application source file. `my/app/app.ts` with content `$my_alert( 'Hello, World!' )` in example.
-6. Create application web entry point. `my/app/index.html` with content `<script src="-/web.js"></script>` in example.
+1. Create dir for your namespace: `my` in example.
+2. Create dir for your module: `my/alert` in example.
+3. Create module source file: `my/alert/alert.ts` with content `function $my_alert( msg : string ) { alert( msg ) }` in example.
+4. Create dir for your application module: `my/app` in example.
+5. Create application source file: `my/app/app.ts` with content `$my_alert( 'Hello, World!' )` in example.
+6. Create application web entry point: `my/app/index.html` with content `<script src="-/web.js"></script>` in example.
 7. Start development server: `npm start`
-8. Open your application. `http://localhost:9080/my/app/-/test.html` in example.
+8. Open your application: `http://localhost:9080/my/app/-/test.html` in example.
 
 # MAM based projects
 
-- https://github.com/hyoo-ru?q=hyoo.ru
+- See https://github.com/hyoo-ru?q=hyoo.ru
 
