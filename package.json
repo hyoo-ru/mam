@@ -32,5 +32,8 @@
   "dependencies": {
     "@types/node": "*",
     "mam": "*"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.16"
   }
 }
