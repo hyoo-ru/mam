@@ -73,5 +73,27 @@
 			"}"
 		],
 		"description": "$mol_test defs"
+	},
+	"$mol_view entry": {
+		"scope": "html",
+		"prefix": "html",
+		"body": [
+			"<!doctype html>",
+			"<html mol_view_root>",
+			"	<head>",
+			"		<meta charset='utf-8' />",
+			"		<title>$1</title>",
+			"		<meta name='viewport' content='width=device-width, height=device-height, initial-scale=1'>",
+			"		<!--<link href='/logo/logo.svg' rel='icon' />-->",
+			"		<meta name='mobile-web-app-capable' content='yes'>",
+			"		<meta name='apple-mobile-web-app-capable' content='yes'>",
+			"	</head>",
+			"	<body mol_view_root>",
+			"		<div mol_view_root='$2'></div>",
+			"		<script src='web.js' charset='utf-8'></script>",
+			"	</body>",
+			"</html>",
+		],
+		"description": "$mol_view entry"
 	}
 }
