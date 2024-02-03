@@ -1,7 +1,7 @@
 {
   "description": "Simple MAM project",
   "scripts": {
-    "postinstall": "mam mol/build",
+    "postinstall": "npx mam mol/build",
     "start": "node ./mol/build/-/node.js"
   },
   "repository": {
@@ -31,6 +31,7 @@
   },
   "dependencies": {
     "@types/node": "*",
-    "mam": "*"
+    "mam": "*",
+    "undici": "*"
   }
 }
