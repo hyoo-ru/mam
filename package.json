@@ -2,7 +2,7 @@
   "description": "Simple MAM project",
   "scripts": {
     "postinstall": "mam mol/build",
-    "start": "node ./mol/build/-/node.js"
+    "start": "node --enable-source-maps --trace-uncaught ./mol/build/-/node.js"
   },
   "repository": {
     "type": "git",
