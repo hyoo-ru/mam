@@ -17,28 +17,30 @@ namespace $ {
 			if( !/tsx?$/.test( file.ext() ) ) return deps
 			if( !file.exists() ) return deps
 
-			for( const code of $mam_source_ts_remarks.parse( file.text() ) ) {
-				if( !code[0] ) continue
+			for( const code of file.text().matchAll( $mam_source_remarks_js ) ) {
+				if( code.groups ) continue
 
 				for( const line of code[0].split( '\n' ) ) {
-					const indent = $mam_source_line.parse( line ).next().value?.indent ?? ''
-					
-					for( const ref of $mam_source_ts_refs.parse( line ) ) {
-						
-						if( ref.fqn ) {
-							const dep = this.root().dir().resolve( ref.name.replace( /[._]/g , '/' ) )
-							deps.set( this.lookup( dep ) , - indent.length )
-						}
-						
-						if( ref.req ) {
-							const dep = file.parent().resolve( ref.path )
-							deps.set( dep , - indent.length )
-						}
 
+					const refs = line.matchAll( $mam_source_refs_js )
+
+					const indent = line.matchAll( $mam_source_line )?.next().value?.groups?.indent ?? ''
+
+					const priority = - indent.replace( /\t/g , '    ' ).length / 4
+
+					for( const { groups } of refs ) {
+
+						if( groups?.fqn ) {
+							const dep = this.root().dir().resolve( groups.name.replace( /[._]/g , '/' ) )
+							deps.set( this.lookup( dep ) , priority )
+						}
+						
+						if( groups?.req ) {
+							const dep = file.parent().resolve( groups.path )
+							deps.set( dep , priority )
+						}
 					}
-
 				}
-
 			}
 // console.time(file.path())
 // 			const res = $node.typescript.transpileModule( file.text() , {
