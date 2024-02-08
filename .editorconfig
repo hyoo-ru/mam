@@ -13,3 +13,9 @@ trim_trailing_whitespace = false
 [tree]
 end_of_line = lf
 indent_style = tab
+insert_final_newline = true
+
+# important!
+[yml]
+indent_style = space
+indent_size = 2
