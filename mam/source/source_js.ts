@@ -5,9 +5,8 @@ namespace $ {
 		@ $mol_mem_key
 		deps( source : $mol_file ) {
 			
-			if( !/\.js$/.test( source.ext() ) ) return super.deps( source )
-			
-			const deps = new Map< $mol_file , number >()
+			const deps = super.deps( source )
+			if( !/\.js$/.test( source.ext() ) ) return deps
 			// extract dependencies
 			
 			return deps

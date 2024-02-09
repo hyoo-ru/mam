@@ -3,13 +3,12 @@ namespace $ {
 	export class $mam_convert_ts extends $mam_convert {
 
 		@ $mol_mem_key
-		generated( source : $mol_file ): $mol_file[] {
+		generated( source : $mol_file ) {
 			if( !/tsx?$/.test( source.ext() ) ) return []
-			if( !source.exists() ) return []
-			
-			return [ 
-				this.js( source ), 
-				this.map( source ),
+
+			return [
+				{ file: this.js( source ), search_deps: false }, 
+				{ file: this.map( source ), search_deps: false },
 			]
 		}
 

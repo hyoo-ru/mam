@@ -20,14 +20,14 @@ namespace $ {
 			if( !/^[a-z0-9]/i.test( file.name() ) ) return false
 			return true
 		}
-		
+
 		@ $mol_mem
 		source_classes() {
 			return [
 				this.$.$mam_source_dir,
 				this.$.$mam_source_js,
 				this.$.$mam_source_ts,
-			]
+			] as const
 		}
 
 		@ $mol_mem
@@ -35,7 +35,7 @@ namespace $ {
 			return [
 				this.$.$mam_convert_view_tree,
 				this.$.$mam_convert_ts,
-			]
+			] as const
 		}
 
 		@ $mol_mem
@@ -44,7 +44,7 @@ namespace $ {
 				this.$.$mam_bundle_meta,
 				this.$.$mam_bundle_js,
 				this.$.$mam_bundle_dts,
-			]
+			] as const
 		}
 
 		@ $mol_mem
@@ -79,13 +79,12 @@ namespace $ {
 				for (const convert of converts ) {
 
 					for( const generated of convert.generated( file ) ) {
-
-						if( !this.filter( generated ) ) continue
+						if( !this.filter( generated.file ) ) continue
 						
-						graph.link( file , generated , { priority: convert.priority.generated } )
-						graph.link( generated , file , { priority: convert.priority.source } )
+						graph.link( file , generated.file , { priority: generated.search_deps ? 1 : 0 } )
+						graph.link( generated.file , file , { priority: generated.search_deps ? 0 : 1 } )
 
-						collect( generated )
+						if( generated.search_deps ) collect( generated.file )
 
 					}
 					
@@ -94,7 +93,6 @@ namespace $ {
 				for( const source of sources ) {
 
 					for( const[ dep , priority ] of source.deps( file ) ) {
-
 						if( !this.filter( dep ) ) continue
 
 						const edge = graph.edge_out( file , dep )

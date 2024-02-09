@@ -1,5 +1,6 @@
 namespace $ {
 
+	/** Source file transpiler. */
 	export class $mam_convert extends $mol_object2 {
 
 		@ $mol_mem
@@ -8,13 +9,16 @@ namespace $ {
 		}
 
 		@ $mol_mem_key
-		generated( source : $mol_file ): $mol_file[] {
-			return []
+		match( file : $mol_file ) {
+			return false
 		}
 
-		priority = {
-			source: 1,
-			generated: 0,
+		@ $mol_mem_key
+		generated( source : $mol_file ): {
+			file: $mol_file,
+			search_deps: Boolean,
+		}[] {
+			return []
 		}
 
 	}

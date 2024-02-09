@@ -3,13 +3,12 @@ namespace $ {
 	export class $mam_convert_view_tree extends $mam_convert {
 
 		@ $mol_mem_key
-		generated( source : $mol_file ): $mol_file[] {
+		generated( source : $mol_file ) {
 			if( source.ext() !== 'view.tree' ) return []
-			if( !source.exists() ) return []
 
 			return [
-				this.script( source ), 
-				this.locale( source ),
+				{ file: this.script( source ), search_deps: true }, 
+				{ file: this.locale( source ), search_deps: false },
 			]
 		}
 

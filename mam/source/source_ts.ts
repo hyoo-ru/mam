@@ -13,9 +13,7 @@ namespace $ {
 		deps( file : $mol_file ) {
 			
 			const deps = super.deps( file )
-
 			if( !/tsx?$/.test( file.ext() ) ) return deps
-			if( !file.exists() ) return deps
 
 			for( const code of file.text().matchAll( $mam_source_remarks_js ) ) {
 				if( code.groups ) continue
