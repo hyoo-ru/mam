@@ -2,7 +2,7 @@
 
 ## Hierarhy
 
-![](mam.drawio.svg)
+![](_mam.drawio.svg)
 
 ## Test project
 
