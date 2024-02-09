@@ -4,11 +4,31 @@ namespace $ {
 	export class $mam_slice extends $mol_object2 {
 
 		@ $mol_mem
-		bundle_classes() {
+		sources() {
+			const source = this.root().source
 			return [
-				this.$.$mam_bundle_meta,
-				this.$.$mam_bundle_js,
-				this.$.$mam_bundle_dts,
+				source( this.$.$mam_source_dir ),
+				source( this.$.$mam_source_js ),
+				source( this.$.$mam_source_ts ),
+			]
+		}
+
+		@ $mol_mem
+		converts() {
+			const convert = this.root().convert
+			return [
+				convert( this.$.$mam_convert_view_tree ),
+				convert( this.$.$mam_convert_ts ),
+			]
+		}
+
+		@ $mol_mem
+		bundles() {
+			const bundle = this.root().bundle
+			return [
+				bundle( this.$.$mam_bundle_meta ),
+				bundle( this.$.$mam_bundle_js ),
+				bundle( this.$.$mam_bundle_dts ),
 			]
 		}
 
@@ -30,11 +50,16 @@ namespace $ {
 			return true
 		}
 
+		// @ $mol_mem
+		// bundles() {
+		// 	return this.bundle_classes().map( ctor => this.pack().bundle( ctor ) )
+		// }
+
 		@ $mol_mem
 		graph() {
 			
-			const sources = this.pack().root().sources()
-			const converts = this.pack().root().converts()
+			const sources = this.sources()
+			const converts = this.converts()
 			
 			const ignore = new Set<$mol_file>()
 			const graph = new $mol_graph< $mol_file , { priority : number } >()
@@ -50,8 +75,8 @@ namespace $ {
 
 						if( !this.filter( generated ) ) continue
 						
-						graph.link( file , generated , { priority: 0 } )
-						graph.link( generated , file , { priority: 1 } )
+						graph.link( file , generated , { priority: convert.priority.generated } )
+						graph.link( generated , file , { priority: convert.priority.source } )
 
 						collect( generated )
 
@@ -88,11 +113,6 @@ namespace $ {
 		@ $mol_mem
 		files() {
 			return this.graph().sorted
-		}
-
-		@ $mol_mem
-		bundles() {
-			return this.bundle_classes().map( ctor => this.pack().bundle( ctor ) )
 		}
 
 		@ $mol_mem

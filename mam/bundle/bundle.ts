@@ -13,16 +13,16 @@ namespace $ {
 			return this.pack().root()
 		}
 		
-		/** Used when the bundle does not depend on the slice, i.e. the same for any */
-		@ $mol_mem
-		generated_default() {
+		/** Used when the generated bundles should be the same for each slice of pack */
+		@ $mol_mem_key
+		generated_for_pack( pack: $mam_package ) {
 			return [] as $mol_file[]
 		}
 
 		/** Generated bundle by slice */
 		@ $mol_mem_key
 		generated( slice : $mam_slice ) {
-			return this.generated_default()
+			return this.generated_for_pack( slice.pack() )
 		}
 
 		log( target : $mol_file , duration : number ) {

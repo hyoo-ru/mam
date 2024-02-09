@@ -4,7 +4,7 @@ namespace $ {
 
 		@ $mol_mem_key
 		ts_source( source : $mol_file ) {
-			const target = this.root().ts_options().target!
+			const target = this.root().ts().options().target!
 			return $node.typescript.createSourceFile( source.path() , source.text() , target )
 		}
 
@@ -62,9 +62,9 @@ namespace $ {
 // 			}
 			
 // 			console.timeEnd(file.path())
-			const js = file.parent().resolve( file.name() + '.js' )
+			// const js = file.parent().resolve( file.name() + '.js' )
 			// js.text_cached( res.outputText )
-			deps.set( js , 0 )
+			// deps.set( js , 0 )
 
 			// const map = file.parent().resolve( file.name() + '.js.map' )
 			// map.text_cached( res.sourceMapText ?? '' )

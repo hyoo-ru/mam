@@ -4,7 +4,13 @@ namespace $ {
 
 		@ $mol_mem_key
 		generated( source : $mol_file ): $mol_file[] {
-			return [ this.js( source ), this.map( source ) ]
+			if( !/tsx?$/.test( source.ext() ) ) return []
+			if( !source.exists() ) return []
+			
+			return [ 
+				this.js( source ), 
+				this.map( source ),
+			]
 		}
 
 		@ $mol_mem_key
@@ -30,7 +36,7 @@ namespace $ {
 			console.time(file.path())
 
 			const res = $node.typescript.transpileModule( file.text() , {
-				compilerOptions: this.root().ts_options(),
+				compilerOptions: this.root().ts().options(),
 				fileName: file.path(),
 				reportDiagnostics: true,
 			})

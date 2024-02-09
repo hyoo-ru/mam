@@ -22,7 +22,7 @@ namespace $ {
 		slice< Slice extends typeof $mam_slice >( Slice : Slice ) {
 			const slice = new Slice
 			slice.pack = $mol_const( this )
-			return slice
+			return slice as InstanceType< Slice >
 		}
 
 		@ $mol_mem
@@ -33,13 +33,6 @@ namespace $ {
 				// this.slice( this.$.$mam_slice_node_prod ) ,
 				// this.slice( this.$.$mam_slice_node_test ) ,
 			]
-		}
-
-		@ $mol_mem_key
-		bundle< Bundle extends typeof $mam_bundle >( Bundle : Bundle ) {
-			const bundle = new Bundle
-			bundle.pack = $mol_const( this )
-			return bundle as InstanceType< Bundle >
 		}
 
 		@ $mol_mem
