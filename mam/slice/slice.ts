@@ -4,35 +4,6 @@ namespace $ {
 	export class $mam_slice extends $mol_object2 {
 
 		@ $mol_mem
-		sources() {
-			const source = this.root().source
-			return [
-				source( this.$.$mam_source_dir ),
-				source( this.$.$mam_source_js ),
-				source( this.$.$mam_source_ts ),
-			]
-		}
-
-		@ $mol_mem
-		converts() {
-			const convert = this.root().convert
-			return [
-				convert( this.$.$mam_convert_view_tree ),
-				convert( this.$.$mam_convert_ts ),
-			]
-		}
-
-		@ $mol_mem
-		bundles() {
-			const bundle = this.root().bundle
-			return [
-				bundle( this.$.$mam_bundle_meta ),
-				bundle( this.$.$mam_bundle_js ),
-				bundle( this.$.$mam_bundle_dts ),
-			]
-		}
-
-		@ $mol_mem
 		pack() {
 			return undefined as any as $mam_package
 		}
@@ -49,11 +20,47 @@ namespace $ {
 			if( !/^[a-z0-9]/i.test( file.name() ) ) return false
 			return true
 		}
+		
+		@ $mol_mem
+		source_classes() {
+			return [
+				this.$.$mam_source_dir,
+				this.$.$mam_source_js,
+				this.$.$mam_source_ts,
+			]
+		}
 
-		// @ $mol_mem
-		// bundles() {
-		// 	return this.bundle_classes().map( ctor => this.pack().bundle( ctor ) )
-		// }
+		@ $mol_mem
+		convert_classes() {
+			return [
+				this.$.$mam_convert_view_tree,
+				this.$.$mam_convert_ts,
+			]
+		}
+
+		@ $mol_mem
+		bundle_classes() {
+			return [
+				this.$.$mam_bundle_meta,
+				this.$.$mam_bundle_js,
+				this.$.$mam_bundle_dts,
+			]
+		}
+
+		@ $mol_mem
+		sources() {
+			return this.source_classes().map( ctor => this.root().source( ctor ) )
+		}
+
+		@ $mol_mem
+		converts() {
+			return this.convert_classes().map( ctor => this.root().convert( ctor ) )
+		}
+
+		@ $mol_mem
+		bundles() {
+			return this.bundle_classes().map( ctor => this.root().bundle( ctor ) )
+		}
 
 		@ $mol_mem
 		graph() {

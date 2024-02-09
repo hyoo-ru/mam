@@ -1,13 +1,12 @@
 namespace $ {
 
-	const ts = $node.typescript as typeof import( "typescript" )
+	const typescript = $node.typescript as typeof import( "typescript" )
 
-	/** MAM Root of all sources. */
 	export class $mam_root_ts extends $mol_object2 {
 
 		@ $mol_mem
 		dir() {
-			return this.$.$mol_file.relative( '.' )
+			return undefined as any as $mol_file
 		}
 
 		@ $mol_mem
@@ -15,19 +14,19 @@ namespace $ {
 
 			const path = this.dir().resolve( 'tsconfig.json' ).path()
 
-			const config = ts.readConfigFile(
+			const config = typescript.readConfigFile(
 				path ,
 				( path : string )=> this.$.$mol_file.absolute( path ).text()
 			)
 
 			if( config.error ) {
 				throw new Error(
-					ts.formatDiagnosticsWithColorAndContext(
+					typescript.formatDiagnosticsWithColorAndContext(
 						[ config.error ] ,
 						{
 							getCanonicalFileName: ( path : string )=> path,
-							getCurrentDirectory: ts.sys.getCurrentDirectory,
-							getNewLine: () => ts.sys.newLine,
+							getCurrentDirectory: typescript.sys.getCurrentDirectory,
+							getNewLine: () => typescript.sys.newLine,
 						}
 					)
 				)
@@ -39,7 +38,7 @@ namespace $ {
 		@ $mol_mem
 		options() {
 
-			const options = ts.convertCompilerOptionsFromJson(
+			const options = typescript.convertCompilerOptionsFromJson(
 				this.config().compilerOptions ,
 				"." ,
 				'tsconfig.json'
@@ -47,12 +46,12 @@ namespace $ {
 
 			if( options.errors.length ) {
 				throw new Error(
-					ts.formatDiagnosticsWithColorAndContext(
+					typescript.formatDiagnosticsWithColorAndContext(
 						options.errors ,
 						{
 							getCanonicalFileName: ( path : string )=> path,
-							getCurrentDirectory: ts.sys.getCurrentDirectory,
-							getNewLine: () => ts.sys.newLine,
+							getCurrentDirectory: typescript.sys.getCurrentDirectory,
+							getNewLine: () => typescript.sys.newLine,
 						}
 					)
 				)
@@ -63,7 +62,7 @@ namespace $ {
 
 		@ $mol_mem
 		registry() {
-			return ts.createDocumentRegistry()
+			return typescript.createDocumentRegistry()
 		}
 
 		// ts_host() : Parameters< typeof ts.createLanguageService >[0] {
@@ -133,7 +132,7 @@ namespace $ {
 
 		@ $mol_mem
 		service() {
-			return ts.createLanguageService(
+			return typescript.createLanguageService(
 				this.host() as any,
 				this.registry()
 			)
