@@ -13,6 +13,7 @@ namespace $ {
 			return undefined as any as $mam_root
 		}
 
+		@ $mol_mem_key
 		deps( source : $mol_file ) {
 			return new Map< $mol_file , number >()
 		}

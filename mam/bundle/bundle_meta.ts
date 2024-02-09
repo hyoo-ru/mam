@@ -2,13 +2,13 @@ namespace $ {
 
 	export class $mam_bundle_meta extends $mam_bundle {
 
-		@ $mol_mem
-		generated() {
+		@ $mol_mem_key
+		generated( slice: $mam_slice ) {
 
-			const prefix = this.prefix()
+			const prefix = slice.prefix()
 			const meta = this.pack().output().resolve( `${prefix}.meta.json` )
-			const graph = this.slice().graph()
-			const files = this.files()
+			const graph = slice.graph()
+			const files = [ ... slice.files() ]
 
 			const deps_in = {} as Record< string , Record< string , number > >
 			for( const [ dep , pair ] of graph.edges_in ) {
@@ -48,7 +48,7 @@ namespace $ {
 			const json = {
 				deps_in,
 				deps_out,
-				order: this.files().map( file => file.relate() ),
+				order: files.map( file => file.relate() ),
 				size,
 			}
 			
@@ -57,7 +57,7 @@ namespace $ {
 			meta.text( text )
 			
 			this.$.$mol_log3_done({
-				place : '$mam_bundle_dts.generated()' ,
+				place : '$mam_bundle_meta.generated()' ,
 				message : 'Built',
 				file : meta.relate(),
 			})

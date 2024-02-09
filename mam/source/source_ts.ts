@@ -25,7 +25,6 @@ namespace $ {
 					const refs = line.matchAll( $mam_source_refs_js )
 
 					const indent = line.matchAll( $mam_source_line )?.next().value?.groups?.indent ?? ''
-
 					const priority = - indent.replace( /\t/g , '    ' ).length / 4
 
 					for( const { groups } of refs ) {

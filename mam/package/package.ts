@@ -35,11 +35,24 @@ namespace $ {
 			]
 		}
 
+		@ $mol_mem_key
+		bundle< Bundle extends typeof $mam_bundle >( Bundle : Bundle ) {
+			const bundle = new Bundle
+			bundle.pack = $mol_const( this )
+			return bundle as InstanceType< Bundle >
+		}
+
 		@ $mol_mem
-		bundles() {
-			return ( [] as $mam_bundle[] ).concat(
-				... this.slices().map( slice => slice.bundles() )
-			)
+		bundles_generated() {
+			const files = new Set< $mol_file >()
+
+			for (const slice of this.slices()) {
+				for (const file of slice.bundles_generated()) {
+					files.add( file )
+				}
+			}
+
+			return files
 		}
 
 	}

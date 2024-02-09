@@ -8,9 +8,7 @@ namespace $ {
 
 			const pack = root.pack( root.dir().resolve( path ) )
 			
-			for( const bundle of pack.bundles() ) {
-				bundle.generated()
-			}
+			pack.bundles_generated()
 
 		}
 
@@ -20,7 +18,7 @@ namespace $ {
 		
 		$mol_ambient({}).$mol_log3_fail({
 			place: 'mam/start' , 
-			message: error?.stack ?? String( error ) ,
+			message: ( error as Error ).stack ?? String( error ) ,
 			// message: error?.message ?? String( error ) ,
 		})
 
