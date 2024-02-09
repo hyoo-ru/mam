@@ -13,7 +13,7 @@ namespace $ {
 			
 			const prefix = slice.prefix()
 
-			const target = this.pack().output().resolve( `${ prefix }.d.ts` )
+			const target = slice.pack().output().resolve( `${ prefix }.d.ts` )
 			
 			const sources = [ ... slice.files() ].filter( file => /\.d\.ts$/.test( file.name() ) )
 			if( sources.length === 0 ) return []

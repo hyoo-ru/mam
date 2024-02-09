@@ -6,7 +6,7 @@ namespace $ {
 		generated( slice: $mam_slice ) {
 
 			const prefix = slice.prefix()
-			const meta = this.pack().output().resolve( `${prefix}.meta.json` )
+			const meta = slice.pack().output().resolve( `${prefix}.meta.json` )
 			const graph = slice.graph()
 			const files = [ ... slice.files() ]
 

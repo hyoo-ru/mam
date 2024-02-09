@@ -6,7 +6,7 @@ namespace $ {
 		generated( slice: $mam_slice ) {
 
 			const prefix = slice.prefix()
-			const output = this.pack().output()
+			const output = slice.pack().output()
 			const script = output.resolve( `${prefix}.js` ) 
 			const map = output.resolve( `${prefix}.js.map` ) 
 
