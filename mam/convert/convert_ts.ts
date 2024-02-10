@@ -7,8 +7,8 @@ namespace $ {
 			if( !/tsx?$/.test( source.ext() ) ) return []
 
 			return [
-				{ file: this.js( source ), search_deps: false }, 
-				{ file: this.map( source ), search_deps: false },
+				this.js( source ),
+				this.map( source ),
 			]
 		}
 

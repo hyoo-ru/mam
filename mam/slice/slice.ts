@@ -22,29 +22,32 @@ namespace $ {
 		}
 
 		@ $mol_mem
-		source_classes() {
+		source_classes(): ( typeof $mam_source )[]  {
 			return [
 				this.$.$mam_source_dir,
 				this.$.$mam_source_js,
 				this.$.$mam_source_ts,
-			] as const
+			]
 		}
 
 		@ $mol_mem
-		convert_classes() {
+		convert_classes(): ( typeof $mam_convert )[]  {
 			return [
 				this.$.$mam_convert_view_tree,
 				this.$.$mam_convert_ts,
-			] as const
+			]
 		}
 
 		@ $mol_mem
-		bundle_classes() {
+		bundle_classes(): ( typeof $mam_bundle )[] {
 			return [
 				this.$.$mam_bundle_meta,
 				this.$.$mam_bundle_js,
 				this.$.$mam_bundle_dts,
-			] as const
+				this.$.$mam_bundle_index_html,
+				this.$.$mam_bundle_test_html,
+				this.$.$mam_bundle_readme,
+			]
 		}
 
 		@ $mol_mem
@@ -78,14 +81,14 @@ namespace $ {
 
 				for (const convert of converts ) {
 
-					for( const generated of convert.generated( file ) ) {
-						if( !this.filter( generated.file ) ) continue
+					for( const gen of convert.generated( file ) ) {
+						if( !this.filter( gen ) ) continue
+						const is_promoted = convert.promoted( file ).includes( gen )
 						
-						graph.link( file , generated.file , { priority: generated.search_deps ? 1 : 0 } )
-						graph.link( generated.file , file , { priority: generated.search_deps ? 0 : 1 } )
+						graph.link( file , gen , { priority: is_promoted ? 1 : 0 } )
+						graph.link( gen , file , { priority: is_promoted ? 0 : 1 } )
 
-						if( generated.search_deps ) collect( generated.file )
-
+						if( is_promoted ) collect( gen )
 					}
 					
 				}

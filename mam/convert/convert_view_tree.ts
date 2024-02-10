@@ -7,14 +7,14 @@ namespace $ {
 			if( source.ext() !== 'view.tree' ) return []
 
 			return [
-				{ file: this.script( source ), search_deps: true }, 
-				{ file: this.locale( source ), search_deps: false },
+				this.script( source ),
+				this.locale( source ),
 			]
 		}
 
-		priority = {
-			source: 0,
-			generated: 1,
+		@ $mol_mem_key
+		promoted( source : $mol_file ) {
+			return [ this.script( source ) ]
 		}
 
 		@ $mol_mem_key

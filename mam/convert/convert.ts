@@ -14,10 +14,13 @@ namespace $ {
 		}
 
 		@ $mol_mem_key
-		generated( source : $mol_file ): {
-			file: $mol_file,
-			search_deps: Boolean,
-		}[] {
+		generated( source : $mol_file ): $mol_file[] {
+			return []
+		}
+
+		/** Will be included in further processing (converting, deps searching) */
+		@ $mol_mem_key
+		promoted( source : $mol_file ): $mol_file[] {
 			return []
 		}
 

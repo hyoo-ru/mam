@@ -31,6 +31,14 @@ namespace $ {
 		}
 
 		@ $mol_mem
+		bundle_classes() {
+			return [
+				this.$.$mam_bundle_js,
+				this.$.$mam_bundle_dts,
+			]
+		}
+
+		@ $mol_mem
 		files() {
 			
 			const all = super.files()
