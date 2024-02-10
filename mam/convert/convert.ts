@@ -24,7 +24,7 @@ namespace $ {
 
 		/** Will be included in further processing (converting, deps searching) */
 		@ $mol_mem
-		promoted(): $mol_file[] {
+		generated_sources(): $mol_file[] {
 			return []
 		}
 

@@ -9,14 +9,15 @@ namespace $ {
 		@ $mol_mem
 		generated() {
 			return [
-				this.script(),
 				this.locale(),
 			]
 		}
 
 		@ $mol_mem
-		promoted() {
-			return [ this.script() ]
+		generated_sources() {
+			return [ 
+				this.script() 
+			]
 		}
 
 		@ $mol_mem

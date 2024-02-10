@@ -84,12 +84,18 @@ namespace $ {
 
 					for( const gen of convert.generated() ) {
 						if( !this.filter( gen ) ) continue
-						const is_promoted = convert.promoted().includes( gen )
-						
-						graph.link( file , gen , { priority: is_promoted ? 1 : 0 } )
-						graph.link( gen , file , { priority: is_promoted ? 0 : 1 } )
 
-						if( is_promoted ) collect( gen )
+						graph.link( file , gen , { priority: 0 } )
+						graph.link( gen , file , { priority: 1 } )
+					}
+
+					for( const gen of convert.generated_sources() ) {
+						if( !this.filter( gen ) ) continue
+						
+						graph.link( file , gen , { priority: 1 } )
+						graph.link( gen , file , { priority: 0 } )
+
+						collect( gen )
 					}
 					
 				}
