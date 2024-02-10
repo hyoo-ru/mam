@@ -31,6 +31,11 @@
   },
   "dependencies": {
     "@types/node": "*",
+    "child": "^0.0.3",
     "mam": "*"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.55",
+    "@types/react-dom": "^18.2.19"
   }
 }

@@ -29,8 +29,8 @@ namespace $ {
 		slices() {
 			return [
 				this.slice( this.$.$mam_slice_web_prod ) ,
-				this.slice( this.$.$mam_slice_web_test ) ,
 				this.slice( this.$.$mam_slice_node_prod ) ,
+				this.slice( this.$.$mam_slice_web_test ) ,
 				this.slice( this.$.$mam_slice_node_test ) ,
 			]
 		}

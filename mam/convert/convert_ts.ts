@@ -15,8 +15,11 @@ namespace $ {
 		@ $mol_mem_key
 		js( file : $mol_file ) {
 			const res = this.transpile_out( file )
+
 			const js = file.parent().resolve( file.name() + '.js' )
+
 			const text = res.outputText.replace( /^\/\/#\ssourceMappingURL=[^\n]*/mg , '//' + file.relate() ) + '\n'
+
 			js.text( text, 'virt' )
 			return js
 		}
@@ -35,7 +38,7 @@ namespace $ {
 			console.time(file.path())
 
 			const res = $node.typescript.transpileModule( file.text() , {
-				compilerOptions: this.root().ts().options(),
+				compilerOptions: this.root().ts_options(),
 				fileName: file.path(),
 				reportDiagnostics: true,
 			})

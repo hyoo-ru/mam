@@ -49,6 +49,7 @@ namespace $ {
 				this.$.$mam_bundle_index_html,
 				this.$.$mam_bundle_test_html,
 				this.$.$mam_bundle_readme,
+				this.$.$mam_bundle_audit_js,
 			]
 		}
 

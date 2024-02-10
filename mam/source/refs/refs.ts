@@ -21,7 +21,7 @@ namespace $ {
 
 		fqn : [ '$' , { name : [ word , repeat_greedy([ /[._]/ , word ]) ] } ] ,
 		
-		req : [ word_break_only , 'require' , spaces , '(' , spaces , strings({ path : bytes }) , spaces , ')' ] ,
+		req : [ word_break_only , 'require' , spaces , '(' , spaces , strings({ path: bytes }) , spaces , ')' ] ,
 
 	})
 

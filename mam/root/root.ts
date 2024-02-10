@@ -38,10 +38,11 @@ namespace $ {
 		}
 
 		@ $mol_mem
-		ts() {
-			const ts = new this.$.$mam_root_ts
-			ts.dir = () => this.dir()
-			return ts
+		ts_options() {
+			const rawOptions = JSON.parse( this.dir().resolve( 'tsconfig.json' ).text() + '').compilerOptions
+			const res = $node.typescript.convertCompilerOptionsFromJson( rawOptions , "." , 'tsconfig.json' )
+			if( res.errors.length ) throw res.errors
+			return res.options
 		}
 
 	}

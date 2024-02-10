@@ -12,6 +12,23 @@ namespace $ {
 			return 'node'
 		}
 
+		@ $mol_mem
+		node_deps() : string[] {
+			
+			var deps = new Set< string >()
+			var sources = this.files()
+			
+			for( let src of sources ) {
+
+				const deps = this.root().source( this.$.$mam_source_ts ).ts_source_deps( src ).node_deps
+				deps.forEach( dep => deps.add( dep ) )
+
+			}
+
+			return [ ... deps ]
+
+		}
+
 	}
 
 	export class $mam_slice_node_prod extends $mam_slice_node {
