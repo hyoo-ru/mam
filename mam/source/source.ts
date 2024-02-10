@@ -18,17 +18,23 @@ namespace $ {
 			return new Map< $mol_file , number >()
 		}
 
-		lookup( file : $mol_file ) : $mol_file {
+		lookup( path : string ) : $mol_file {
 
-			if( file.exists() ) return file
+			const dir = this.root().dir().resolve( path + '/' + path.replace( /.*\// , '' ) ) // dir duplicatation for the case when submodules should be independent from the parent 
 
-			const parent = file.parent()
-			
-			if( parent === this.root().dir() ) {
-				throw new Error( `Absent dependency: ${ file.relate() }` )
+			const lookup = ( dir : $mol_file ): $mol_file => {
+
+				if( dir.exists() ) return dir
+	
+				const parent = dir.parent()
+				if( parent === this.root().dir() ) {
+					throw new Error( `Absent dependency: ${ dir.relate() }` )
+				}
+
+				return lookup( parent )
 			}
 			
-			return this.lookup( parent )
+			return lookup( dir )
 		}
 
 	}

@@ -28,8 +28,8 @@ namespace $ {
 					for( const { groups } of refs ) {
 
 						if( groups?.fqn ) {
-							const dep = this.root().dir().resolve( groups.name.replace( /[._]/g , '/' ) )
-							deps.set( this.lookup( dep ) , priority )
+							const path = groups.name.replace( /[._]/g , '/' )
+							deps.set( this.lookup( path ) , priority )
 						}
 						
 						if( groups?.req ) {
@@ -39,7 +39,9 @@ namespace $ {
 					}
 				}
 			}
-// console.time(file.path())
+			
+			return deps
+			// console.time(file.path())
 // 			const res = $node.typescript.transpileModule( file.text() , {
 // 				compilerOptions: this.root().ts_options(),
 // 				fileName: file.path(),
@@ -68,7 +70,6 @@ namespace $ {
 			// map.text_cached( res.sourceMapText ?? '' )
 			// deps.set( map , 0 )
 
-			return deps
 		}
 
 	}

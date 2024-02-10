@@ -12,6 +12,8 @@ namespace $ {
 				if( item.type() !== 'file' ) continue
 				deps.set( item , 0 )
 			}
+
+			if( source !== this.root().dir() ) deps.set( source.parent() , Number.MIN_SAFE_INTEGER )
 			
 			return deps
 		}
