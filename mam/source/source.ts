@@ -28,7 +28,7 @@ namespace $ {
 	
 				const parent = dir.parent()
 				if( parent === this.root().dir() ) {
-					throw new Error( `Absent dependency: ${ dir.relate() }` )
+					throw new Error( `Absent dependency: ${ dir.relate() }, (${ path })` )
 				}
 
 				return lookup( parent )
