@@ -25,8 +25,8 @@ namespace $ {
 		source_classes(): ( typeof $mam_source )[]  {
 			return [
 				this.$.$mam_source_dir,
-				this.$.$mam_source_ts,
 				this.$.$mam_source_js,
+				this.$.$mam_source_ts,
 				this.$.$mam_source_meta_tree,
 			]
 		}
