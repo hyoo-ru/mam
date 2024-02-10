@@ -2,11 +2,14 @@ namespace $ {
 
 	export class $mam_convert_meta_tree extends $mam_convert {
 
-		@ $mol_mem_key
-		generated( source : $mol_file ) {
-			if( source.ext() !== 'meta.tree' ) return []
-			
-			const tree = this.tree( source )
+		static match( file: $mol_file ): boolean {
+			return /\.meta\.tree$/.test( file.name() )
+		}
+
+		@ $mol_mem
+		generated() {
+			const source = this.source()
+			const tree = this.tree()
 			
 			let content = ''
 			for( const step of tree.select( 'build' , '' ).sub ) {
@@ -23,8 +26,9 @@ namespace $ {
 			return [ script ]
 		}
 
-		@ $mol_mem_key
-		tree( source : $mol_file ) {
+		@ $mol_mem
+		tree() {
+			const source = this.source()
 			return this.root().source( [ this.$.$mam_source_meta_tree, source ] )!.tree()
 		}
 

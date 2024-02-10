@@ -55,12 +55,12 @@ namespace $ {
 
 		@ $mol_mem_key
 		sources( file: $mol_file ) {
-			return this.source_classes().map( ctor => this.root().source( [ ctor, file ] ) )
+			return this.source_classes().map( ctor => this.root().source([ ctor, file ]) )
 		}
 
-		@ $mol_mem
-		converts() {
-			return this.convert_classes().map( ctor => this.root().convert( ctor ) )
+		@ $mol_mem_key
+		converts( file: $mol_file ) {
+			return this.convert_classes().map( ctor => this.root().convert([ ctor, file ]) )
 		}
 
 		@ $mol_mem
@@ -71,8 +71,6 @@ namespace $ {
 		@ $mol_mem
 		graph() {
 			
-			const converts = this.converts()
-			
 			const ignore = new Set<$mol_file>()
 			const graph = new $mol_graph< $mol_file , { priority : number } >()
 			
@@ -81,11 +79,12 @@ namespace $ {
 				if( ignore.has( file ) ) return
 				ignore.add( file )
 
-				for (const convert of converts ) {
+				for (const convert of this.converts( file ) ) {
+					if( !convert ) continue
 
-					for( const gen of convert.generated( file ) ) {
+					for( const gen of convert.generated() ) {
 						if( !this.filter( gen ) ) continue
-						const is_promoted = convert.promoted( file ).includes( gen )
+						const is_promoted = convert.promoted().includes( gen )
 						
 						graph.link( file , gen , { priority: is_promoted ? 1 : 0 } )
 						graph.link( gen , file , { priority: is_promoted ? 0 : 1 } )

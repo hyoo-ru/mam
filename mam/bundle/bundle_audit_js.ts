@@ -21,7 +21,7 @@ namespace $ {
 			for( const path of paths ) {
 
 				if( /\.d\.ts/.test( path ) ) continue
-				this.root().convert( this.$.$mam_convert_ts ).transpile_out( $mol_file.absolute( path ) )
+				this.root().convert([ this.$.$mam_convert_ts, $mol_file.absolute( path ) ])?.transpile_out()
 				// this.js_content( path ) // recheck on file change
 
 				const error = this.on_error( path )
@@ -164,7 +164,7 @@ namespace $ {
 
 		@ $mol_mem_key
 		on_error( path : string , next = null as null | string ) {
-			this.root().convert( this.$.$mam_convert_ts ).transpile_out( $mol_file.absolute( path ) )
+			this.root().convert([ this.$.$mam_convert_ts, $mol_file.absolute( path ) ])?.transpile_out()
 			return next
 		}
 

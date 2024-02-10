@@ -2,44 +2,49 @@ namespace $ {
 
 	export class $mam_convert_ts extends $mam_convert {
 
-		@ $mol_mem_key
-		generated( source : $mol_file ) {
-			if( !/tsx?$/.test( source.ext() ) ) return []
+		static match( file: $mol_file ): boolean {
+			return /tsx?$/.test( file.ext() )
+		}
 
+		@ $mol_mem
+		generated() {
 			return [
-				this.js( source ),
-				this.map( source ),
+				this.js(),
+				this.map(),
 			]
 		}
 
-		@ $mol_mem_key
-		js( file : $mol_file ) {
-			const res = this.transpile_out( file )
+		@ $mol_mem
+		js() {
+			const source = this.source()
+			const res = this.transpile_out()
 
-			const js = file.parent().resolve( file.name() + '.js' )
+			const js = source.parent().resolve( source.name() + '.js' )
 
-			const text = res.outputText.replace( /^\/\/#\ssourceMappingURL=[^\n]*/mg , '//' + file.relate() ) + '\n'
+			const text = res.outputText.replace( /^\/\/#\ssourceMappingURL=[^\n]*/mg , '//' + source.relate() ) + '\n'
 
 			js.text( text, 'virt' )
 			return js
 		}
 
-		@ $mol_mem_key
-		map( file : $mol_file ) {
-			const res = this.transpile_out( file )
-			const map = file.parent().resolve( file.name() + '.js.map' )
+		@ $mol_mem
+		map() {
+			const source = this.source()
+			const res = this.transpile_out()
+			const map = source.parent().resolve( source.name() + '.js.map' )
 			map.text( res.sourceMapText ?? '', 'virt' )
 			return map
 		}
 
-		@ $mol_mem_key
-		transpile_out( file : $mol_file ) {
+		@ $mol_mem
+		transpile_out() {
+			const source = this.source()
 
-			console.time(file.path())
+			console.time(source.path())
 
-			const res = $node.typescript.transpileModule( file.text() , {
+			const res = $node.typescript.transpileModule( source.text() , {
 				compilerOptions: this.root().ts_options(),
-				fileName: file.path(),
+				fileName: source.path(),
 				reportDiagnostics: true,
 			})
 
@@ -55,7 +60,7 @@ namespace $ {
 					)
 				) )
 			}
-			console.timeEnd(file.path())
+			console.timeEnd(source.path())
 
 			return res
 		}

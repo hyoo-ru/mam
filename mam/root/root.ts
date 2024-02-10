@@ -27,9 +27,12 @@ namespace $ {
 		}
 
 		@ $mol_mem_key
-		convert< Convert extends typeof $mam_convert >( Convert : Convert ) {
+		convert< Convert extends typeof $mam_convert >( [ Convert, file ]: [ Convert, $mol_file ] ) {
+			if( !Convert.match( file ) ) return null
+			
 			const convert = new Convert
 			convert.root = $mol_const( this )
+			convert.source = $mol_const( file )
 			return convert as InstanceType< Convert >
 		}
 
