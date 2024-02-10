@@ -1,75 +1,75 @@
 namespace $ {
 
+	type ts_Node = import('typescript').Node
+
 	export class $mam_source_ts extends $mam_source {
 
 		@ $mol_mem_key
+		deps( file : $mol_file ) {
+			
+			if( !/tsx?$/.test( file.ext() ) ) return super.deps( file )
+
+			const deps = this.ts_source_deps( file ).mam_deps
+
+			let name_parts = file.name().split('.')
+
+			while( name_parts.length > 2 ) {
+
+				name_parts.splice( -2, 1 )
+
+				const dep = file.parent().resolve( name_parts.slice( 0, -1 ).join( '.' ) + '.ts' )
+				if( dep.exists() ) deps.set( dep , 0 )
+
+			}
+
+			return deps
+		}
+
+		@ $mol_mem_key
 		ts_source( source : $mol_file ) {
-			const target = this.root().ts().options().target!
+			const target = this.root().ts_options().target!
 			return $node.typescript.createSourceFile( source.path() , source.text() , target )
 		}
 
-		/** @todo Use `ts_source` to search references throught AST */
 		@ $mol_mem_key
-		deps( file : $mol_file ) {
-			
-			const deps = super.deps( file )
-			if( !/tsx?$/.test( file.ext() ) ) return deps
+		ts_source_deps( file : $mol_file ) {
+			const mam_deps = new Map< $mol_file , number >()
+			const node_deps: Set< string > = new Set
 
-			for( const code of file.text().matchAll( $mam_source_remarks_js ) ) {
-				if( code.groups ) continue
+			if( !/tsx?$/.test( file.ext() ) ) return { mam_deps, node_deps }
 
-				for( const line of code[0].split( '\n' ) ) {
+			const ts_source = this.ts_source( file )
 
-					const refs = line.matchAll( $mam_source_refs_js )
-
-					const indent = line.matchAll( $mam_source_line )?.next().value?.groups?.indent ?? ''
-					const priority = - indent.replace( /\t/g , '    ' ).length / 4
-
-					for( const { groups } of refs ) {
-
-						if( groups?.fqn ) {
-							const path = groups.name.replace( /[._]/g , '/' )
-							deps.set( this.lookup( path ) , priority )
-						}
-						
-						if( groups?.req ) {
-							const dep = file.parent().resolve( groups.path )
-							deps.set( dep , priority )
-						}
-					}
+			const visit = ( node: ts_Node, parent: ts_Node , priority: number ) => {
+				if( !$node.typescript.isIdentifier( node ) ) {
+					node.forEachChild( child => visit( child, node, priority - 1 ) )
+					return
 				}
+				
+				const text = node.escapedText as string
+				const fqn = text.match( /\$([^$]*)/ )?.[1]
+				if( !fqn ) return
+
+				if( fqn == 'node' ) {
+
+					if( $node.typescript.isPropertyAccessExpression( parent ) ) {
+						node_deps.add( parent.name.escapedText as string )
+					}
+
+					else if ($node.typescript.isElementAccessExpression( parent ) 
+						&& $node.typescript.isStringLiteral( parent.argumentExpression ) ) {
+						node_deps.add( parent.argumentExpression.text )
+					}
+
+				}
+				
+				const path = fqn.replace( /[._]/g , '/' )
+				mam_deps.set( this.lookup( path ) , priority )
 			}
-			
-			return deps
-			// console.time(file.path())
-// 			const res = $node.typescript.transpileModule( file.text() , {
-// 				compilerOptions: this.root().ts_options(),
-// 				fileName: file.path(),
-// 				reportDiagnostics: true,
-// 			})
 
-// 			if( res.diagnostics?.length ) {
-// 				throw new Error(
-// 					$node.typescript.formatDiagnosticsWithColorAndContext(
-// 						res.diagnostics ,
-// 						{
-// 							getCanonicalFileName: ( path : string )=> path,
-// 							getCurrentDirectory: $node.typescript.sys.getCurrentDirectory,
-// 							getNewLine: () => $node.typescript.sys.newLine,
-// 						}
-// 					)
-// 				)
-// 			}
-			
-// 			console.timeEnd(file.path())
-			// const js = file.parent().resolve( file.name() + '.js' )
-			// js.text_cached( res.outputText )
-			// deps.set( js , 0 )
+			ts_source.forEachChild( child => visit( child, ts_source, 0 ) )
 
-			// const map = file.parent().resolve( file.name() + '.js.map' )
-			// map.text_cached( res.sourceMapText ?? '' )
-			// deps.set( map , 0 )
-
+			return { mam_deps, node_deps }
 		}
 
 	}
