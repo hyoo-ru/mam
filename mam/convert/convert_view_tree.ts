@@ -4,7 +4,7 @@ namespace $ {
 
 		@ $mol_mem_key
 		generated( source : $mol_file ) {
-			if( source.ext() !== 'view.tree' ) return []
+			if( !/\.view\.tree$/.test( source.name() ) ) return []
 
 			return [
 				this.script( source ),

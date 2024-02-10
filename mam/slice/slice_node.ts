@@ -20,8 +20,8 @@ namespace $ {
 			
 			for( let src of sources ) {
 
-				const deps = this.root().source( this.$.$mam_source_ts ).ts_source_deps( src ).node_deps
-				deps.forEach( dep => deps.add( dep ) )
+				const deps = this.root().source( [ this.$.$mam_source_ts, src ] )?.ts_source_deps().node_deps
+				deps?.forEach( dep => deps.add( dep ) )
 
 			}
 

@@ -17,9 +17,12 @@ namespace $ {
 		}
 
 		@ $mol_mem_key
-		source< Source extends typeof $mam_source >( Source : Source ) {
+		source< Source extends typeof $mam_source >( [ Source, file ]: [ Source, $mol_file ] ) {
+			if( !Source.match( file ) ) return null
+			
 			const source = new Source
 			source.root = $mol_const( this )
+			source.file = $mol_const( file )
 			return source as InstanceType< Source >
 		}
 

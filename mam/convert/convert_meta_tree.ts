@@ -25,7 +25,7 @@ namespace $ {
 
 		@ $mol_mem_key
 		tree( source : $mol_file ) {
-			return this.root().source( this.$.$mam_source_meta_tree ).tree( source )
+			return this.root().source( [ this.$.$mam_source_meta_tree, source ] )!.tree()
 		}
 
 	}

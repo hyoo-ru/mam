@@ -53,9 +53,9 @@ namespace $ {
 			]
 		}
 
-		@ $mol_mem
-		sources() {
-			return this.source_classes().map( ctor => this.root().source( ctor ) )
+		@ $mol_mem_key
+		sources( file: $mol_file ) {
+			return this.source_classes().map( ctor => this.root().source( [ ctor, file ] ) )
 		}
 
 		@ $mol_mem
@@ -71,7 +71,6 @@ namespace $ {
 		@ $mol_mem
 		graph() {
 			
-			const sources = this.sources()
 			const converts = this.converts()
 			
 			const ignore = new Set<$mol_file>()
@@ -96,9 +95,10 @@ namespace $ {
 					
 				}
 
-				for( const source of sources ) {
+				for( const source of this.sources( file ) ) {
+					if( !source ) continue
 
-					for( const[ dep , priority ] of source.deps( file ) ) {
+					for( const[ dep , priority ] of source.deps() ) {
 						if( !this.filter( dep ) ) continue
 
 						const edge = graph.edge_out( file , dep )

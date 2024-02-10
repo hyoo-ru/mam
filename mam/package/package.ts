@@ -40,9 +40,11 @@ namespace $ {
 			const files = new Set< $mol_file >()
 
 			for (const slice of this.slices()) {
+
 				for (const file of slice.bundles_generated()) {
 					files.add( file )
 				}
+				
 			}
 
 			return files
@@ -53,11 +55,10 @@ namespace $ {
 			const decls = [] as $mol_tree[]
 
 			for( const file of this.dir().sub() ) {
-				if( !/\.meta\.tree$/.test( file.name() ) ) continue
 
-				const tree = this.root().source( this.$.$mam_source_meta_tree ).tree( file )
+				const tree = this.root().source([ this.$.$mam_source_meta_tree, file ])?.tree()
+				if( tree ) decls.push( ... tree.sub )
 
-				decls.push( ... tree.sub )
 			}
 			
 			return new $mol_tree({ sub : decls })

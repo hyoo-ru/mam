@@ -8,13 +8,22 @@ namespace $ {
 	/** Source file dependencies extractor. */
 	export class $mam_source extends $mol_object2 {
 
+		static match( file: $mol_file ): boolean {
+			return false
+		}
+
 		@ $mol_mem
 		root() {
 			return undefined as any as $mam_root
 		}
 
-		@ $mol_mem_key
-		deps( source : $mol_file ) {
+		@ $mol_mem
+		file() {
+			return undefined as any as $mol_file
+		}
+
+		@ $mol_mem
+		deps() {
 			return new Map< $mol_file , number >()
 		}
 

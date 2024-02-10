@@ -4,12 +4,15 @@ namespace $ {
 
 	export class $mam_source_ts extends $mam_source {
 
-		@ $mol_mem_key
-		deps( file : $mol_file ) {
+		static match( file: $mol_file ): boolean {
+			return /tsx?$/.test( file.ext() )
+		}
+		
+		@ $mol_mem
+		deps() {
 			
-			if( !/tsx?$/.test( file.ext() ) ) return super.deps( file )
-
-			const deps = this.ts_source_deps( file ).mam_deps
+			const file = this.file()
+			const deps = this.ts_source_deps().mam_deps
 
 			let name_parts = file.name().split('.')
 
@@ -25,20 +28,23 @@ namespace $ {
 			return deps
 		}
 
-		@ $mol_mem_key
-		ts_source( source : $mol_file ) {
+		@ $mol_mem
+		ts_source() {
+			const file = this.file()
 			const target = this.root().ts_options().target!
-			return $node.typescript.createSourceFile( source.path() , source.text() , target )
+			return $node.typescript.createSourceFile( file.path() , file.text() , target )
 		}
 
-		@ $mol_mem_key
-		ts_source_deps( file : $mol_file ) {
+		@ $mol_mem
+		ts_source_deps() {
+			const file = this.file()
+
 			const mam_deps = new Map< $mol_file , number >()
 			const node_deps: Set< string > = new Set
 
 			if( !/tsx?$/.test( file.ext() ) ) return { mam_deps, node_deps }
 
-			const ts_source = this.ts_source( file )
+			const ts_source = this.ts_source()
 
 			const visit = ( node: ts_Node, parent: ts_Node , priority: number ) => {
 				if( !$node.typescript.isIdentifier( node ) ) {

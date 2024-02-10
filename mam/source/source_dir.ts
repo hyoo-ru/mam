@@ -2,18 +2,22 @@ namespace $ {
 
 	export class $mam_source_dir extends $mam_source {
 
-		@ $mol_mem_key
-		deps( source : $mol_file ) {
-			
-			const deps = super.deps( source )
-			if( source.type() !== 'dir' ) return deps
+		static match( file: $mol_file ): boolean {
+			return file.type() == 'dir'
+		}
 
-			for( const item of source.sub() ) {
+		@ $mol_mem
+		deps() {
+			
+			const dir = this.file()
+			const deps = super.deps()
+
+			for( const item of dir.sub() ) {
 				if( item.type() !== 'file' ) continue
 				deps.set( item , 0 )
 			}
 
-			if( source !== this.root().dir() ) deps.set( source.parent() , Number.MIN_SAFE_INTEGER )
+			if( dir !== this.root().dir() ) deps.set( dir.parent() , Number.MIN_SAFE_INTEGER )
 			
 			return deps
 		}

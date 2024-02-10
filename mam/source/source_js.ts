@@ -2,11 +2,16 @@ namespace $ {
 
 	export class $mam_source_js extends $mam_source {
 
-		@ $mol_mem_key
-		deps( source : $mol_file ) {
+		static match( file: $mol_file ): boolean {
+			return /\.js$/.test( file.name() )
+		}
+
+		@ $mol_mem
+		deps() {
 			
-			const deps = super.deps( source )
-			if( !/\.js$/.test( source.ext() ) ) return deps
+			const file = this.file()
+			
+			const deps =  super.deps()
 			// extract dependencies
 			
 			return deps

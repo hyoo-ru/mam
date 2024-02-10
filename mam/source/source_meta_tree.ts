@@ -3,17 +3,15 @@ namespace $ {
 	export class $mam_source_meta_tree extends $mam_source {
 
 		static match( file: $mol_file ): boolean {
-			return file.ext() == 'meta.tree'
-			// /\.meta\.tree$/.test( 
+			return /\.meta\.tree$/.test( file.name() )
 		}
 
-		@ $mol_mem_key
-		deps( source : $mol_file ) {
+		@ $mol_mem
+		deps() {
 			
-			const deps = super.deps( source )
-			if( source.ext() !== 'meta.tree' ) return deps
+			const deps = super.deps()
 
-			const tree = this.tree( source )
+			const tree = this.tree()
 			const root_dir = this.root().dir()
 		
 			tree.select( 'require' ).sub.forEach( leaf => {
@@ -27,9 +25,10 @@ namespace $ {
 			return deps
 		}
 
-		@ $mol_mem_key
-		tree( source : $mol_file ) {
-			return $mol_tree.fromString( source.text() , source.path() )
+		@ $mol_mem
+		tree() {
+			const file = this.file()
+			return $mol_tree.fromString( file.text() , file.path() )
 		}
 
 	}
