@@ -13,6 +13,9 @@ namespace $ {
 			const pack = new this.$.$mam_package
 			pack.root = $mol_const( this )
 			pack.dir = $mol_const( dir )
+
+			pack.ensure()
+			
 			return pack
 		}
 

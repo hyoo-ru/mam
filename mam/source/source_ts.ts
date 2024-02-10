@@ -53,10 +53,19 @@ namespace $ {
 				}
 				
 				const text = node.escapedText as string
+				if( text === 'require' && $node.typescript.isCallExpression( parent ) ) {
+
+					const arg = parent.arguments[ 0 ]
+					if( !$node.typescript.isStringLiteral( arg ) ) return
+					mam_deps.set( this.file().resolve( arg.text ) , priority )
+					
+					return
+				}
+
 				const fqn = text.match( /\$([^$]*)/ )?.[1]
 				if( !fqn ) return
 
-				if( fqn == 'node' ) {
+				if( fqn === 'node' ) {
 
 					if( $node.typescript.isPropertyAccessExpression( parent ) ) {
 						node_deps.add( parent.name.escapedText as string )
@@ -74,6 +83,10 @@ namespace $ {
 			}
 
 			ts_source.forEachChild( child => visit( child, ts_source, 0 ) )
+
+			node_deps.forEach( name => {
+				$node[ name ] // force autoinstall through npm
+			} )
 
 			return { mam_deps, node_deps }
 		}
