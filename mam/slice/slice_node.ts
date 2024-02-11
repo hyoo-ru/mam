@@ -15,13 +15,13 @@ namespace $ {
 		@ $mol_mem
 		node_deps(): string[] {
 			
-			var deps = new Set< string >()
-			var sources = this.files()
+			const deps = new Set< string >()
+			const sources = this.files()
 			
-			for( let src of sources ) {
-
-				const deps = this.root().source( [ this.$.$mam_source_ts, src ] )?.ts_source_deps().node_deps
-				deps?.forEach( dep => deps.add( dep ) )
+			for( let file of sources ) {
+				
+				const file_deps = this.root().source( [ this.$.$mam_source_ts, file ] )?.ts_source_deps().node_deps
+				file_deps?.forEach( dep => deps.add( dep ) )
 
 			}
 
@@ -45,6 +45,12 @@ namespace $ {
 
 		prefix() {
 			return 'node.test'
+		}
+
+		filter( file: $mol_file ) {
+			if( !super.filter( file ) ) return false
+			// if( /\.test\./.test( file.name() ) ) return false
+			return true
 		}
 
 		bundle_classes() {

@@ -7,7 +7,7 @@ namespace $ {
 		}
 
 		@ $mol_mem
-		generated() {
+		generated_sources() {
 			const source = this.source()
 			const tree = this.tree()
 			

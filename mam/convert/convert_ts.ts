@@ -60,7 +60,7 @@ namespace $ {
 					)
 				) )
 			}
-			console.timeEnd(source.path())
+			// console.timeEnd(source.path())
 
 			return res
 		}

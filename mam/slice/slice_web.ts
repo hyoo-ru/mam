@@ -46,22 +46,27 @@ namespace $ {
 				this.$.$mam_bundle_dts,
 			]
 		}
-
-		@ $mol_mem
-		files() {
-			
-			const all = super.files()
-			const prod = this.pack().slice( this.$.$mam_slice_web_prod ).files()
-			
-			const test = new Set< $mol_file >()
-
-			for( const file of all ) {
-				if( prod.has( file ) ) continue
-				test.add( file )
-			}
-
-			return test
+		
+		filter( file: $mol_file ) {
+			if( !super.filter( file ) ) return false
+			return true
 		}
+
+		// @ $mol_mem
+		// files() {
+			
+		// 	const all = super.files()
+		// 	const prod = this.pack().slice( this.$.$mam_slice_web_prod ).files()
+			
+		// 	const test = new Set< $mol_file >()
+
+		// 	for( const file of all ) {
+		// 		if( prod.has( file ) ) continue
+		// 		test.add( file )
+		// 	}
+
+		// 	return test
+		// }
 
 	}
 

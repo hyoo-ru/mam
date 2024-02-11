@@ -9,7 +9,7 @@ namespace $ {
 		@ $mol_mem
 		deps() {
 			const deps = super.deps()
-			deps.set( this.lookup( 'mol_3d_glsl' ), 0 )
+			deps.set( this.lookup( 'mol/3d/glsl' ), 0 )
 
 			var lines = String( this.file().text() )
 			.replace( /\/\*[^]*?\*\//g, '' ) // drop block comments

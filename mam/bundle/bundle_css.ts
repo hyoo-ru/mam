@@ -9,8 +9,6 @@ namespace $ {
 			const prefix = slice.prefix()
 			const output = slice.pack().output()
 
-			if( prefix === 'node' ) return []
-
 			var sources = [] as $mol_file[] // this.sourcesCSS( { path, exclude } )
 			
 			var target = output.resolve( `${prefix}.css` )

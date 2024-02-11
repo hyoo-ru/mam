@@ -6,7 +6,7 @@ namespace $ {
 			return /css?$/.test( file.ext() )
 		}
 
-		generated() {
+		generated_sources() {
 			const source = this.source()
 
 			const name = source.name()

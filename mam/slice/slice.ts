@@ -27,6 +27,7 @@ namespace $ {
 				this.$.$mam_source_dir,
 				this.$.$mam_source_js,
 				this.$.$mam_source_css,
+				this.$.$mam_source_view_ts,
 				this.$.$mam_source_ts,
 				this.$.$mam_source_meta_tree,
 			]
@@ -49,6 +50,7 @@ namespace $ {
 			return [
 				this.$.$mam_bundle_meta,
 				this.$.$mam_bundle_js,
+				this.$.$mam_bundle_mjs,
 				this.$.$mam_bundle_view_tree,
 				this.$.$mam_bundle_meta_tree,
 				this.$.$mam_bundle_locale,

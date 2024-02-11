@@ -14,7 +14,7 @@ namespace $ {
 			const concater = new this.$.$mol_sourcemap_builder( script.name(), ';' )
 			concater.add( '#!/usr/bin/env node\n"use strict"' )
 
-			if( prefix === 'node' ) {
+			if( /node/.test( prefix ) ) {
 				concater.add( 'var exports = void 0' )
 			} else {
 				concater.add( 'function require'+'( path ){ return $node[ path ] }' )

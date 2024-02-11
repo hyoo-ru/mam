@@ -20,7 +20,7 @@ namespace $ {
 				<script>
 					addEventListener( 'load', ()=> setTimeout( ()=> {
 						const audit =  document.createElement( 'script' )
-						audit.src = 'web.audit.js'
+						audit.src = 'web.test.audit.js'
 						document.head.appendChild( audit )
 					}, 500 ) )
 				</script>

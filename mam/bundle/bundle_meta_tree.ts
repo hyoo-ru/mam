@@ -18,7 +18,7 @@ namespace $ {
 				if( file.type() !== 'dir' ) return
 				const meta = root.pack( file ).meta()
 				if( meta.sub.length > 0 ) {
-					named_metas.push( meta.clone({ value: '/' + file }) )
+					named_metas.push( meta.clone({ value: '/' + file.relate( root.dir() ) }) )
 				}
 			} )
 			

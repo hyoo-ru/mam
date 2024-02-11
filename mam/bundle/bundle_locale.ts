@@ -27,7 +27,7 @@ namespace $ {
 
 			const targets = Object.keys( locales ).map( lang => {
 				const start = Date.now()
-				const target = output.resolve( `-/${prefix}.locale=${ lang }.json` )
+				const target = output.resolve( `${prefix}.locale=${ lang }.json` )
 				
 				const locale = locales[ lang ]
 

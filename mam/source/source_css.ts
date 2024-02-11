@@ -9,22 +9,27 @@ namespace $ {
 		@ $mol_mem
 		deps() {
 			const deps = super.deps()
-			deps.set( this.lookup( 'mol_style_attach' ), 0 )
+			deps.set( this.lookup( 'mol/style/attach' ), 0 )
 
-			for( const code of this.file().text().matchAll( this.$.$mam_source_remarks_js ) ) {
+			var lines = String( this.file().text() )
+			.replace( /\/\*[^]*?\*\//g , '' ) // drop block comments
+			.replace( /\/\/.*$/gm , '' ) // drop inline comments
+			.split( '\n' )
+			
+			lines.forEach(
+				( line )=> {
+					var indent = /^([\s\t]*)/.exec( line )!
+					var priority = -indent[ 0 ].replace( /\t/g , '    ' ).length / 4
+					
+					line.replace(
+						/(?:--|\[)([a-z][a-z0-9]+(?:[_][a-z0-9]+)+)/ig , ( str , name )=> {
 
-				for( const line of code[0].split( '\n' ) ) {
-					const refs = line.matchAll( this.$.$mam_source_refs_js )
-
-					for( const { groups } of refs ) {
-						const indent = line.matchAll( this.$.$mam_source_line )?.next().value?.indent ?? ''
-
-						if( groups?.fqn ) {
-							deps.set( this.lookup( groups.name.replace( /[._]/g, '/' ) ), - indent.length )
+							deps.set( this.lookup( name.replace( /[._-]/g , '/' ) ), priority )
+							return str
 						}
-					}
+					)
 				}
-			}
+			)
 
 			return deps
 		}

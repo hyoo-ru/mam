@@ -34,8 +34,10 @@ namespace $ {
 			const lookup = ( dir: $mol_file ): $mol_file => {
 
 				if( dir.exists() ) return dir
+				if( this.root().pack( dir ).ensure() ) return dir
 	
 				const parent = dir.parent()
+
 				if( parent === this.root().dir() ) {
 					throw new Error( `Absent dependency: ${ dir.relate() }, (${ path })` )
 				}

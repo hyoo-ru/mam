@@ -47,16 +47,16 @@ namespace $ {
 			const sources = [ ...slice.files() ].filter( src => /tsx?$/.test( src.ext() ) )
 
 			if( /node/.test( slice.prefix() ) ) {
-				const types = [] as string[]
+				const lines = [] as string[]
 				
 				for( let dep of ( slice as $mam_slice_node ).node_deps() ) {
-					types.push( '\t' + JSON.stringify( dep ) + ': typeof import\( ' + JSON.stringify( dep ) + ' )' )
+					lines.push( '\t' + JSON.stringify( dep ) + ': typeof import\( ' + JSON.stringify( dep ) + ' )' )
 				}
 				
-				if( types.length > 0 ) {
+				if( lines.length > 0 ) {
 				
 					const node_types = slice.pack().dir().resolve( `-node/deps.d.ts` )
-					node_types.text( 'interface $node {\n ' + types.join( '\n' ) + '\n}' )
+					node_types.text( 'interface $node {\n ' + lines.join( '\n' ) + '\n}' )
 					sources.push( node_types )
 
 				}

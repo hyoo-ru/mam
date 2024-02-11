@@ -75,13 +75,13 @@ namespace $ {
 			const dir = this.dir()
 			
 			const parent = dir.parent()
-			const root_dir = this.root().dir()
+			const root = this.root()
 			
-			if( dir !== root_dir ) this.root().pack( parent ).ensure()
+			if( dir !== root.dir() ) root.pack( parent ).ensure()
 			
-			const mapping = dir === root_dir
+			const mapping = dir === root.dir()
 				? $mol_tree.fromString( `pack ${ dir.name() } git \\https://github.com/hyoo-ru/mam.git\n` )
-				: this.meta()
+				: root.pack( parent ).meta()
 			
 			if( dir.exists() ) {
 
@@ -132,13 +132,13 @@ namespace $ {
 			}
 
 			for( let repo of mapping.select( 'pack', dir.name(), 'git' ).sub ) {
-				this.$.$mol_exec( root_dir.path(), 'git', 'clone', '--depth', '1', repo.value, dir.relate( root_dir ) )
+				this.$.$mol_exec( root.dir().path(), 'git', 'clone', '--depth', '1', repo.value, dir.relate( root.dir() ) )
 				dir.reset()
 				return true
 			}
 			
-			if( parent === root_dir ) {
-				throw new Error( `Root package "${ dir.relate( root_dir ) }" not found` )
+			if( parent === root.dir() ) {
+				throw new Error( `Root package "${ dir.relate( root.dir() ) }" not found` )
 			}
 
 			return false
