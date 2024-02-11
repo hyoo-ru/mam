@@ -63,7 +63,7 @@ namespace $ {
 			if( errors.length ) $mol_fail_hidden( new $mol_error_mix( `Build fail ${ pack_dir.path() }`, ...errors ) )
 
 			if( prefix === 'node' ) {
-				this.$.$mol_exec( root_dir.path() , 'node' , '--trace-uncaught', target.relate( root_dir ) )
+				this.$.$mol_exec( root_dir.path() , 'node' , '--enable-source-maps', '--trace-uncaught', target.relate( root_dir ) )
 			}
 			
 			return [ target , targetMap ]

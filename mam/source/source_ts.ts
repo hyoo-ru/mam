@@ -10,9 +10,9 @@ namespace $ {
 		
 		@ $mol_mem
 		deps() {
+			const deps = this.ts_source_deps().mam_deps
 			
 			const file = this.file()
-			const deps = this.ts_source_deps().mam_deps
 
 			let name_parts = file.name().split('.')
 

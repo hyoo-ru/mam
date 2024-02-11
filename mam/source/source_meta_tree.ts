@@ -8,7 +8,6 @@ namespace $ {
 
 		@ $mol_mem
 		deps() {
-			
 			const deps = super.deps()
 
 			const tree = this.tree()

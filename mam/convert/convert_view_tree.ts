@@ -15,8 +15,8 @@ namespace $ {
 
 		@ $mol_mem
 		generated_sources() {
-			return [ 
-				this.script() 
+			return [
+				this.script(),
 			]
 		}
 

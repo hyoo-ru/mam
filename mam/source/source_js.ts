@@ -7,7 +7,7 @@ namespace $ {
 		}
 
 		@ $mol_mem
-		deps(): Map< $mol_file , number > {
+		deps() {
 			const deps = super.deps()
 
 			const file = this.file()

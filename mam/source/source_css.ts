@@ -9,6 +9,7 @@ namespace $ {
 		@ $mol_mem
 		deps() {
 			const deps = super.deps()
+			deps.set( this.lookup( 'mol_style_attach' ) , 0 )
 
 			for( const code of this.file().text().matchAll( this.$.$mam_source_remarks_js ) ) {
 

@@ -8,9 +8,9 @@ namespace $ {
 
 		@ $mol_mem
 		deps() {
+			const deps = super.deps()
 			
 			const dir = this.file()
-			const deps = super.deps()
 
 			for( const item of dir.sub() ) {
 				if( item.type() !== 'file' ) continue

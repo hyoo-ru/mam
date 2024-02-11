@@ -26,6 +26,7 @@ namespace $ {
 			return [
 				this.$.$mam_source_dir,
 				this.$.$mam_source_js,
+				this.$.$mam_source_css,
 				this.$.$mam_source_ts,
 				this.$.$mam_source_meta_tree,
 			]
@@ -36,6 +37,9 @@ namespace $ {
 			return [
 				this.$.$mam_convert_meta_tree,
 				this.$.$mam_convert_view_tree,
+				this.$.$mam_convert_glsl,
+				this.$.$mam_convert_css,
+				this.$.$mam_convert_bin,
 				this.$.$mam_convert_ts,
 			]
 		}
@@ -50,6 +54,8 @@ namespace $ {
 				this.$.$mam_bundle_test_html,
 				this.$.$mam_bundle_readme,
 				this.$.$mam_bundle_audit_js,
+				this.$.$mam_bundle_css,
+				this.$.$mam_bundle_css,
 			]
 		}
 
