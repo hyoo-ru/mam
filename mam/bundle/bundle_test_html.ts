@@ -14,7 +14,7 @@ namespace $ {
 				: `<!doctype html><meta charset="utf-8" /><body><script src="web.js" charset="utf-8"></script>`
 			
 			content = content.replace(
-				/(<\/body>|$)/ , `
+				/(<\/body>|$)/, `
 				<script src="/mol/build/client/client.js" charset="utf-8"></script>
 				<script src="web.test.js" charset="utf-8"></script>
 				<script>
@@ -29,7 +29,8 @@ namespace $ {
 			
 			res.text( content )
 			
-			this.log( res , Date.now() - start )
+			this.log( res, Date.now() - start )
+
 			return [ res ]
 		}
 

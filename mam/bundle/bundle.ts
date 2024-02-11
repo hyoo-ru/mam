@@ -16,19 +16,19 @@ namespace $ {
 
 		/** Generated bundle by slice */
 		@ $mol_mem_key
-		generated( slice : $mam_slice ) {
+		generated( slice: $mam_slice ) {
 			return this.generated_for_pack( slice.pack() )
 		}
 
-		log( target : $mol_file , duration : number ) {
+		log( target: $mol_file, duration: number ) {
 
 			const path = target.relate( this.root().dir() )
 			
 			this.$.$mol_log3_done({
-				place: this ,
-				duration: `${duration}ms` ,
-				message: `Built` , 
-				path ,
+				place: this,
+				duration: `${duration}ms`,
+				message: `Built`, 
+				path,
 			})
 
 		}

@@ -24,7 +24,8 @@ namespace $ {
 
 			const target = pack.output().resolve( 'README.md' )
 			target.text( source?.text() ?? pack.dir().path() )
-			this.log( target , Date.now() - start )
+
+			this.log( target, Date.now() - start )
 			
 			return [ target ]
 		}

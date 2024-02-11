@@ -14,10 +14,10 @@ namespace $ {
 
 			for( const item of dir.sub() ) {
 				if( item.type() !== 'file' ) continue
-				deps.set( item , 0 )
+				deps.set( item, 0 )
 			}
 
-			if( dir !== this.root().dir() ) deps.set( dir.parent() , Number.MIN_SAFE_INTEGER )
+			if( dir !== this.root().dir() ) deps.set( dir.parent(), Number.MIN_SAFE_INTEGER )
 			
 			return deps
 		}

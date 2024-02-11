@@ -16,7 +16,7 @@ namespace $ {
 			return 'index'
 		}
 
-		filter( file : $mol_file ) {
+		filter( file: $mol_file ) {
 			if( !/^[a-z0-9]/i.test( file.name() ) ) return false
 			return true
 		}
@@ -49,13 +49,12 @@ namespace $ {
 			return [
 				this.$.$mam_bundle_meta,
 				this.$.$mam_bundle_js,
-				this.$.$mam_bundle_dts,
+				this.$.$mam_bundle_view_tree,
+				this.$.$mam_bundle_meta_tree,
+				this.$.$mam_bundle_locale,
 				this.$.$mam_bundle_index_html,
-				this.$.$mam_bundle_test_html,
+				this.$.$mam_bundle_package_json,
 				this.$.$mam_bundle_readme,
-				this.$.$mam_bundle_audit_js,
-				this.$.$mam_bundle_css,
-				this.$.$mam_bundle_css,
 			]
 		}
 
@@ -78,9 +77,9 @@ namespace $ {
 		graph() {
 			
 			const ignore = new Set<$mol_file>()
-			const graph = new $mol_graph< $mol_file , { priority : number } >()
+			const graph = new $mol_graph< $mol_file, { priority: number } >()
 			
-			const collect = ( file : $mol_file )=> {
+			const collect = ( file: $mol_file )=> {
 
 				if( ignore.has( file ) ) return
 				ignore.add( file )
@@ -91,15 +90,15 @@ namespace $ {
 					for( const gen of convert.generated() ) {
 						if( !this.filter( gen ) ) continue
 
-						graph.link( file , gen , { priority: 0 } )
-						graph.link( gen , file , { priority: 1 } )
+						graph.link( file, gen, { priority: 0 } )
+						graph.link( gen, file, { priority: 1 } )
 					}
 
 					for( const gen of convert.generated_sources() ) {
 						if( !this.filter( gen ) ) continue
 						
-						graph.link( file , gen , { priority: 1 } )
-						graph.link( gen , file , { priority: 0 } )
+						graph.link( file, gen, { priority: 1 } )
+						graph.link( gen, file, { priority: 0 } )
 
 						collect( gen )
 					}
@@ -109,12 +108,12 @@ namespace $ {
 				for( const source of this.sources( file ) ) {
 					if( !source ) continue
 
-					for( const[ dep , priority ] of source.deps() ) {
+					for( const[ dep, priority ] of source.deps() ) {
 						if( !this.filter( dep ) ) continue
 
-						const edge = graph.edge_out( file , dep )
+						const edge = graph.edge_out( file, dep )
 						if( !edge || edge.priority < priority ) {
-							graph.link( file , dep , { priority } )
+							graph.link( file, dep, { priority } )
 						}
 						
 						collect( dep )

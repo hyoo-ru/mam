@@ -20,12 +20,12 @@ namespace $ {
 			// const exclude_ext = exclude.filter( ex => ex !== 'test' && ex !== 'dev' )
 
 			const sources = [ ...slice.files() ].filter( file => /\.[jt]sx?$/.test( file.name() ) )
-			// this.sources_js( { path , exclude : exclude_ext } )
+			// this.sources_js( { path, exclude: exclude_ext } )
 
-			// const sourcesNoTest = new Set( this.sources_js( { path , exclude } ) )
+			// const sourcesNoTest = new Set( this.sources_js( { path, exclude } ) )
 			// const sourcesTest = sources.filter( src => !sourcesNoTest.has( src ) )
 			// if( prefix === 'node' ) {
-			// 	sourcesTest = [ ... sourcesNoTest , ... sourcesTest ]
+			// 	sourcesTest = [ ... sourcesNoTest, ... sourcesTest ]
 			// } else {
 			if( prefix !== 'node' ) {
 				concater.add( 'function require'+'( path ){ return $node[ path ] }' )
@@ -58,15 +58,15 @@ namespace $ {
 			target.text( concater.content + '\n//# sourceMappingURL=' + targetMap.relate( target.parent() )+'\n' )
 			targetMap.text( concater.toString() )
 			
-			this.log( target , Date.now() - start )
+			this.log( target, Date.now() - start )
 			
 			if( errors.length ) $mol_fail_hidden( new $mol_error_mix( `Build fail ${ pack_dir.path() }`, ...errors ) )
 
 			if( prefix === 'node' ) {
-				this.$.$mol_exec( root_dir.path() , 'node' , '--enable-source-maps', '--trace-uncaught', target.relate( root_dir ) )
+				this.$.$mol_exec( root_dir.path(), 'node', '--enable-source-maps', '--trace-uncaught', target.relate( root_dir ) )
 			}
 			
-			return [ target , targetMap ]
+			return [ target, targetMap ]
 		}
 
 	}

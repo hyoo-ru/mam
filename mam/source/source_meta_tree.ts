@@ -27,7 +27,7 @@ namespace $ {
 		@ $mol_mem
 		tree() {
 			const file = this.file()
-			return $mol_tree.fromString( file.text() , file.path() )
+			return $mol_tree.fromString( file.text(), file.path() )
 		}
 
 	}

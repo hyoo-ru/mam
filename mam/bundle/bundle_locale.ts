@@ -10,11 +10,11 @@ namespace $ {
 
 			const files = [ ...slice.files() ].filter( file => /(locale=(\w+)\.json)$/.test( file.name() ) )
 
-			const locales = {} as { [ key : string ] : { [ key : string ] : string } }
+			const locales = {} as { [ key: string ]: { [ key: string ]: string } }
 			
 			files.forEach(
 				file => {
-					const [ ext , lang ] = /locale=(\w+)\.json$/.exec( file.name() )!
+					const [ ext, lang ] = /locale=(\w+)\.json$/.exec( file.name() )!
 					
 					if( !locales[ lang ] ) locales[ lang ] = {}
 					
@@ -53,9 +53,9 @@ namespace $ {
 					locale_sorted[ key ] = locale[ key ]
 				}
 
-				target.text( JSON.stringify( locale_sorted , null , '\t' ) )
+				target.text( JSON.stringify( locale_sorted, null, '\t' ) )
 				
-				this.log( target , Date.now() - start )
+				this.log( target, Date.now() - start )
 				
 				return target
 			} )

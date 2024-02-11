@@ -14,12 +14,22 @@ namespace $ {
 		}
 
 		@ $mol_mem
-		output( next? : $mol_file ) {
+		output( next?: $mol_file ) {
 			return this.dir().resolve( '-' )
 		}
 
+		@ $mol_mem
+		slice_classes(): ( typeof $mam_slice )[] {
+			return [
+				this.$.$mam_slice_web_prod,
+				this.$.$mam_slice_node_prod,
+				this.$.$mam_slice_web_test,
+				this.$.$mam_slice_node_test,
+			]
+		}
+
 		@ $mol_mem_key
-		slice< Slice extends typeof $mam_slice >( Slice : Slice ) {
+		slice< Slice extends typeof $mam_slice >( Slice: Slice ) {
 			const slice = new Slice
 			slice.pack = $mol_const( this )
 			return slice as InstanceType< Slice >
@@ -27,12 +37,7 @@ namespace $ {
 
 		@ $mol_mem
 		slices() {
-			return [
-				this.slice( this.$.$mam_slice_web_prod ) ,
-				this.slice( this.$.$mam_slice_node_prod ) ,
-				this.slice( this.$.$mam_slice_web_test ) ,
-				this.slice( this.$.$mam_slice_node_test ) ,
-			]
+			return this.slice_classes().map( ctor => this.slice( ctor ) )
 		}
 
 		@ $mol_mem
@@ -61,7 +66,7 @@ namespace $ {
 
 			}
 			
-			return new $mol_tree({ sub : decls })
+			return new $mol_tree({ sub: decls })
 		}
 
 		@ $mol_mem
@@ -87,25 +92,25 @@ namespace $ {
 					const git_dir = dir.resolve( '.git' )
 					if( git_dir.exists() ) {
 						
-						this.$.$mol_exec( dir.path() , 'git' , 'pull', '--deepen=1' )
+						this.$.$mol_exec( dir.path(), 'git', 'pull', '--deepen=1' )
 						// mod.reset()
 						// for ( const sub of mod.sub() ) sub.reset()
 						
 						return false
 					}
 					
-					for( let repo of mapping.select( 'pack' , dir.name() , 'git' ).sub ) {
+					for( let repo of mapping.select( 'pack', dir.name(), 'git' ).sub ) {
 						
-						this.$.$mol_exec( dir.path() , 'git' , 'init' )
+						this.$.$mol_exec( dir.path(), 'git', 'init' )
 						
-						const res = this.$.$mol_exec( dir.path() , 'git' , 'remote' , 'show' , repo.value )
+						const res = this.$.$mol_exec( dir.path(), 'git', 'remote', 'show', repo.value )
 						const matched = res.stdout.toString().match( /HEAD branch: (.*?)\n/ )
 						const head_branch_name = res instanceof Error || matched === null || !matched[1]
 							? 'master'
 							: matched[1]
 						
-						this.$.$mol_exec( dir.path() , 'git' , 'remote' , 'add' , '--track' , head_branch_name! , 'origin' , repo.value )
-						this.$.$mol_exec( dir.path() , 'git' , 'pull', '--deepen=1' )
+						this.$.$mol_exec( dir.path(), 'git', 'remote', 'add', '--track', head_branch_name!, 'origin', repo.value )
+						this.$.$mol_exec( dir.path(), 'git', 'pull', '--deepen=1' )
 						dir.reset()
 						for ( const sub of dir.sub() ) {
 							sub.reset()
@@ -116,9 +121,9 @@ namespace $ {
 				} catch( error: any ) {
 
 					this.$.$mol_log3_fail({
-						place: `${this}.modEnsure()` ,
-						path: dir.path() ,
-						message: error.message ,
+						place: `${this}.modEnsure()`,
+						path: dir.path(),
+						message: error.message,
 					})
 
 				}
@@ -126,8 +131,8 @@ namespace $ {
 				return false
 			}
 
-			for( let repo of mapping.select( 'pack' , dir.name() , 'git' ).sub ) {
-				this.$.$mol_exec( root_dir.path() , 'git' , 'clone' , '--depth', '1', repo.value , dir.relate( root_dir ) )
+			for( let repo of mapping.select( 'pack', dir.name(), 'git' ).sub ) {
+				this.$.$mol_exec( root_dir.path(), 'git', 'clone', '--depth', '1', repo.value, dir.relate( root_dir ) )
 				dir.reset()
 				return true
 			}

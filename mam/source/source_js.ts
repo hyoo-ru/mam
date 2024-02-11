@@ -17,15 +17,15 @@ namespace $ {
 				for( const line of code[0].split( '\n' ) ) {
 					
 					const indent = /^([\s\t]*)/.exec( line )!
-					const priority = -indent[ 0 ].replace( /\t/g , '    ' ).length / 4
+					const priority = -indent[ 0 ].replace( /\t/g, '    ' ).length / 4
 					
 					line.replace(
-						/\b(?:require|import)\(\s*['"]([^"'()]*?)['"]\s*\)/ig , ( str , path )=> {
-							path = path.replace( /(\/[^\/.]+)$/ , '$1.js' ).replace( /\/$/, '/index.js' )
+						/\b(?:require|import)\(\s*['"]([^"'()]*?)['"]\s*\)/ig, ( str, path )=> {
+							path = path.replace( /(\/[^\/.]+)$/, '$1.js' ).replace( /\/$/, '/index.js' )
 							if( path[0] === '.' ) path = '../' + path
 
 							const dep = this.root().dir().resolve( path )
-							deps.set( dep , priority )
+							deps.set( dep, priority )
 							return str
 						}
 					)

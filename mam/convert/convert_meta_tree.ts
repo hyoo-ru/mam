@@ -12,9 +12,9 @@ namespace $ {
 			const tree = this.tree()
 			
 			let content = ''
-			for( const step of tree.select( 'build' , '' ).sub ) {
+			for( const step of tree.select( 'build', '' ).sub ) {
 
-				const res = this.$.$mol_exec( source.parent().path() , step.value ).stdout.toString().trim()
+				const res = this.$.$mol_exec( source.parent().path(), step.value ).stdout.toString().trim()
 				if( step.type ) content += `let ${ step.type } = ${ JSON.stringify( res ) }`
 
 			}

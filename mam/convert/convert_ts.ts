@@ -21,7 +21,7 @@ namespace $ {
 
 			const js = source.parent().resolve( source.name() + '.js' )
 
-			const text = res.outputText.replace( /^\/\/#\ssourceMappingURL=[^\n]*/mg , '//' + source.relate() ) + '\n'
+			const text = res.outputText.replace( /^\/\/#\ssourceMappingURL=[^\n]*/mg, '//' + source.relate() ) + '\n'
 
 			js.text( text, 'virt' )
 			return js
@@ -42,7 +42,7 @@ namespace $ {
 
 			console.time(source.path())
 
-			const res = $node.typescript.transpileModule( source.text() , {
+			const res = $node.typescript.transpileModule( source.text(), {
 				compilerOptions: this.root().ts_options(),
 				fileName: source.path(),
 				reportDiagnostics: true,
@@ -51,9 +51,9 @@ namespace $ {
 			if( res.diagnostics?.length ) {
 				return $mol_fail( new Error(
 					$node.typescript.formatDiagnosticsWithColorAndContext(
-						res.diagnostics ,
+						res.diagnostics,
 						{
-							getCanonicalFileName: ( path : string )=> path,
+							getCanonicalFileName: ( path: string )=> path,
 							getCurrentDirectory: $node.typescript.sys.getCurrentDirectory,
 							getNewLine: () => $node.typescript.sys.newLine,
 						}

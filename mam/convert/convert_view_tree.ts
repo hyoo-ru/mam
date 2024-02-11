@@ -25,7 +25,7 @@ namespace $ {
 			const source = this.source()
 			
 			const text = source.text()
-			return this.$.$mol_tree2_from_string( text , source.path() )
+			return this.$.$mol_tree2_from_string( text, source.path() )
 		}
 
 		@ $mol_mem
@@ -50,7 +50,7 @@ namespace $ {
 			const source = this.source()
 
 			const locale = source.parent().resolve( `-view.tree/${ source.name() }.locale=en.json` )
-			locale.text( JSON.stringify( this.compiled().locales , null , '\t' ) )
+			locale.text( JSON.stringify( this.compiled().locales, null, '\t' ) )
 			
 			return locale
 		}

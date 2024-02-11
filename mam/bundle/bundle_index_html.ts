@@ -5,6 +5,7 @@ namespace $ {
 		@ $mol_mem_key
 		generated_for_pack( pack: $mam_package ) {
 			const start = Date.now()
+			
 			const html = pack.dir().resolve( 'index.html' )
 			const tree = pack.dir().resolve( 'index.xml.tree' )
 

@@ -4,11 +4,10 @@ namespace $ {
 
 		@ $mol_mem_key
 		generated( slice: $mam_slice ) {
+			const start = Date.now()
 
 			const prefix = slice.prefix()
 			const root = this.root()
-
-			const start = Date.now()
 			
 			const target = slice.pack().output().resolve( `${prefix}.meta.tree` )
 			
@@ -27,7 +26,7 @@ namespace $ {
 			
 			target.text( new $mol_tree( { sub: named_metas } ).toString() )
 			
-			this.log( target , Date.now() - start )
+			this.log( target, Date.now() - start )
 			
 			return [ target ]
 		}

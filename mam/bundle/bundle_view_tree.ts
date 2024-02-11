@@ -15,7 +15,7 @@ namespace $ {
 			
 			target.text( files.map( file => file.text() ).join( '\n' ) )
 			
-			this.log( target , Date.now() - start )
+			this.log( target, Date.now() - start )
 			
 			return [ target ]
 		}

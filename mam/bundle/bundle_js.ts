@@ -4,6 +4,7 @@ namespace $ {
 
 		@ $mol_mem_key
 		generated( slice: $mam_slice ) {
+			const start = Date.now()
 
 			const prefix = slice.prefix()
 			const output = slice.pack().output()
@@ -21,24 +22,22 @@ namespace $ {
 
 			const files = [ ...slice.files() ].filter( file => /\.[j]sx?$/.test( file.name() ) )
 
-			console.log(files.map(String))
-
 			for( const file of files ) {
 				const file_map = file.parent().resolve( file.name() + '.map' )
-				const content = file.text().replace( /^\/\/#\ssourceMappingURL=.*$/mg , '' )
+				const content = file.text().replace( /^\/\/#\ssourceMappingURL=.*$/mg, '' )
 				
 				const isCommonJs = /typeof +exports|module\.exports|\bexports\.\w+\s*=/.test( content )
 					
 				if( isCommonJs ) {
-					concater.add( `\nvar $node = $node || {}\nvoid function( module ) { var exports = module.${''}exports = this; function require( id ) { return $node[ id.replace( /^.\\// , "` + file.parent().relate( this.root().dir().resolve( 'node_modules' ) ) + `/" ) ] }; \n`, '-' )
+					concater.add( `\nvar $node = $node || {}\nvoid function( module ) { var exports = module.${''}exports = this; function require( id ) { return $node[ id.replace( /^.\\//, "` + file.parent().relate( this.root().dir().resolve( 'node_modules' ) ) + `/" ) ] }; \n`, '-' )
 				}
 
-				concater.add( content , file.relate( output ) , file_map.text() || undefined )
+				concater.add( content, file.relate( output ), file_map.text() || undefined )
 				
 				if( isCommonJs ) {
 					const idFull = file.relate( this.root().dir().resolve( 'node_modules' ) )
-					const idShort = idFull.replace( /\/index\.js$/ , '' ).replace( /\.js$/ , '' )
-					concater.add( `\n$${''}node[ "${ idShort }" ] = $${''}node[ "${ idFull }" ] = module.${''}exports }.call( {} , {} )\n`, '-' )
+					const idShort = idFull.replace( /\/index\.js$/, '' ).replace( /\.js$/, '' )
+					concater.add( `\n$${''}node[ "${ idShort }" ] = $${''}node[ "${ idFull }" ] = module.${''}exports }.call( {}, {} )\n`, '-' )
 				}
 			}
 
@@ -46,16 +45,9 @@ namespace $ {
 			script.text( text )
 			map.text( JSON.stringify( concater.sourcemap ) )
 			
-			this.$.$mol_log3_done({
-				place : `$mam_bundle_js.generated()` ,
-				message : 'Built',
-				size : text.length,
-				file : script.relate(),
-				sourcemap : map.relate(),
-				sources : [ ... files ].map(s=>s.relate()),
-			})
+			this.log( script, Date.now() - start )
 			
-			return [ script , map ]
+			return [ script, map ]
 		}
 
 	}

@@ -9,7 +9,7 @@ namespace $ {
 		@ $mol_mem
 		deps() {
 			const deps = super.deps()
-			deps.set( this.lookup( 'mol_style_attach' ) , 0 )
+			deps.set( this.lookup( 'mol_style_attach' ), 0 )
 
 			for( const code of this.file().text().matchAll( this.$.$mam_source_remarks_js ) ) {
 
@@ -20,7 +20,7 @@ namespace $ {
 						const indent = line.matchAll( this.$.$mam_source_line )?.next().value?.indent ?? ''
 
 						if( groups?.fqn ) {
-							deps.set( this.lookup( groups.name.replace( /[._]/g , '/' ) ) , - indent.length )
+							deps.set( this.lookup( groups.name.replace( /[._]/g, '/' ) ), - indent.length )
 						}
 					}
 				}

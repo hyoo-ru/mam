@@ -21,7 +21,7 @@ namespace $ {
 				name_parts.splice( -2, 1 )
 
 				const dep = file.parent().resolve( name_parts.slice( 0, -1 ).join( '.' ) + '.ts' )
-				if( dep.exists() ) deps.set( dep , 0 )
+				if( dep.exists() ) deps.set( dep, 0 )
 
 			}
 
@@ -32,21 +32,21 @@ namespace $ {
 		ts_source() {
 			const file = this.file()
 			const target = this.root().ts_options().target!
-			return $node.typescript.createSourceFile( file.path() , file.text() , target )
+			return $node.typescript.createSourceFile( file.path(), file.text(), target )
 		}
 
 		@ $mol_mem
 		ts_source_deps() {
 			const file = this.file()
 
-			const mam_deps = new Map< $mol_file , number >()
+			const mam_deps = new Map< $mol_file, number >()
 			const node_deps: Set< string > = new Set
 
 			if( !/tsx?$/.test( file.ext() ) ) return { mam_deps, node_deps }
 
 			const ts_source = this.ts_source()
 
-			const visit = ( node: ts_Node, parent: ts_Node , priority: number ) => {
+			const visit = ( node: ts_Node, parent: ts_Node, priority: number ) => {
 				if( !$node.typescript.isIdentifier( node ) ) {
 					node.forEachChild( child => visit( child, node, priority - 1 ) )
 					return
@@ -57,7 +57,7 @@ namespace $ {
 
 					const arg = parent.arguments[ 0 ]
 					if( !$node.typescript.isStringLiteral( arg ) ) return
-					mam_deps.set( this.file().resolve( arg.text ) , priority )
+					mam_deps.set( this.file().resolve( arg.text ), priority )
 					
 					return
 				}
@@ -78,8 +78,8 @@ namespace $ {
 
 				}
 				
-				const path = fqn.replace( /[._]/g , '/' )
-				mam_deps.set( this.lookup( path ) , priority )
+				const path = fqn.replace( /[._]/g, '/' )
+				mam_deps.set( this.lookup( path ), priority )
 			}
 
 			ts_source.forEachChild( child => visit( child, ts_source, 0 ) )

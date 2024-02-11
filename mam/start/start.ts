@@ -17,9 +17,9 @@ namespace $ {
 	} catch( error ) {
 		
 		$mol_ambient({}).$mol_log3_fail({
-			place: 'mam/start' , 
-			message: ( error as Error ).stack ?? String( error ) ,
-			// message: error?.message ?? String( error ) ,
+			place: 'mam/start', 
+			message: ( error as Error ).stack ?? String( error ),
+			// message: error?.message ?? String( error ),
 		})
 
 		process.exit(1)

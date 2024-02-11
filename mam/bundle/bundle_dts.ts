@@ -4,13 +4,11 @@ namespace $ {
 
 		@ $mol_mem_key
 		generated( slice: $mam_slice ) {
+			const start = Date.now()
 
 			// const script = this.pack().output().resolve( `${prefix}.d.ts` )
 			// const map = this.pack().output().resolve( `${prefix}.d.ts.map` )
 
-			// generate bundle
-			const start = Date.now()
-			
 			const prefix = slice.prefix()
 
 			const target = slice.pack().output().resolve( `${ prefix }.d.ts` )
@@ -29,16 +27,10 @@ namespace $ {
 			
 			target.text( concater.content + '\nexport = $;' )
 			
-			this.log( target , Date.now() - start )
-			// this.$.$mol_log3_done({
-			// 	place : '$mam_bundle_dts.generated()' ,
-			// 	message : 'Built',
-			// 	file : script.relate(),
-			// 	// sources : [ ... this.files() ].map(s=>s.relate()),
-			// })
+			this.log( target, Date.now() - start )
 			
 			return [ target ]
-			// return [ script , map ]
+			// return [ script, map ]
 		}
 
 	}

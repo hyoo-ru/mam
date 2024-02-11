@@ -10,18 +10,18 @@ namespace $ {
 
 			const root_dir = this.root().dir()
 			
-			const targets : $mol_file[] = []
+			const targets: $mol_file[] = []
 
 			const files = [ ...slice.files() ].filter( file => /meta.tree$/.test( file.name() ) )
 			files.forEach( source => {
-				const tree = $mol_tree.fromString( source.text() , source.path() )
+				const tree = $mol_tree.fromString( source.text(), source.path() )
 
 				const pushFile = (file:$mol_file) => {
 					const start = Date.now()
 					const target = output.resolve( file.relate( root_dir ) )
 					target.buffer( file.buffer() )
 					targets.push( target )
-					this.log( target , Date.now() - start )
+					this.log( target, Date.now() - start )
 				}
 
 				const addFilesRecursive = (file:$mol_file) =>{
@@ -39,7 +39,7 @@ namespace $ {
 				}
 
 				tree.select( 'deploy' ).sub.forEach( deploy => {
-					addFilesRecursive( root_dir.resolve( deploy.value.replace( /^\// , '' ) ) )
+					addFilesRecursive( root_dir.resolve( deploy.value.replace( /^\//, '' ) ) )
 				} )
 				
 			} )

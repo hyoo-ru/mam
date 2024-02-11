@@ -1,8 +1,8 @@
 namespace $ {
 
 	export let $mam_source_line = $mol_regexp.from([
-		$mol_regexp.begin ,
-		{ indent : $mol_regexp.repeat_greedy( '\t' , 1 ) },
+		$mol_regexp.begin,
+		{ indent: $mol_regexp.repeat_greedy( '\t', 1 ) },
 	])
 
 	/** Source file dependencies extractor. */
@@ -24,14 +24,14 @@ namespace $ {
 
 		@ $mol_mem
 		deps() {
-			return new Map< $mol_file , number >()
+			return new Map< $mol_file, number >()
 		}
 
-		lookup( path : string ) : $mol_file {
+		lookup( path: string ): $mol_file {
 
-			const dir = this.root().dir().resolve( path + '/' + path.replace( /.*\// , '' ) ) // dir duplicatation for the case when submodules should be independent from the parent 
+			const dir = this.root().dir().resolve( path + '/' + path.replace( /.*\//, '' ) ) // dir duplicatation for the case when submodules should be independent from the parent 
 
-			const lookup = ( dir : $mol_file ): $mol_file => {
+			const lookup = ( dir: $mol_file ): $mol_file => {
 
 				if( dir.exists() ) return dir
 	

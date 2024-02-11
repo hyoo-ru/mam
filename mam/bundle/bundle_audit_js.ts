@@ -4,10 +4,9 @@ namespace $ {
 
 		@ $mol_mem_key
 		generated( slice: $mam_slice ) {
+			const start = Date.now()
 			
 			const prefix = slice.prefix()
-			
-			const start = Date.now()
 			
 			const output = slice.pack().output()
 			const target = output.resolve( `${prefix}.audit.js` )
@@ -31,7 +30,7 @@ namespace $ {
 				this.on_error( path, null ) // ts will refill it on change
 			}
 			
-			this.log( target , Date.now() - start )
+			this.log( target, Date.now() - start )
 			
 			if( errors.length ) {
 				$mol_fail_hidden( new $mol_error_mix( `Build fail ${ slice.pack().dir().relate( slice.root().dir() ) }`, ... errors ) )
@@ -51,7 +50,7 @@ namespace $ {
 				const types = [] as string[]
 				
 				for( let dep of ( slice as $mam_slice_node ).node_deps() ) {
-					types.push( '\t' + JSON.stringify( dep ) + ' : typeof import\( ' + JSON.stringify( dep ) + ' )' )
+					types.push( '\t' + JSON.stringify( dep ) + ': typeof import\( ' + JSON.stringify( dep ) + ' )' )
 				}
 				
 				if( types.length > 0 ) {
@@ -72,35 +71,35 @@ namespace $ {
 			const paths = this.ts_paths( slice )
 			if( !paths.length ) return null
 
-			const watchers = new Map< string , ( path : string , kind : number )=> void >()
+			const watchers = new Map< string, ( path: string, kind: number )=> void >()
 			let run = ()=> {}
 			
 			var host = $node.typescript.createWatchCompilerHost(
 
-				paths ,
+				paths,
 				
 				{
 					... this.root().ts_options(),
-					emitDeclarationOnly : true,
+					emitDeclarationOnly: true,
 				},
 				
 				{
-					... $node.typescript.sys ,
+					... $node.typescript.sys,
 					watchDirectory: ( path, cb ) => {
 						// console.log('watchDirectory', path )
-						watchers.set( path , cb )
+						watchers.set( path, cb )
 						return { close(){} }
 					},
-					writeFile : ( path , data )=> {
+					writeFile: ( path, data )=> {
 						$mol_file.relative( path ).text( data, 'virt' )
 					},
-					setTimeout : ( cb : any )=> {
+					setTimeout: ( cb: any )=> {
 						// console.log('setTimeout' )
 						run = cb
-					} ,
-					watchFile : ( path:string, cb:(path:string,kind:number)=>any )=> {
+					},
+					watchFile: ( path:string, cb:(path:string,kind:number)=>any )=> {
 						// console.log('watchFile', path )
-						watchers.set( path , cb )
+						watchers.set( path, cb )
 						return { close(){ } }
 					},
 				},
@@ -111,22 +110,22 @@ namespace $ {
 
 					if( diagnostic.file ) {
 
-						const error = $node.typescript.formatDiagnostic( diagnostic , {
-							getCurrentDirectory : ()=> this.root().dir().path() ,
-							getCanonicalFileName : ( path : string )=> path.toLowerCase() ,
-							getNewLine : ()=> '\n' ,
+						const error = $node.typescript.formatDiagnostic( diagnostic, {
+							getCurrentDirectory: ()=> this.root().dir().path(),
+							getCanonicalFileName: ( path: string )=> path.toLowerCase(),
+							getNewLine: ()=> '\n',
 						})
 						// console.log('XXX', error )
-						this.on_error( diagnostic.file.getSourceFile().fileName , error )
+						this.on_error( diagnostic.file.getSourceFile().fileName, error )
 						
 					} else {
 						this.$.$mol_log3_fail({
-							place : `${this}.tsService()` ,
-							message: String( diagnostic.messageText ) ,
+							place: `${this}.tsService()`,
+							message: String( diagnostic.messageText ),
 						})
 					}
 					
-				} ,
+				},
 
 				()=> {}, //watch reports
 				
@@ -142,7 +141,7 @@ namespace $ {
 
 			const service = $node.typescript.createWatchProgram( host )
 
-			const versions = {} as Record< string , number >
+			const versions = {} as Record< string, number >
 
 			return {
 				recheck: ()=> {
@@ -151,19 +150,19 @@ namespace $ {
 						// this.js_error( path, null )
 						if( versions[ path ] && versions[ path ] !== version ) {
 							const watcher = watchers.get( path )
-							if( watcher ) watcher( path , 2 )
+							if( watcher ) watcher( path, 2 )
 						}
 						versions[ path ] = version
 					}
 					run()
 				},
-				destructor : ()=> service.close()
+				destructor: ()=> service.close()
 			}
 
 		}
 
 		@ $mol_mem_key
-		on_error( path : string , next = null as null | string ) {
+		on_error( path: string, next = null as null | string ) {
 			this.root().convert([ this.$.$mam_convert_ts, $mol_file.absolute( path ) ])?.transpile_out()
 			return next
 		}

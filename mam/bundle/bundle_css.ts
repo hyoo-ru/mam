@@ -4,7 +4,6 @@ namespace $ {
 
 		@ $mol_mem_key
 		generated( slice: $mam_slice ) {
-
 			const start = Date.now()
 			
 			const prefix = slice.prefix()
@@ -12,38 +11,38 @@ namespace $ {
 
 			if( prefix === 'node' ) return []
 
-			var sources = [] as $mol_file[] // this.sourcesCSS( { path , exclude } )
+			var sources = [] as $mol_file[] // this.sourcesCSS( { path, exclude } )
 			
-			var target = output.resolve( `-/${prefix}.css` )
-			var targetMap = output.resolve( `-/${prefix}.css.map` )
+			var target = output.resolve( `${prefix}.css` )
+			var targetMap = output.resolve( `${prefix}.css.map` )
 			
-			// var root : any = null //$node['postcss'].root({})
+			// var root: any = null //$node['postcss'].root({})
 			// sources.forEach(
 			// 	src => {
-			// 		var root2 = $node['postcss'].parse( src.content() , { from : src.path() } )
-			// 		root = root ? root.append( root2 ) : root2
+			// 		var root2 = $node['postcss'].parse( src.content(), { from: src.path() } )
+			// 		root = root ? root.append( root2 ): root2
 			// 	}
 			// )
 			
 			// var processor = $node['postcss']([
 			// 	$node[ 'postcss-custom-properties' ]({
-			// 		preserve : true ,
-			// 	}) ,
-			// 	$node[ 'postcss-color-function' ]() ,
+			// 		preserve: true,
+			// 	}),
+			// 	$node[ 'postcss-color-function' ](),
 			// ])
-			// var result = processor.process( root , { to : target.relate() , map : { inline : false } } )
+			// var result = processor.process( root, { to: target.relate(), map: { inline: false } } )
 
 			const result = {
-				css : '/* CSS compiles into js bundle now! */',
-				map : '/* CSS compiles into js bundle now! */',
+				css: '/* CSS compiles into js bundle now! */',
+				map: '/* CSS compiles into js bundle now! */',
 			}
 			
 			target.text( result.css )
-			targetMap.text( JSON.stringify( result.map , null , '\t' ) )
+			targetMap.text( JSON.stringify( result.map, null, '\t' ) )
 			
-			this.log( target , Date.now() - start )
+			this.log( target, Date.now() - start )
 			
-			return [ target , targetMap ]
+			return [ target, targetMap ]
 		}
 
 	}

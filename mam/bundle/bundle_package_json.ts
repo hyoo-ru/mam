@@ -4,38 +4,38 @@ namespace $ {
 		
 		@ $mol_mem_key
 		generated( slice: $mam_slice ) {
-			const pack = slice.pack()
-			
 			const start = Date.now()
-			
+
+			const pack = slice.pack()
+			const root_dir = slice.root().dir()
+
 			const source = pack.dir().resolve( `package.json` )
 			const target = pack.output().resolve( `package.json` )
-			
-			const root_dir = slice.root().dir()
-			let name = pack.dir().relate( root_dir ).replace( /\//g , '_' )
+
+			let name = pack.dir().relate( root_dir ).replace( /\//g, '_' )
 			
 			let json = {
-				name ,
-				version : '0.0.0' ,
+				name,
+				version: '0.0.0',
 				exports: {
 					node: {
-						import : './node.mjs',
-						default : './node.js'
+						import: './node.mjs',
+						default: './node.js'
 					},
-					types : './web.d.ts',
-					import : './web.mjs',
-					default : './web.js'
+					types: './web.d.ts',
+					import: './web.mjs',
+					default: './web.js'
 				},
-				main : './web.js' ,
-				module : './web.mjs',
-				browser : './web.js',
-				types : './web.d.ts',
+				main: './web.js',
+				module: './web.mjs',
+				browser: './web.js',
+				types: './web.d.ts',
 				keywords: [] as string[],
-				dependencies : {} as { [ key : string ] : string }
+				dependencies: {} as { [ key: string ]: string }
 			}
 
 			if( source.exists() ) {
-				Object.assign( json , JSON.parse( source.text() ) )
+				Object.assign( json, JSON.parse( source.text() ) )
 			}
 
 			let version = json.version.split('.').map( Number )
@@ -44,7 +44,7 @@ namespace $ {
 			try {
 				
 				const published = ( [] as string[] ).concat( JSON.parse(
-					this.$.$mol_exec( '' , 'npm' , 'view' , name , 'versions', '--json' ).stdout.toString()
+					this.$.$mol_exec( '', 'npm', 'view', name, 'versions', '--json' ).stdout.toString()
 				) ).slice(-1)[0].split('.').map( Number )
 				
 				if( published[0] > version[0] ) {
@@ -63,7 +63,7 @@ namespace $ {
 
 			json.version = version.join( '.' )
 
-			const node_deps = /node/.test( slice.prefix() ) ? ( slice as $mam_slice_node ).node_deps() : []
+			const node_deps = /node/.test( slice.prefix() ) ? ( slice as $mam_slice_node ).node_deps(): []
 			for( let dep of node_deps ) {
 				if( require('module').builtinModules.includes(dep) ) continue
 				json.dependencies[ dep ] = `*`
@@ -74,9 +74,9 @@ namespace $ {
 				.filter( file => !/[.-]/.test( file.path() ) )
 				.map( file => '$' + file.path().replaceAll( '/', '_' ) )
 			
-			target.text( JSON.stringify( json , null , '  ' ) )
+			target.text( JSON.stringify( json, null, '  ' ) )
 			
-			this.log( target , Date.now() - start )
+			this.log( target, Date.now() - start )
 			
 			return [ target ]
 		}

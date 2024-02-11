@@ -9,7 +9,7 @@ namespace $ {
 		}
 
 		@ $mol_mem_key
-		pack( dir : $mol_file ) {
+		pack( dir: $mol_file ) {
 			const pack = new this.$.$mam_package
 			pack.root = $mol_const( this )
 			pack.dir = $mol_const( dir )
@@ -40,7 +40,7 @@ namespace $ {
 		}
 
 		@ $mol_mem_key
-		bundle< Bundle extends typeof $mam_bundle >( Bundle : Bundle ) {
+		bundle< Bundle extends typeof $mam_bundle >( Bundle: Bundle ) {
 			const bundle = new Bundle
 			bundle.root = $mol_const( this )
 			return bundle as InstanceType< Bundle >
@@ -49,7 +49,7 @@ namespace $ {
 		@ $mol_mem
 		ts_options() {
 			const rawOptions = JSON.parse( this.dir().resolve( 'tsconfig.json' ).text() + '').compilerOptions
-			const res = $node.typescript.convertCompilerOptionsFromJson( rawOptions , "." , 'tsconfig.json' )
+			const res = $node.typescript.convertCompilerOptionsFromJson( rawOptions, ".", 'tsconfig.json' )
 			if( res.errors.length ) throw res.errors
 			return res.options
 		}
