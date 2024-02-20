@@ -28,5 +28,15 @@
     "javascript.format.insertSpaceAfterKeywordsInControlFlowStatements": false,
     "typescript.format.insertSpaceBeforeFunctionParenthesis": false,
     "javascript.format.insertSpaceBeforeFunctionParenthesis": false,
-    "editor.renderWhitespace": "trailing"
+	"editor.renderWhitespace": "trailing",
+	"javascript.format.insertSpaceAfterCommaDelimiter": true,
+	"javascript.format.insertSpaceAfterConstructor": false,
+	"typescript.enablePromptUseWorkspaceTsdk": true,
+	"typescript.format.insertSpaceAfterConstructor": false,
+	"javascript.preferences.autoImportFileExcludePatterns": [
+		"**"
+	],
+	"typescript.preferences.autoImportFileExcludePatterns": [
+		"**"
+	]
 }
