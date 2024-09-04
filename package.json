@@ -30,7 +30,7 @@
     }
   },
   "dependencies": {
-    "@types/node": "*",
+    "@types/node": "22.5.2",
     "mam": "*"
   }
 }
