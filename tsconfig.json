@@ -8,6 +8,7 @@
 		"noEmitHelpers": true,
 		"experimentalDecorators": true,
 		"noImplicitAny": true,
+		"suppressImplicitAnyIndexErrors": true,
 		"alwaysStrict": true,
 		"strict": true,
 		"allowUnusedLabels": true,
@@ -15,8 +16,7 @@
 		"sourceMap" : true ,
 		"inlineSources" : true ,
 		"declaration" : true,
-		"skipLibCheck" : false,
-		"skipDefaultLibCheck": true,
+		"skipLibCheck" : true,
 		"types" : ["node"]
 	},
 	"include": [

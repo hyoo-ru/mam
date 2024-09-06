@@ -5,8 +5,9 @@
         "**/-*": false
     },
     "search.exclude": {
-        "**/node_modules": true,
-        "**/-*": true
+        "**/-*": true,
+        "**/.*": true,
+        "**/node_modules": true
     },
     "files.exclude": {
         "**/-*": false
