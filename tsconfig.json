@@ -3,7 +3,7 @@
 		"target": "ESNext",
 		"jsx": "react",
 		"module": "ES2020",
-		"moduleResolution": "nodenext",
+		"moduleResolution": "Bundler",
 		"esModuleInterop": true,
 		"noEmitHelpers": true,
 		"experimentalDecorators": true,
