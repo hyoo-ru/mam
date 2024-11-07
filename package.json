@@ -18,11 +18,9 @@
   },
   "homepage": "https://github.com/hyoo-ru/mam#readme",
   "engines": {
-    "node": ">=14.0.0"
+    "node": ">=18.0.0"
   },
   "dependencies": {
-    "@types/node-fetch": "^2.5.12",
-    "mam": "*",
-    "node-fetch": "^2.6.1"
+    "mam": "*"
   }
 }
