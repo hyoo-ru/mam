@@ -2,8 +2,8 @@
 	"compilerOptions": {
 		"target": "ESNext",
 		"jsx": "react",
-		"module": "ES2020",
-		"moduleResolution": "Bundler",
+		"module": "ESNext",
+		"moduleResolution": "nodenext",
 		"esModuleInterop": true,
 		"noEmitHelpers": true,
 		"experimentalDecorators": true,
