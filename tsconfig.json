@@ -15,7 +15,7 @@
 		"sourceMap" : true ,
 		"inlineSources" : true ,
 		"declaration" : true,
-		"skipLibCheck" : true,
+		"skipLibCheck" : false,
 		"types" : ["node"]
 	},
 	"include": [
