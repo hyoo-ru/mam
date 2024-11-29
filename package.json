@@ -21,6 +21,7 @@
     "node": ">=18.0.0"
   },
   "dependencies": {
+	"nwsapi": "2.2.13",
     "mam": "*"
   }
 }
