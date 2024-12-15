@@ -3,7 +3,7 @@
 		"target": "ESNext",
 		"jsx": "react",
 		"module": "ESNext",
-		"moduleResolution": "nodenext",
+		"moduleResolution": "bundler",
 		"esModuleInterop": true,
 		"noEmitHelpers": true,
 		"experimentalDecorators": true,
@@ -15,6 +15,7 @@
 		"sourceMap" : true ,
 		"inlineSources" : true ,
 		"declaration" : true,
+		"skipLibCheck" : false,
 		"skipDefaultLibCheck" : true,
 		"types" : ["node"]
 	},
