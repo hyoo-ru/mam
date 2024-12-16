@@ -17,7 +17,7 @@
 		"declaration" : true,
 		"skipLibCheck" : false,
 		"skipDefaultLibCheck" : true,
-		"types" : ["node"]
+		"types" : []
 	},
 	"include": [
 		"**/*.ts",
