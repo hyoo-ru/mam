@@ -17,6 +17,7 @@
 	// }
 	"MAM class definition": {
 		"scope": "javascript,typescript",
+		"isFileTemplate": true,
 		"prefix": "class",
 		"body": [
 			"namespace $ {",
@@ -30,6 +31,7 @@
 	},
 	"$mol_view extend": {
 		"scope": "javascript,typescript",
+		"isFileTemplate": true,
 		"prefix": "logic",
 		"body": [
 			"namespace $.$$ {",
@@ -44,6 +46,7 @@
 	},
 	"$mol_style_define": {
 		"scope": "javascript,typescript",
+		"isFileTemplate": true,
 		"prefix": "styles",
 		"body": [
 			"namespace $.$$ {",
@@ -59,7 +62,7 @@
 		"description": "$mol_test defs"
 	},
 	"JS-POJO-Field": {
-		"scope": "javascript,typescript",
+		"scope": "javascript,typescript,json",
 		"prefix": ":",
 		"body": [
 			": {",
@@ -70,6 +73,7 @@
 	},
 	"$mol_test defs": {
 		"scope": "javascript,typescript",
+		"isFileTemplate": true,
 		"prefix": "tests",
 		"body": [
 			"namespace $.$$ {",
@@ -86,6 +90,7 @@
 	},
 	"$mol_view entry": {
 		"scope": "html",
+		"isFileTemplate": true,
 		"prefix": "html",
 		"body": [
 			"<!doctype html>",
