@@ -58,6 +58,16 @@
 		],
 		"description": "$mol_test defs"
 	},
+	"JS-POJO-Field": {
+		"scope": "javascript,typescript",
+		"prefix": ":",
+		"body": [
+			": {",
+			"\t$1",
+			"},"
+		],
+		"description": "POJO fielad value"
+	},
 	"$mol_test defs": {
 		"scope": "javascript,typescript",
 		"prefix": "tests",
