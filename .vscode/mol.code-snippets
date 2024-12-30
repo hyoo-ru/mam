@@ -21,7 +21,7 @@
 		"prefix": "class",
 		"body": [
 			"namespace $ {",
-			"\texport class $$1 extends $2 {",
+			"\texport class $${RELATIVE_FILEPATH/\\\\[^\\\\]+$|(\\\\)/${1:+_}/g} extends $$mol_object {",
 			"\t\t",
 			"\t\t$0",
 			"\t\t",
@@ -35,7 +35,7 @@
 		"prefix": "logic",
 		"body": [
 			"namespace $.$$ {",
-			"\texport class \\$$1 extends $.$$1 {",
+			"\texport class \\$${RELATIVE_FILEPATH/\\\\[^\\\\]+$|(\\\\)/${1:+_}/g} extends $.$${RELATIVE_FILEPATH/\\\\[^\\\\]+$|(\\\\)/${1:+_}/g} {",
 			"\t\t",
 			"\t\t$0",
 			"\t\t",
@@ -51,7 +51,7 @@
 		"body": [
 			"namespace $.$$ {",
 			"\t",
-			"\t\\$mol_style_define( \\$$1, {",
+			"\t\\$mol_style_define( \\$${RELATIVE_FILEPATH/\\\\[^\\\\]+$|(\\\\)/${1:+_}/g}, {",
 			"\t\t",
 			"\t\t$0",
 			"\t\t",
