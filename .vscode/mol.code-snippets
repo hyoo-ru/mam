@@ -72,7 +72,7 @@
 		"description": "POJO fielad value"
 	},
 	"$mol_test defs": {
-		"scope": "javascript,typescript",
+		"scope": "javascript,typescript,javascriptreact,typescriptreact",
 		"isFileTemplate": true,
 		"prefix": "tests",
 		"body": [
