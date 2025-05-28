@@ -12,3 +12,4 @@ pack piterjs git \https://github.com/piterjs/piterjs.git
 pack psb git \https://github.com/MolDevHack/psb.git
 pack rise git \https://github.com/stan-donarise/mam_rise.git
 pack yuf git \https://github.com/zerkalica/yuf.git
+pack hyper git \https://github.com/koplenov/mam_hyper.git
