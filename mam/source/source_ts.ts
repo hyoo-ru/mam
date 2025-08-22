@@ -43,23 +43,6 @@ namespace $ {
 			const ts_source = this.ts_source();
 
 			const visit = (node: ts_Node, parents: ts_Node[], priority: number) => {
-				// NEW: $.$mol_* -> добавить зависимость на mol/*
-				if ($node.typescript.isPropertyAccessExpression(node)) {
-					const left = node.expression;
-					const right = node.name;
-					if (
-						$node.typescript.isIdentifier(left) &&
-						left.escapedText === "$" &&
-						$node.typescript.isIdentifier(right) &&
-						/^\$[A-Za-z0-9_]+$/.test(String(right.escapedText))
-					) {
-						const fqn = String(right.escapedText).slice(1); // "mol_foo"
-						const dep = this.lookup(fqn.replace(/[._]/g, "/"));
-						const existed = mam_deps.get(dep);
-						if (!existed || existed < priority) mam_deps.set(dep, priority);
-					}
-				}
-
 				if (!$node.typescript.isIdentifier(node)) {
 					node.forEachChild((child) => visit(child, [...parents, node], priority - 1));
 					return;
