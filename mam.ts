@@ -1,14 +1,14 @@
-Error.stackTraceLimit = 50;
+Error.stackTraceLimit = 1;
 
-declare let _$_: { new(): {} } & typeof globalThis
+declare let _$_: { new (): {} } & typeof globalThis;
 declare class $ extends _$_ {}
 
 namespace $ {
-	export type $ = typeof $$
+	export type $ = typeof $$;
 	export declare class $$ extends $ {}
 	namespace $$ {
-		export type $$ = $
+		export type $$ = $;
 	}
 }
 
-module.exports = $
+module.exports = $;
