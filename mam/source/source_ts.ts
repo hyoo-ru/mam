@@ -38,6 +38,12 @@ namespace $ {
 			const mam_deps = new Map<$mol_file, number>();
 			const node_deps: Set<string> = new Set();
 
+			// NEW: любой TSX требует подключить JSX-объявления
+			if (/\.tsx$/.test(file.name())) {
+				const jsx = this.lookup("mol/jsx/jsx");
+				mam_deps.set(jsx, 0);
+			}
+
 			if (!/tsx?$/.test(file.ext())) return { mam_deps, node_deps };
 
 			const ts_source = this.ts_source();

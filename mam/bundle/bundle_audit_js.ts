@@ -44,15 +44,13 @@ namespace $ {
 
 		@$mol_mem_key
 		ts_paths(slice: $mam_slice) {
-			const sources = [...slice.files()].filter((src) => /tsx?$/.test(src.ext()));
+			const sources = [...slice.files()].filter((src) => /\.(?:d\.ts|ts|tsx)$/.test(src.name()));
 
 			if (/node/.test(slice.prefix())) {
 				const lines = [] as string[];
-
 				for (let dep of (slice as $mam_slice_node).node_deps()) {
 					lines.push("\t" + JSON.stringify(dep) + ": typeof import\( " + JSON.stringify(dep) + " )");
 				}
-
 				if (lines.length > 0) {
 					const node_types = slice.pack().dir().resolve(`-node/deps.d.ts`);
 					node_types.text("interface $node {\n " + lines.join("\n") + "\n}");
