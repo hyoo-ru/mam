@@ -5,7 +5,9 @@ declare class $ extends _$_ {}
 
 namespace $ {
 	export type $ = typeof $$
-	export declare class $$ extends $ {}
+	export declare class $$ extends $ {
+		static $: $
+	}
 	namespace $$ {
 		export type $$ = $
 	}
