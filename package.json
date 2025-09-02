@@ -1,8 +1,7 @@
 {
   "description": "Simple MAM project",
   "scripts": {
-    "postinstall": "mam mol/build",
-    "start": "node ./mol/build/-/node.js"
+    "start": "npm update && mam"
   },
   "repository": {
     "type": "git",
