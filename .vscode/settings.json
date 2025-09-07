@@ -6,7 +6,6 @@
     },
     "search.exclude": {
         "**/-*": true,
-        "**/.*": true,
         "**/node_modules": true
     },
     "files.exclude": {
