@@ -1,76 +1,73 @@
 namespace $ {
-
 	export class $mam_bundle_test_js extends $mam_bundle {
+		@$mol_mem_key
+		generated(slice: $mam_slice) {
+			const start = Date.now()
 
-		@ $mol_mem_key
-		generated( slice: $mam_slice ) {
-			return this.root().bundle( $mam_bundle_js ).generated( slice )
-			// const start = Date.now()
+			const prefix = slice.prefix()
+			const output = slice.pack().output()
+			const script = output.resolve(`${prefix}.js`)
+			const map = output.resolve(`${prefix}.js.map`)
 
-			// const prefix = slice.prefix()
-			// const pack = slice.pack()
-			// const pack_dir = slice.pack().dir()
-			
-			// const root_dir = this.root().dir()
-			// const target = pack.output().resolve( `${prefix}.test.js` )
-			// const targetMap = pack.output().resolve( `${prefix}.test.js.map` )
-			
-			// const concater = new $mol_sourcemap_builder( root_dir.relate( target.parent() ), ';')
-			// concater.add( '"use strict"' )
-			
-			// // const exclude_ext = exclude.filter( ex => ex !== 'test' && ex !== 'dev' )
+			const concater = new this.$.$mol_sourcemap_builder(script.name(), ';')
+			concater.add('"use strict"')
 
-			// const sources = [ ...slice.files() ].filter( file => /\.[jt]sx?$/.test( file.name() ) )
-			// // this.sources_js( { path, exclude: exclude_ext } )
+			const is_node = /node/.test(prefix)
+			if (!is_node) {
+				concater.add('function require' + '( path ){ return $node[ path ] }')
+			}
 
-			// //note: sorting:
-			// // const sourcesNoTest = new Set( this.sources_js( { path, exclude } ) )
-			// // const sourcesTest = sources.filter( src => !sourcesNoTest.has( src ) )
-			// // if( prefix === 'node' ) {
-			// // 	sourcesTest = [ ... sourcesNoTest, ... sourcesTest ]
-			// // } else {
-			// if( prefix !== 'node' ) {
-			// 	concater.add( 'function require'+'( path ){ return $node[ path ] }' )
-			// }
+			const all_files = [...slice.files()].filter((file: $mol_file) => /\.js$/.test(file.name()))
+			if (all_files.length === 0) return []
 
-			// if( sources.length === 0 ) return []
-			
-			// const errors = [] as Error[]
+			const prod_slice_class = is_node ? this.$.$mam_slice_node_prod : this.$.$mam_slice_web_prod
+			const prod_slice = slice.pack().slice(prod_slice_class)
+			const prod_files = prod_slice.files()
+			const prod_paths = new Set(prod_files.map((file: $mol_file) => file.path()))
 
-			// // sourcesTest.forEach(
-			// sources.forEach(
-			// 	( src )=> {
-			// 		if( prefix === 'node' ) {
-			// 			if( /node_modules\//.test( src.relate( root_dir ) ) ) {
-			// 				return
-			// 			}
-			// 		}
-			// 		try {
-			// 			// const content = this.js_content( src.path() )
-			// 			const js = src.text()
-			// 			const map = src.parent().resolve( src.name().replace( /\.js$/, 'map' ) ).text()
-			// 			concater.add( js, '', map )
-			// 			// concater.add( content.text, '', content.map)
-			// 		} catch( error: any ) {
-			// 			errors.push( error )
-			// 		}
-			// 	}
-			// )
-			
-			// target.text( concater.content + '\n//# sourceMappingURL=' + targetMap.relate( target.parent() )+'\n' )
-			// targetMap.text( concater.toString() )
-			
-			// this.log( target, Date.now() - start )
-			
-			// if( errors.length ) $mol_fail_hidden( new $mol_error_mix( `Build fail ${ pack_dir.path() }`, ...errors ) )
+			const test_files = all_files.filter((file: $mol_file) => !prod_paths.has(file.path()))
+			const files = is_node
+				? [...prod_files.filter((file: $mol_file) => /\.js$/.test(file.name())), ...test_files]
+				: test_files
 
-			// if( prefix === 'node' ) {
-			// 	this.$.$mol_exec( root_dir.path(), 'node', '--enable-source-maps', '--trace-uncaught', target.relate( root_dir ) )
-			// }
-			
-			// return [ target, targetMap ]
+			const root_dir = this.root().dir()
+
+			for (const file of files) {
+				if (is_node && /node_modules\//.test(file.relate(root_dir))) continue
+
+				const file_map = file.parent().resolve(file.name() + '.map')
+				const content = file.text().replace(/^\/\/#\ssourceMappingURL=.*$/gm, '')
+
+				const isCommonJs = /typeof +exports|module\.exports|\bexports\.\w+\s*=/.test(content)
+
+				if (isCommonJs) {
+					concater.add(
+						`\nvar $node = $node || {}\nvoid function( module ) { var exports = module.${''}exports = this; function require( id ) { return $node[ id.replace( /^.\\//, "` +
+							file.parent().relate(this.root().dir().resolve('node_modules')) +
+							`/" ) ] }; \n`,
+						'-',
+					)
+				}
+
+				concater.add(content, file.relate(output), file_map.text() || undefined)
+
+				if (isCommonJs) {
+					const idFull = file.relate(this.root().dir().resolve('node_modules'))
+					const idShort = idFull.replace(/\/index\.js$/, '').replace(/\.js$/, '')
+					concater.add(
+						`\n$${''}node[ "${idShort}" ] = $${''}node[ "${idFull}" ] = module.${''}exports }.call( {}, {} )\n`,
+						'-',
+					)
+				}
+			}
+
+			const text = concater.content + `\n//# sourceMappingURL=${map.relate(output)}\n`
+			script.text(text)
+			map.text(JSON.stringify(concater.sourcemap))
+
+			this.log(script, Date.now() - start)
+
+			return [script, map]
 		}
-
 	}
-
 }
