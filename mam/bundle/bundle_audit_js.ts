@@ -22,11 +22,11 @@ namespace $ {
 					})
 				}
 				target.text(
-					`console.warn( '%c ▫ $mol_build ▫ Audit has ${errors.length} warnings', 'color:orange; font-weight:bolder' )`,
+					`console.warn( '%cplace: $mol_build\\nmessage: Audit has ${errors.length} warnings', 'color:orange; font-weight:bolder' )`,
 				)
 			} else {
 				target.text(
-					`console.info( '%c ▫ $mol_build ▫ Audit passed', 'color:forestgreen; font-weight:bolder' )`,
+					`console.info( '%cplace: $mol_build\\nmessage: Audit passed', 'color:forestgreen; font-weight:bolder' )`,
 				)
 			}
 
