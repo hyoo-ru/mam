@@ -41,6 +41,25 @@ namespace $ {
 				return true
 			})
 
+			const path_set = new Set(sources.map(src => src.path()))
+
+			// Ensure base $ typings are present for audit.
+			const mam_types = this.root().dir().resolve('mam.ts')
+			if (mam_types.exists() && !path_set.has(mam_types.path())) {
+				sources.unshift(mam_types)
+				path_set.add(mam_types.path())
+			}
+
+			// Include generated view.tree typings even if they are not in the slice file list.
+			for (const file of slice.files()) {
+				if (!/\.view\.tree$/.test(file.name())) continue
+				const dts = file.parent().resolve(`-view.tree/${file.name()}.d.ts`)
+				if (!dts.exists()) continue
+				if (path_set.has(dts.path())) continue
+				sources.push(dts)
+				path_set.add(dts.path())
+			}
+
 			// Add bundled .d.ts from prod slice for type resolution
 			const prefix = slice.prefix()
 			const output = slice.pack().output()

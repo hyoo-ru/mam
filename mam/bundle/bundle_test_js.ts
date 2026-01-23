@@ -22,7 +22,7 @@ namespace $ {
 
 			const prod_slice_class = is_node ? this.$.$mam_slice_node_prod : this.$.$mam_slice_web_prod
 			const prod_slice = slice.pack().slice(prod_slice_class)
-			const prod_files = prod_slice.files()
+			const prod_files = [...prod_slice.files()]
 			const prod_paths = new Set(prod_files.map((file: $mol_file) => file.path()))
 
 			const test_files = all_files.filter((file: $mol_file) => !prod_paths.has(file.path()))
