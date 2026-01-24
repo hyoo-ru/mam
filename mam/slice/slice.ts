@@ -48,12 +48,15 @@ namespace $ {
 		bundle_classes(): (typeof $mam_bundle)[] {
 			return [
 				this.$.$mam_bundle_meta,
+				this.$.$mam_bundle_deps_json,
 				this.$.$mam_bundle_js,
 				this.$.$mam_bundle_audit_js,
 				this.$.$mam_bundle_mjs,
 				this.$.$mam_bundle_view_tree,
 				this.$.$mam_bundle_meta_tree,
 				this.$.$mam_bundle_locale,
+				this.$.$mam_bundle_dts,
+				this.$.$mam_bundle_files,
 				this.$.$mam_bundle_index_html,
 				this.$.$mam_bundle_package_json,
 				this.$.$mam_bundle_readme,
