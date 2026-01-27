@@ -6,6 +6,8 @@ namespace $ {
 			const output = slice.pack().output()
 
 			const root_dir = this.root().dir()
+			const output_path = output.path()
+			const output_prefix = output_path.endsWith('/') ? output_path : `${output_path}/`
 
 			const targets: $mol_file[] = []
 
@@ -23,9 +25,11 @@ namespace $ {
 
 				const addFilesRecursive = (file: $mol_file) => {
 					if (!file.exists()) return
+					const file_path = file.path()
+					if (file_path === output_path || file_path.startsWith(output_prefix)) return
 					const rel = file.relate(root_dir)
-					if (/\/\.\w+($|\/)/.test(rel)) return
-					if (/\/-\//.test(rel)) return
+					if (/(^|\/)\.\w+($|\/)/.test(rel)) return
+					if (/(^|\/)-\//.test(rel)) return
 					if (file.type() === 'dir') {
 						file.sub().forEach(sub => {
 							addFilesRecursive(sub)
