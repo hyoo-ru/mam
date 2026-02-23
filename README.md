@@ -24,7 +24,8 @@ This is the base **MAM** project.
 
 ```sh
 mkdir mam && cd mam # makes empty directory
-npm exec mam # starts dev server
+npm exec mam # starts dev server with hot reload
+start http://localhost:9080/hyoo/todomvc/-/test.html # checkout, build and open some project
 ```
 
 # Installation
