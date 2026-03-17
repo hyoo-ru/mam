@@ -1,0 +1,32 @@
+namespace $ {
+	export class $mam_convert_meta_tree extends $mam_convert {
+		static match(file: $mol_file): boolean {
+			return /\.meta\.tree$/.test(file.name())
+		}
+
+		@$mol_mem
+		generated_sources() {
+			const source = this.source()
+			const tree = this.tree()
+
+			let content = ''
+			for (const step of tree.select('build', null).kids) {
+				if (!step.type) continue
+				const res = this.$.$mol_exec(source.parent().path(), step.text()).stdout.toString().trim()
+				content += `namespace $ { export let ${step.type} = ${JSON.stringify(res)} }\n`
+			}
+
+			if (!content) return []
+
+			const script = source.parent().resolve(`-meta.tree/${source.name()}.ts`)
+			script.text(content)
+			return [script]
+		}
+
+		@$mol_mem
+		tree() {
+			const source = this.source()
+			return this.root().source([this.$.$mam_source_meta_tree, source])!.tree()
+		}
+	}
+}

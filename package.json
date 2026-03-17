@@ -1,25 +1,28 @@
 {
-  "description": "Simple MAM project",
-  "scripts": {
-    "start": "npm update && mam"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/hyoo-ru/mam.git"
-  },
-  "keywords": [
-    "mam"
-  ],
-  "author": "jin",
-  "license": "UNLICENSED",
-  "bugs": {
-    "url": "https://github.com/hyoo-ru/mam/issues"
-  },
-  "homepage": "https://github.com/hyoo-ru/mam#readme",
-  "engines": {
-    "node": ">=24.0.0"
-  },
-  "dependencies": {
-    "mam": "*"
-  }
+	"description": "Simple MAM project",
+	"scripts": {
+		"start": "npm update && mam",
+		"dev": "node mam/start/-/node.js"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/hyoo-ru/mam.git"
+	},
+	"keywords": [
+		"mam"
+	],
+	"author": "jin",
+	"license": "UNLICENSED",
+	"bugs": {
+		"url": "https://github.com/hyoo-ru/mam/issues"
+	},
+	"homepage": "https://github.com/hyoo-ru/mam#readme",
+	"engines": {
+		"node": ">=24.0.0"
+	},
+	"dependencies": {
+		"fake-indexeddb": "^6.2.5",
+		"mam": "*",
+		"web-audio-api": "^0.2.2"
+	}
 }
