@@ -1,6 +1,6 @@
 # MAM
 
-**M**am owns language-**A**gnostic **M**odules.
+**M**am owns **A**bstract **M**odules.
 This is the base **MAM** project.
 
 # Articles
@@ -20,6 +20,13 @@ This is the base **MAM** project.
 
 [![Gitpod Online Dev Workspace](https://img.shields.io/badge/Gitpod-Online--Dev--Workspace-blue?logo=gitpod)](https://gitpod.io/#https://github.com/hyoo-ru/mam)
 
+# Quick start
+
+```sh
+mkdir mam && cd mam # makes empty directory
+npm exec mam # starts dev server with hot reload
+start http://localhost:9080/hyoo/todomvc/-/test.html # checkout, build and open some project
+```
 
 # Installation
 

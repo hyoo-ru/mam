@@ -1,6 +1,6 @@
 lang kind
 	[] [] operator \Exact match
-	[] [: operator \Math by prefix
+	[] [: operator \Match by prefix
 	[] kind keyword \Language tokens description
 	[] operator keyword
 	[] keyword keyword

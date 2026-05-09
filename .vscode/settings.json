@@ -5,12 +5,13 @@
         "**/-*": false
     },
     "search.exclude": {
-        "**/node_modules": true,
-        "**/-*": true
+        "**/-*": true,
+        "**/node_modules": true
     },
     "files.exclude": {
         "**/-*": false
     },
+    "editor.formatOnSave": false,
     "javascript.format.insertSpaceAfterFunctionKeywordForAnonymousFunctions": false,
     "javascript.format.insertSpaceAfterOpeningAndBeforeClosingEmptyBraces": false,
     "javascript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets": true,
@@ -28,5 +29,15 @@
     "javascript.format.insertSpaceAfterKeywordsInControlFlowStatements": false,
     "typescript.format.insertSpaceBeforeFunctionParenthesis": false,
     "javascript.format.insertSpaceBeforeFunctionParenthesis": false,
-    "editor.renderWhitespace": "trailing"
+	"editor.renderWhitespace": "trailing",
+	"javascript.format.insertSpaceAfterCommaDelimiter": true,
+	"javascript.format.insertSpaceAfterConstructor": false,
+	"typescript.enablePromptUseWorkspaceTsdk": true,
+	"typescript.format.insertSpaceAfterConstructor": false,
+	"javascript.preferences.autoImportFileExcludePatterns": [
+		"**"
+	],
+	"typescript.preferences.autoImportFileExcludePatterns": [
+		"**"
+	]
 }

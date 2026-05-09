@@ -2,8 +2,8 @@
 	"compilerOptions": {
 		"target": "ESNext",
 		"jsx": "react",
-		"module": "ES2020",
-		"moduleResolution": "node",
+		"module": "ESNext",
+		"moduleResolution": "bundler",
 		"esModuleInterop": true,
 		"noEmitHelpers": true,
 		"experimentalDecorators": true,
@@ -11,11 +11,12 @@
 		"alwaysStrict": true,
 		"strict": true,
 		"allowUnusedLabels": true,
-		"removeComments" : true ,
+		"removeComments" : false ,
 		"sourceMap" : true ,
 		"inlineSources" : true ,
 		"declaration" : true,
-		"skipLibCheck" : true,
+		"skipLibCheck" : false,
+		"skipDefaultLibCheck" : true,
 		"types" : ["node"]
 	},
 	"include": [
