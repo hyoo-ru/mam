@@ -27,9 +27,11 @@ namespace $ {
 			return new Map< $mol_file, number >()
 		}
 
-		lookup( path: string ): $mol_file {
+		lookup( path: string | readonly string[] ): $mol_file {
 
-			const dir = this.root().dir().resolve( path + '/' + path.replace( /.*\//, '' ) ) // dir duplicatation for the case when submodules should be independent from the parent 
+			const path_text = typeof path === 'string' ? path : path.join( '/' )
+
+			const dir = this.root().dir().resolve( path_text + '/' + path_text.replace( /.*\//, '' ) ) // dir duplicatation for the case when submodules should be independent from the parent 
 
 			const lookup = ( dir: $mol_file ): $mol_file => {
 
@@ -39,7 +41,7 @@ namespace $ {
 				const parent = dir.parent()
 
 				if( parent === this.root().dir() ) {
-					throw new Error( `Absent dependency: ${ dir.relate() }, (${ path })` )
+					throw new Error( `Absent dependency: ${ dir.relate() }, (${ path_text })` )
 				}
 
 				return lookup( parent )

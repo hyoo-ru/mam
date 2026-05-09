@@ -28,7 +28,7 @@ namespace $ {
 							const path = name.split( /_+/g )
 							if( path[0] === 'gl' ) return str
 							
-							deps.set( this.lookup( path ), - indent.length )
+							deps.set( this.lookup( path ), priority )
 
 							return str
 							

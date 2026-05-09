@@ -71,77 +71,7 @@ namespace $ {
 
 		@ $mol_mem
 		ensure() {
-
-			const dir = this.dir()
-			
-			const parent = dir.parent()
-			const root = this.root()
-			
-			if( dir !== root.dir() ) root.pack( parent ).ensure()
-			
-			const mapping = dir === root.dir()
-				? this.$.$mol_tree2_from_string( `pack ${ dir.name() } git \\https://github.com/hyoo-ru/mam.git\n` )
-				: root.pack( parent ).meta()
-			
-			if( dir.exists() ) {
-
-				try {
-
-					if( dir.type() !== 'dir' ) return false
-					
-					const git_dir = dir.resolve( '.git' )
-					if( git_dir.exists() ) {
-						
-						this.$.$mol_exec( dir.path(), 'git', 'pull', '--deepen=1' )
-						// mod.reset()
-						// for ( const sub of mod.sub() ) sub.reset()
-						
-						return false
-					}
-					
-					for( let repo of mapping.select( 'pack', dir.name(), 'git' ).kids ) {
-						
-						this.$.$mol_exec( dir.path(), 'git', 'init' )
-						
-						const res = this.$.$mol_exec( dir.path(), 'git', 'remote', 'show', repo.value )
-						const matched = res.stdout.toString().match( /HEAD branch: (.*?)\n/ )
-						const head_branch_name = res instanceof Error || matched === null || !matched[1]
-							? 'master'
-							: matched[1]
-						
-						this.$.$mol_exec( dir.path(), 'git', 'remote', 'add', '--track', head_branch_name!, 'origin', repo.value )
-						this.$.$mol_exec( dir.path(), 'git', 'pull', '--deepen=1' )
-						dir.reset()
-						for ( const sub of dir.sub() ) {
-							sub.reset()
-						}
-						return true
-					}
-
-				} catch( error: any ) {
-
-					this.$.$mol_log3_fail({
-						place: `${this}.modEnsure()`,
-						path: dir.path(),
-						message: error.message,
-					})
-
-				}
-
-				return false
-			}
-
-			for( let repo of mapping.select( 'pack', dir.name(), 'git' ).kids ) {
-				this.$.$mol_exec( root.dir().path(), 'git', 'clone', '--depth', '1', repo.value, dir.relate( root.dir() ) )
-				dir.reset()
-				return true
-			}
-			
-			if( parent === root.dir() ) {
-				throw new Error( `Root package "${ dir.relate( root.dir() ) }" not found` )
-			}
-
-			return false
+			return this.root().ensure().ensure( this.dir().path() )
 		}
 
 	}

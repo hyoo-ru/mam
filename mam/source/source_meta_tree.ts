@@ -14,11 +14,11 @@ namespace $ {
 			const root_dir = this.root().dir()
 		
 			tree.select( 'require' ).kids.forEach( ( leaf: $mol_tree2 ) => {
-				deps.set( root_dir.resolve( leaf.value ), 0 )
+				deps.set( root_dir.resolve( leaf.text().replace( /^\//, '' ) ), 0 )
 			} )
 			
 			tree.select( 'include' ).kids.forEach( ( leaf: $mol_tree2 ) => {
-				deps.set( root_dir.resolve( leaf.value ), -9000 )
+				deps.set( this.lookup( leaf.text().replace( /^\//, '' ) ), -9000 )
 			} )
 
 			return deps

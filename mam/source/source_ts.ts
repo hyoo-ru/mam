@@ -46,6 +46,15 @@ namespace $ {
 
 			const ts_source = this.ts_source()
 
+			const dep_add = ( dep: $mol_file, priority: number )=> {
+				const existed = mam_deps.get( dep )
+				if( !existed || existed < priority ) mam_deps.set( dep, priority )
+			}
+
+			if( /\.tsx$/.test( file.ext() ) ) {
+				dep_add( this.lookup( 'mol/jsx' ), 0 )
+			}
+
 			const visit = ( node: ts_Node, parents: ts_Node[], priority: number ) => {
 				if( !$node.typescript.isIdentifier( node ) ) {
 					node.forEachChild( ( child: ts_Node ) => visit( child, [ ...parents, node ], priority - 1 ) )
@@ -59,8 +68,7 @@ namespace $ {
 					if( !$node.typescript.isStringLiteral( arg ) ) return
 
 					const dep = this.file().resolve( ( arg as import('typescript').StringLiteral ).text )
-					const existed = mam_deps.get( dep )
-					if( !existed || existed < priority ) mam_deps.set( dep, priority )
+					dep_add( dep, priority )
 					
 					return
 				}
@@ -84,15 +92,15 @@ namespace $ {
 
 				}
 				
-				const dep = this.lookup( fqn.replace( /[._]/g, '/' ) )
-				const existed = mam_deps.get( dep )
-				if( !existed || existed < priority ) mam_deps.set( dep, priority )
+				dep_add( this.lookup( fqn.replace( /[._]/g, '/' ) ), priority )
 			}
 
 			ts_source.forEachChild( ( child: ts_Node ) => visit( child, [ ts_source ], 0 ) )
 
 			node_deps.forEach( name => {
-				$node[ name ] // force autoinstall through npm
+				if( $node_internal_check( name ) ) return
+				if( name === 'internal' ) return
+				this.$.$node_autoinstall( name )
 			} )
 
 			return { mam_deps, node_deps }

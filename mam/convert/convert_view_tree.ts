@@ -10,6 +10,9 @@ namespace $ {
 		generated() {
 			return [
 				this.locale(),
+				this.script_map(),
+				this.dts(),
+				this.dts_map(),
 			]
 		}
 
@@ -33,6 +36,7 @@ namespace $ {
 			const tree = this.tree()
 			return {
 				script: this.$.$mol_tree2_js_to_text( this.$.$mol_view_tree2_to_js( tree ) ),
+				dts: this.$.$mol_view_tree2_to_dts( tree ),
 				locales: this.$.$mol_view_tree2_to_locale( tree ),
 			}
 		}
@@ -41,12 +45,44 @@ namespace $ {
 		script() {
 			const source = this.source()
 
-			const script = source.parent().resolve( `-view.tree/${ source.name() }.ts` )
-			script.text( this.$.$mol_tree2_text_to_string( this.compiled().script ) )
-			// const sourceMap = source.parent().resolve( `-view.tree/${ name }.map` )
-			// sourceMap.text( res.map )
+			const script = source.parent().resolve( `-view.tree/${ source.name() }.js` )
+			script.text(
+				this.$.$mol_tree2_text_to_string( this.compiled().script )
+				+ '\n//# sourceMappingURL=' + this.script_map().relate( script.parent() )
+			)
 
 			return script
+		}
+
+		@ $mol_mem
+		script_map() {
+			const source = this.source()
+			const map = source.parent().resolve( `-view.tree/${ source.name() }.js.map` )
+			map.text( JSON.stringify( this.$.$mol_tree2_text_to_sourcemap( this.compiled().script ), null, '\t' ) )
+			return map
+		}
+
+		@ $mol_mem
+		dts() {
+			const source = this.source()
+			const dts = source.parent().resolve( `-view.tree/${ source.name() }.d.ts` )
+			dts.text(
+				this.$.$mol_tree2_text_to_string( this.compiled().dts )
+				+ '\n//# sourceMappingURL=' + this.dts_map().relate( dts.parent() )
+			)
+			return dts
+		}
+
+		@ $mol_mem
+		dts_map() {
+			const source = this.source()
+			const dts = source.parent().resolve( `-view.tree/${ source.name() }.d.ts.map` )
+			const map = this.$.$mol_tree2_text_to_sourcemap( this.compiled().dts )
+			delete map.sourcesContent
+			map.file = source.name() + '.d.ts'
+			map.sourceRoot = this.root().dir().relate( dts.parent() )
+			dts.text( JSON.stringify( map, null, '\t' ) )
+			return dts
 		}
 
 		@ $mol_mem

@@ -1,0 +1,3 @@
+build
+	$mam_test_build \node -e "process.stdout.write('meta-build-ok')"
+deploy \mam/test/build/static.txt

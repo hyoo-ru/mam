@@ -28,6 +28,13 @@ namespace $ {
 							return str
 						}
 					)
+					line.replace(
+						/\$([a-z][a-z0-9]*(?:[._][a-z0-9]+)+)/ig , ( str , name )=> {
+
+							deps.set( this.lookup( name.replace( /[._]/g , '/' ) ), priority )
+							return str
+						}
+					)
 				}
 			)
 

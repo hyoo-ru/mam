@@ -19,6 +19,13 @@ namespace $ {
 			return pack
 		}
 
+		@ $mol_mem
+		ensure() {
+			const ensure = new this.$.$mam_ensure
+			ensure.root = $mol_const( this )
+			return ensure
+		}
+
 		@ $mol_mem_key
 		source< Source extends typeof $mam_source >( [ Source, file ]: [ Source, $mol_file ] ) {
 			if( !Source.match( file ) ) return null

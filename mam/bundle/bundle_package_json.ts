@@ -65,14 +65,17 @@ namespace $ {
 
 			const node_deps = /node/.test( slice.prefix() ) ? ( slice as $mam_slice_node ).node_deps(): []
 			for( let dep of node_deps ) {
-				if( require('module').builtinModules.includes(dep) ) continue
+				if( $node_internal_check( dep ) ) continue
+				if( dep === 'internal' ) continue
 				json.dependencies[ dep ] = `*`
 			}
 			
 			json.keywords = [ ... slice.graph().nodes ]
 				.filter( Boolean )
-				.filter( file => !/[.-]/.test( file.path() ) )
-				.map( file => '$' + file.path().replaceAll( '/', '_' ) )
+				.map( file => file.relate( root_dir ) )
+				.filter( path => /^[a-z0-9_\/]+$/.test( path ) )
+				.filter( path => !/[.-]/.test( path ) )
+				.map( path => '$' + path.replaceAll( '/', '_' ) )
 			
 			target.text( JSON.stringify( json, null, '  ' ) )
 			
