@@ -57,16 +57,16 @@ namespace $ {
 
 		@ $mol_mem
 		meta() {
-			const decls = [] as $mol_tree[]
+			const decls = [] as $mol_tree2[]
 
 			for( const file of this.dir().sub() ) {
 
 				const tree = this.root().source([ this.$.$mam_source_meta_tree, file ])?.tree()
-				if( tree ) decls.push( ... tree.sub )
+				if( tree ) decls.push( ... tree.kids )
 
 			}
 			
-			return new $mol_tree({ sub: decls })
+			return $mol_tree2.list( decls )
 		}
 
 		@ $mol_mem
@@ -80,7 +80,7 @@ namespace $ {
 			if( dir !== root.dir() ) root.pack( parent ).ensure()
 			
 			const mapping = dir === root.dir()
-				? $mol_tree.fromString( `pack ${ dir.name() } git \\https://github.com/hyoo-ru/mam.git\n` )
+				? this.$.$mol_tree2_from_string( `pack ${ dir.name() } git \\https://github.com/hyoo-ru/mam.git\n` )
 				: root.pack( parent ).meta()
 			
 			if( dir.exists() ) {
@@ -99,7 +99,7 @@ namespace $ {
 						return false
 					}
 					
-					for( let repo of mapping.select( 'pack', dir.name(), 'git' ).sub ) {
+					for( let repo of mapping.select( 'pack', dir.name(), 'git' ).kids ) {
 						
 						this.$.$mol_exec( dir.path(), 'git', 'init' )
 						
@@ -131,7 +131,7 @@ namespace $ {
 				return false
 			}
 
-			for( let repo of mapping.select( 'pack', dir.name(), 'git' ).sub ) {
+			for( let repo of mapping.select( 'pack', dir.name(), 'git' ).kids ) {
 				this.$.$mol_exec( root.dir().path(), 'git', 'clone', '--depth', '1', repo.value, dir.relate( root.dir() ) )
 				dir.reset()
 				return true

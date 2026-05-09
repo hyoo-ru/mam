@@ -13,11 +13,11 @@ namespace $ {
 			const tree = this.tree()
 			const root_dir = this.root().dir()
 		
-			tree.select( 'require' ).sub.forEach( leaf => {
+			tree.select( 'require' ).kids.forEach( ( leaf: $mol_tree2 ) => {
 				deps.set( root_dir.resolve( leaf.value ), 0 )
 			} )
 			
-			tree.select( 'include' ).sub.forEach( leaf => {
+			tree.select( 'include' ).kids.forEach( ( leaf: $mol_tree2 ) => {
 				deps.set( root_dir.resolve( leaf.value ), -9000 )
 			} )
 
@@ -27,7 +27,7 @@ namespace $ {
 		@ $mol_mem
 		tree() {
 			const file = this.file()
-			return $mol_tree.fromString( file.text(), file.path() )
+			return this.$.$mol_tree2_from_string( file.text(), file.path() )
 		}
 
 	}

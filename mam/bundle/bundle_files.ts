@@ -14,7 +14,7 @@ namespace $ {
 
 			const files = [ ...slice.files() ].filter( file => /meta.tree$/.test( file.name() ) )
 			files.forEach( source => {
-				const tree = $mol_tree.fromString( source.text(), source.path() )
+				const tree = this.$.$mol_tree2_from_string( source.text(), source.path() )
 
 				const pushFile = (file:$mol_file) => {
 					const start = Date.now()
@@ -38,7 +38,7 @@ namespace $ {
 					
 				}
 
-				tree.select( 'deploy' ).sub.forEach( deploy => {
+				tree.select( 'deploy' ).kids.forEach( ( deploy: $mol_tree2 ) => {
 					addFilesRecursive( root_dir.resolve( deploy.value.replace( /^\//, '' ) ) )
 				} )
 				

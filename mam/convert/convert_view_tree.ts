@@ -30,7 +30,11 @@ namespace $ {
 
 		@ $mol_mem
 		compiled() {
-			return this.$.$mol_view_tree2_ts_compile( this.tree() )
+			const tree = this.tree()
+			return {
+				script: this.$.$mol_tree2_js_to_text( this.$.$mol_view_tree2_to_js( tree ) ),
+				locales: this.$.$mol_view_tree2_to_locale( tree ),
+			}
 		}
 
 		@ $mol_mem
@@ -38,7 +42,7 @@ namespace $ {
 			const source = this.source()
 
 			const script = source.parent().resolve( `-view.tree/${ source.name() }.ts` )
-			script.text( this.compiled().script )
+			script.text( this.$.$mol_tree2_text_to_string( this.compiled().script ) )
 			// const sourceMap = source.parent().resolve( `-view.tree/${ name }.map` )
 			// sourceMap.text( res.map )
 

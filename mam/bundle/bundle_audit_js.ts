@@ -85,12 +85,12 @@ namespace $ {
 				
 				{
 					... $node.typescript.sys,
-					watchDirectory: ( path, cb ) => {
+					watchDirectory: ( path: string, cb: ( path: string ) => any ) => {
 						// console.log('watchDirectory', path )
 						watchers.set( path, cb )
 						return { close(){} }
 					},
-					writeFile: ( path, data )=> {
+					writeFile: ( path: string, data: string )=> {
 						$mol_file.relative( path ).text( data, 'virt' )
 					},
 					setTimeout: ( cb: any )=> {
@@ -106,7 +106,7 @@ namespace $ {
 				
 				$node.typescript.createSemanticDiagnosticsBuilderProgram,
 
-				( diagnostic )=> {
+				( diagnostic: import('typescript').Diagnostic )=> {
 
 					if( diagnostic.file ) {
 

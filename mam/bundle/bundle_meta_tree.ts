@@ -13,18 +13,18 @@ namespace $ {
 			
 			const files = slice.graph().sorted
 			
-			const named_metas: $mol_tree[] = []
+			const named_metas: $mol_tree2[] = []
 			files.forEach( file => {
 				if( file.type() !== 'dir' ) return
 				const meta = root.pack( file ).meta()
-				if( meta.sub.length > 0 ) {
-					named_metas.push( meta.clone({ value: '/' + file.relate( root.dir() ) }) )
+				if( meta.kids.length > 0 ) {
+					named_metas.push( new $mol_tree2( meta.type, '/' + file.relate( root.dir() ), meta.kids, meta.span ) )
 				}
 			} )
 			
 			if( named_metas.length === 0 ) return []
 			
-			target.text( new $mol_tree( { sub: named_metas } ).toString() )
+			target.text( $mol_tree2.list( named_metas ).toString() )
 			
 			this.log( target, Date.now() - start )
 			

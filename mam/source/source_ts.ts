@@ -48,17 +48,17 @@ namespace $ {
 
 			const visit = ( node: ts_Node, parents: ts_Node[], priority: number ) => {
 				if( !$node.typescript.isIdentifier( node ) ) {
-					node.forEachChild( child => visit( child, [ ...parents, node ], priority - 1 ) )
+					node.forEachChild( ( child: ts_Node ) => visit( child, [ ...parents, node ], priority - 1 ) )
 					return
 				}
 				
-				const text = node.escapedText as string
+				const text = ( node as import('typescript').Identifier ).escapedText as string
 				if( text === 'require' && $node.typescript.isCallExpression( parents[0] ) ) {
 
-					const arg = parents[0].arguments[ 0 ]
+					const arg = ( parents[0] as import('typescript').CallExpression ).arguments[ 0 ]
 					if( !$node.typescript.isStringLiteral( arg ) ) return
 
-					const dep = this.file().resolve( arg.text )
+					const dep = this.file().resolve( ( arg as import('typescript').StringLiteral ).text )
 					const existed = mam_deps.get( dep )
 					if( !existed || existed < priority ) mam_deps.set( dep, priority )
 					
@@ -75,11 +75,11 @@ namespace $ {
 						: parents.at(-1)!
 
 					if( $node.typescript.isPropertyAccessExpression( parent ) ) {
-						node_deps.add( parent.name.escapedText as string )
+						node_deps.add( ( parent as import('typescript').PropertyAccessExpression ).name.escapedText as string )
 					}
 					else if( $node.typescript.isElementAccessExpression( parent ) 
-						&& $node.typescript.isStringLiteral( parent.argumentExpression ) ) {
-						node_deps.add( parent.argumentExpression.text )
+						&& $node.typescript.isStringLiteral( ( parent as import('typescript').ElementAccessExpression ).argumentExpression ) ) {
+						node_deps.add( ( ( parent as import('typescript').ElementAccessExpression ).argumentExpression as import('typescript').StringLiteral ).text )
 					}
 
 				}
@@ -89,7 +89,7 @@ namespace $ {
 				if( !existed || existed < priority ) mam_deps.set( dep, priority )
 			}
 
-			ts_source.forEachChild( child => visit( child, [ ts_source ], 0 ) )
+			ts_source.forEachChild( ( child: ts_Node ) => visit( child, [ ts_source ], 0 ) )
 
 			node_deps.forEach( name => {
 				$node[ name ] // force autoinstall through npm
