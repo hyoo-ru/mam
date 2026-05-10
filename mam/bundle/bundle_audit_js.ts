@@ -37,7 +37,7 @@ namespace $ {
 				$mol_fail_hidden( new $mol_error_mix( `Build fail ${ slice.pack().dir().relate( slice.root().dir() ) }`, ... errors ) )
 			}
 
-			target.text( `console.info( '%c ▫ $mol_build ▫ Audit passed', 'color:forestgreen; font-weight:bolder' )` )
+			target.text( `console.info( '%c ▫ $mam ▫ Audit passed', 'color:forestgreen; font-weight:bolder' )` )
 			
 			return [ target ]
 		}

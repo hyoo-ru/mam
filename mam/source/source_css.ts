@@ -11,6 +11,11 @@ namespace $ {
 			const deps = super.deps()
 			deps.set( this.lookup( 'mol/style/attach' ), 0 )
 
+			if( /\.view\.css$/.test( this.file().name() ) ) {
+				const tree = this.file().parent().resolve( this.file().name().replace( /css$/, 'tree' ) )
+				deps.set( tree, 0 )
+			}
+
 			var lines = String( this.file().text() )
 			.replace( /\/\*[^]*?\*\//g , '' ) // drop block comments
 			.replace( /\/\/.*$/gm , '' ) // drop inline comments

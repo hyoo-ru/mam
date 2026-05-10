@@ -4,15 +4,20 @@ namespace $ {
 
 	try {
 		
-		for( const path of process.argv.slice( 2 ) ) {
+		const args = process.argv.slice( 2 )
 
-			const pack = root.pack( root.dir().resolve( path ) )
-			
-			pack.bundles_generated()
+		if( args.length === 0 || args.every( arg => /^[^=]+=/.test( arg ) ) ) {
+			$.$mam_server.serve()
+		} else {
+			for( const path of args ) {
 
+				const pack = root.pack( root.dir().resolve( path ) )
+				
+				pack.bundles_generated()
+
+			}
+			process.exit(0)
 		}
-
-		process.exit(0)
 		
 	} catch( error ) {
 		

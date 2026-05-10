@@ -21,14 +21,22 @@ namespace $ {
 				? pack.slice( this.$.$mam_slice_node_prod )
 				: pack.slice( this.$.$mam_slice_web_prod )
 			
-			const prod_files = new Set( [ ...prod.files() ].filter( file => /\.[j]sx?$/.test( file.name() ) ) )
-			const all_files = [ ...slice.files() ].filter( file => /\.[j]sx?$/.test( file.name() ) )
+			const prod_all_files = [ ...prod.files() ]
+			const prod_files = this.js_files_ordered(
+				prod_all_files.filter( file => /\.[j]sx?$/.test( file.name() ) ),
+				prod_all_files,
+				prod.graph(),
+			)
+			const prod_paths = new Set( prod_files.map( file => file.path() ) )
+			const slice_all_files = [ ...slice.files() ]
+			const all_files = slice_all_files.filter( file => /\.[j]sx?$/.test( file.name() ) )
 			
-			let files = all_files.filter( file => !prod_files.has( file ) )
+			let files = all_files.filter( file => !prod_paths.has( file.path() ) )
 			
 			if( prefix === 'node.test' ) {
-				files = [ ...prod_files, ...files ]
+				files = this.js_files_ordered([ ...prod_files, ...files ], [ ...prod_all_files, ...slice_all_files ], slice.graph() )
 			} else {
+				files = this.js_files_ordered( files, slice_all_files, slice.graph() )
 				concater.add( 'function require'+'( path ){ return $node[ path ] }' )
 			}
 

@@ -68,6 +68,7 @@ namespace $ {
 		}
 
 		protected update_disabled = false
+		static ensured = new Set< string >()
 
 		protected pull_disabled() {
 			return Boolean( this.$.$mol_env().MAM_PULL_DISABLED )
@@ -103,23 +104,29 @@ namespace $ {
 		ensure( path: string ) {
 
 			const mod = this.$.$mol_file.absolute( path )
+			const ensured_key = mod.path()
 
 			if( mod.exists() ) {
 				if( this.pull_disabled() ) return false
+				if( $mam_ensure_vcs.ensured.has( ensured_key ) ) return true
 
 				if( !this.inited( path ) ) {
 					if( !this.repo( path ) ) return false
 
 					this.$.$mol_file.unwatched( () => this.init_existing( path ), path )
+					$mam_ensure_vcs.ensured.add( ensured_key )
 					return true
 				}
 
 				this.update_safe( path )
+				$mam_ensure_vcs.ensured.add( ensured_key )
 				return true
 			}
 
 			if( this.repo( path ) ) {
+				if( $mam_ensure_vcs.ensured.has( ensured_key ) ) return true
 				this.$.$mol_file.unwatched( () => this.init( path ), path )
+				$mam_ensure_vcs.ensured.add( ensured_key )
 				return true
 			}
 
