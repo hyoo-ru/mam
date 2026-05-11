@@ -21,10 +21,9 @@ namespace $ {
 			}
 
 			const all_files = [ ...slice.files() ]
-			const files = this.js_files_ordered(
+			const files = this.js_files(
 				all_files.filter( file => /\.[j]sx?$/.test( file.name() ) ),
 				all_files,
-				slice.graph(),
 			)
 
 			for( const file of files ) {

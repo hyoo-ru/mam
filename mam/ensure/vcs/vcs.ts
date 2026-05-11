@@ -71,7 +71,7 @@ namespace $ {
 		static ensured = new Set< string >()
 
 		protected pull_disabled() {
-			return Boolean( this.$.$mol_env().MAM_PULL_DISABLED )
+			return true //Boolean( this.$.$mol_env().MAM_PULL_DISABLED )
 		}
 
 		@ $mol_action
