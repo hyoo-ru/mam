@@ -22,10 +22,7 @@ namespace $ {
 				: pack.slice( this.$.$mam_slice_web_prod )
 			
 			const prod_all_files = [ ...prod.files() ]
-			const prod_files = this.js_files(
-				prod_all_files.filter( file => /\.[j]sx?$/.test( file.name() ) ),
-				prod_all_files,
-			)
+			const prod_files = prod_all_files.filter( file => /\.[j]sx?$/.test( file.name() ) )
 			const prod_paths = new Set( prod_files.map( file => file.path() ) )
 			const slice_all_files = [ ...slice.files() ]
 			const all_files = slice_all_files.filter( file => /\.[j]sx?$/.test( file.name() ) )
@@ -33,11 +30,23 @@ namespace $ {
 			let files = all_files.filter( file => !prod_paths.has( file.path() ) )
 			
 			if( prefix === 'node.test' ) {
-				files = [ ...prod_files, ...this.js_files( files, slice_all_files ) ]
+				files = [ ...prod_files, ...files ]
 			} else {
-				files = this.js_files( files, slice_all_files )
 				concater.add( 'function require'+'( path ){ return $node[ path ] }' )
 			}
+
+			const boot_rank = ( file: $mol_file )=> {
+				switch( file.relate( root_dir ) ) {
+					case 'mol/test/test.web.test.ts.js': return -2
+					case 'mol/test/test.node.test.ts.js': return -2
+					case 'mol/test/test.test.ts.js': return -1
+				}
+				return 0
+			}
+			files = files
+				.map( ( file, index )=> ({ file, index, rank: boot_rank( file ) }) )
+				.sort( ( left, right )=> ( left.rank - right.rank ) || ( left.index - right.index ) )
+				.map( item => item.file )
 
 			if( all_files.length === 0 ) return []
 			

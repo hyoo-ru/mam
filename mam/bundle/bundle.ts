@@ -32,35 +32,6 @@ namespace $ {
 			})
 
 		}
-
-		js_files( files: $mol_file[], order = files ) {
-			const root = this.root().dir()
-			const pos = new Map( order.map( ( file, index )=> [ file.path(), index ] as const ) )
-			const rank = ( file: $mol_file )=> {
-				switch( file.relate( root ) ) {
-					case 'mam.jam.js': return -2
-					case 'mam.ts.js': return -1
-					case 'mol/test/test.test.ts.js': return -1
-				}
-				return 0
-			}
-			const source_path = ( file: $mol_file )=> {
-				if( /[\\\/]-[^\\\/]+[\\\/]/.test( file.path() ) ) {
-					return file.parent().parent().resolve( file.name().replace( /\.js$/, '' ) ).path()
-				}
-				return file.path().replace( /\.([cm]?[jt]sx?)\.js$/, '.$1' )
-			}
-			
-			return files
-				.map( ( file, index )=> ({
-					file,
-					index,
-					rank: rank( file ),
-					order: pos.get( source_path( file ) ) ?? pos.get( file.path() ) ?? index,
-				}) )
-				.sort( ( left, right )=> ( left.rank - right.rank ) || ( left.order - right.order ) || ( left.index - right.index ) )
-				.map( item => item.file )
-		}
 		
 	}
 

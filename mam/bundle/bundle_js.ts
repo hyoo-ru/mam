@@ -20,11 +20,7 @@ namespace $ {
 				concater.add( 'function require'+'( path ){ return $node[ path ] }' )
 			}
 
-			const all_files = [ ...slice.files() ]
-			const files = this.js_files(
-				all_files.filter( file => /\.[j]sx?$/.test( file.name() ) ),
-				all_files,
-			)
+			const files = [ ...slice.files() ].filter( file => /\.[j]sx?$/.test( file.name() ) )
 
 			for( const file of files ) {
 				const file_map = file.parent().resolve( file.name() + '.map' )

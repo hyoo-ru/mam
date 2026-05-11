@@ -78,6 +78,25 @@ namespace $ {
 			return this.bundle_classes().map( ctor => this.root().bundle( ctor ) )
 		}
 
+		@ $mol_mem_key
+		runtime_js_files( file: $mol_file ) {
+			if( /\.[j]sx?$/.test( file.name() ) ) return [ file ]
+
+			const js = [] as $mol_file[]
+
+			for( const convert of this.converts( file ) ) {
+				if( !convert ) continue
+
+				for( const gen of [ ...convert.generated(), ...convert.generated_sources() ] ) {
+					if( !this.filter( gen ) ) continue
+					if( !/\.[j]sx?$/.test( gen.name() ) ) continue
+					js.push( gen )
+				}
+			}
+
+			return js
+		}
+
 		@ $mol_mem
 		graph() {
 			
@@ -119,6 +138,17 @@ namespace $ {
 						const edge = graph.edge_out( file, dep )
 						if( !edge || edge.priority < priority ) {
 							graph.link( file, dep, { priority } )
+						}
+
+						for( const file_js of this.runtime_js_files( file ) ) {
+							for( const dep_js of this.runtime_js_files( dep ) ) {
+								if( file_js === dep_js ) continue
+
+								const runtime = graph.edge_out( file_js, dep_js )
+								if( !runtime || runtime.priority < priority ) {
+									graph.link( file_js, dep_js, { priority } )
+								}
+							}
 						}
 						
 						collect( dep )
