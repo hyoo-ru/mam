@@ -38,6 +38,112 @@ namespace $ {
 			return $node.typescript.createSourceFile( file.path(), file.text(), target )
 		}
 
+		dir_dep_add( dep_add: ( dep: $mol_file, priority: number )=> void, dep: $mol_file, priority: number ) {
+			if( dep.type() !== 'dir' ) return
+			const base = dep.name() + '.'
+
+			for( const item of dep.sub() ) {
+				if( item.type() !== 'file' ) continue
+				if( !item.name().startsWith( base ) ) continue
+				dep_add( item, priority )
+			}
+		}
+
+		fqn_add( dep_add: ( dep: $mol_file, priority: number )=> void, fqn: string, priority: number ) {
+			const path = fqn.replace( /[._]/g, '/' )
+			const dep = this.lookup( path )
+			dep_add( dep, priority )
+			this.dir_dep_add( dep_add, dep, priority )
+		}
+
+		is_type_only( node: ts_Node ) {
+			let in_type = false
+
+			for( let parent = node.parent; parent; parent = parent.parent ) {
+				if( $node.typescript.isHeritageClause( parent ) ) return false
+				if( $node.typescript.isTypeReferenceNode( parent ) ) in_type = true
+				if( $node.typescript.isTypeAliasDeclaration( parent ) ) in_type = true
+				if( $node.typescript.isInterfaceDeclaration( parent ) ) in_type = true
+				if( $node.typescript.isTypeLiteralNode( parent ) ) in_type = true
+				if( $node.typescript.isUnionTypeNode( parent ) ) in_type = true
+				if( $node.typescript.isIntersectionTypeNode( parent ) ) in_type = true
+				if( $node.typescript.isExpressionWithTypeArguments( parent ) ) in_type = true
+			}
+
+			return in_type
+		}
+
+		priority_of( node: ts_Node, ts_source: import('typescript').SourceFile, lines: readonly string[] ) {
+			const pos = ts_source.getLineAndCharacterOfPosition( node.getStart( ts_source ) )
+			const indent = /^([\s\t]*)/.exec( lines[ pos.line ] ?? '' )!
+			return - indent[ 0 ].replace( /\t/g, '    ' ).length / 4
+		}
+
+		implicit_deps_add( dep_add: ( dep: $mol_file, priority: number )=> void ) {
+			const file = this.file()
+
+			if( /\.tsx$/.test( file.ext() ) ) {
+				dep_add( this.lookup( 'mol/jsx' ), 0 )
+			}
+
+			if( /\.test\.tsx?$/.test( file.name() ) && file.relate( this.root().dir() ) !== 'mol/test/test.test.ts' ) {
+				dep_add( this.lookup( 'mol/test' ), 0 )
+			}
+		}
+
+		require_dep_add( dep_add: ( dep: $mol_file, priority: number )=> void, node: import('typescript').Identifier, priority: number ) {
+			if( String( node.escapedText ) !== 'require' ) return
+			if( !node.parent || !$node.typescript.isCallExpression( node.parent ) ) return
+			const arg = node.parent.arguments[ 0 ]
+			if( !$node.typescript.isStringLiteral( arg ) ) return
+
+			dep_add( this.file().resolve( arg.text ), priority )
+		}
+
+		fqn_of( node: import('typescript').Identifier ) {
+			return String( node.escapedText ).match( /\$([^$]*)/ )?.[1] ?? null
+		}
+		
+		node_dep_add( node_deps: Set< string >, node: import('typescript').Identifier ) {
+			const parent = ( node.parent as any )?.name?.escapedText?.[0] === '$'
+				? node.parent.parent
+				: node.parent
+
+			if( parent && $node.typescript.isPropertyAccessExpression( parent ) ) {
+				node_deps.add( String( parent.name.escapedText ) )
+				return
+			}
+			
+			if(
+				parent &&
+				$node.typescript.isElementAccessExpression( parent )
+				&& $node.typescript.isStringLiteral( parent.argumentExpression )
+			) {
+				node_deps.add( parent.argumentExpression.text )
+			}
+		}
+
+		identifier_visit(
+			dep_add: ( dep: $mol_file, priority: number )=> void,
+			node_deps: Set< string >,
+			node: ts_Node,
+			ts_source: import('typescript').SourceFile,
+			lines: readonly string[],
+		) {
+			if( !$node.typescript.isIdentifier( node ) ) return
+
+			if( this.is_type_only( node ) ) return
+
+			const priority = this.priority_of( node, ts_source, lines )
+			this.require_dep_add( dep_add, node, priority )
+
+			const fqn = this.fqn_of( node )
+			if( !fqn ) return
+
+			if( fqn === 'node' ) this.node_dep_add( node_deps, node )
+			this.fqn_add( dep_add, fqn, priority )
+		}
+
 		@ $mol_mem
 		ts_source_deps() {
 			const file = this.file()
@@ -54,121 +160,13 @@ namespace $ {
 				if( !existed || existed < priority ) mam_deps.set( dep, priority )
 			}
 
-			const fqn_add = ( fqn: string, priority: number )=> {
-				const path = fqn.replace( /[._]/g, '/' )
-				const dep = this.lookup( path )
-				dep_add( dep, priority )
-				
-				if( dep.type() !== 'dir' ) return
-				const base = dep.name() + '.'
-				
-				for( const item of dep.sub() ) {
-					if( item.type() !== 'file' ) continue
-					if( !item.name().startsWith( base ) ) continue
-					dep_add( item, priority )
-				}
-			}
-
-			const parent_chain = ( node: ts_Node )=> {
-				const chain = [] as ts_Node[]
-				for( let current = node.parent; current; current = current.parent ) chain.push( current )
-				return chain
-			}
-
-			const priority_of = ( node: ts_Node, parents: readonly ts_Node[] )=> {
-				const in_func = parents.some( parent =>
-					$node.typescript.isFunctionDeclaration( parent )
-					|| $node.typescript.isFunctionExpression( parent )
-					|| $node.typescript.isArrowFunction( parent )
-					|| $node.typescript.isMethodDeclaration( parent )
-					|| $node.typescript.isConstructorDeclaration( parent )
-					|| $node.typescript.isGetAccessorDeclaration( parent )
-					|| $node.typescript.isSetAccessorDeclaration( parent )
-				)
-
-				if( parents.some( parent => $node.typescript.isHeritageClause( parent ) ) ) return 10
-				if( parents.some( parent => $node.typescript.isPropertyDeclaration( parent ) ) ) return 10
-				if( parents.some( parent => $node.typescript.isEnumMember( parent ) ) ) return 10
-				if( parents.some( parent => $node.typescript.isComputedPropertyName( parent ) ) ) return 10
-				if( parents.some( parent => $node.typescript.isDecorator( parent ) ) ) return 10
-				if(
-					!in_func
-					&& parents.some( parent =>
-						$node.typescript.isExpressionStatement( parent )
-						|| $node.typescript.isVariableDeclaration( parent )
-						|| $node.typescript.isIfStatement( parent )
-					)
-				) return 10
-
-				const pos = ts_source.getLineAndCharacterOfPosition( node.getStart( ts_source ) )
-				const indent = /^([\s\t]*)/.exec( lines[ pos.line ] ?? '' )!
-				return - indent[ 0 ].replace( /\t/g, '    ' ).length / 4
-			}
-
-			if( /\.tsx$/.test( file.ext() ) ) {
-				dep_add( this.lookup( 'mol/jsx' ), 0 )
-			}
-
-			if( /\.test\.tsx?$/.test( file.name() ) && file.relate( this.root().dir() ) !== 'mol/test/test.test.ts' ) {
-				dep_add( this.lookup( 'mol/test' ), 0 )
-			}
-
 			const visit = ( node: ts_Node )=> {
-				if( $node.typescript.isIdentifier( node ) ) {
-					const parents = parent_chain( node )
-					const in_heritage = parents.some( parent => $node.typescript.isHeritageClause( parent ) )
-					const in_type = parents.some( parent =>
-						$node.typescript.isTypeReferenceNode( parent )
-						|| $node.typescript.isTypeAliasDeclaration( parent )
-						|| $node.typescript.isInterfaceDeclaration( parent )
-						|| $node.typescript.isTypeLiteralNode( parent )
-						|| $node.typescript.isUnionTypeNode( parent )
-						|| $node.typescript.isIntersectionTypeNode( parent )
-						|| $node.typescript.isExpressionWithTypeArguments( parent )
-					)
-					if( in_type && !in_heritage ) return
-
-					const priority = priority_of( node, parents )
-					const text = String( node.escapedText )
-
-					if( text === 'require' && node.parent && $node.typescript.isCallExpression( node.parent ) ) {
-						const arg = node.parent.arguments[ 0 ]
-						if( $node.typescript.isStringLiteral( arg ) ) dep_add( file.resolve( arg.text ), priority )
-					}
-
-					const fqn = text.match( /\$([^$]*)/ )?.[1]
-					if( !fqn ) return
-
-					if( fqn === 'node' ) {
-						const parent = (node.parent as any)?.name?.escapedText?.[0] === '$'
-							? node.parent.parent
-							: node.parent
-
-						if( parent && $node.typescript.isPropertyAccessExpression( parent ) ) {
-							node_deps.add( String( parent.name.escapedText ) )
-						}
-						else if(
-							parent &&
-							$node.typescript.isElementAccessExpression( parent )
-							&& $node.typescript.isStringLiteral( parent.argumentExpression )
-						) {
-							node_deps.add( parent.argumentExpression.text )
-						}
-					}
-
-					fqn_add( fqn, priority )
-				}
-
+				this.identifier_visit( dep_add, node_deps, node, ts_source, lines )
 				node.forEachChild( visit )
 			}
 
+			this.implicit_deps_add( dep_add )
 			visit( ts_source )
-
-			node_deps.forEach( name => {
-				if( $node_internal_check( name ) ) return
-				if( name === 'internal' ) return
-				this.$.$node_autoinstall( name )
-			} )
 
 			return { mam_deps, node_deps }
 		}

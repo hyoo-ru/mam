@@ -25,6 +25,12 @@ namespace $ {
 
 			}
 
+			deps.forEach( dep => {
+				if( $node_internal_check( dep ) ) return
+				if( dep === 'internal' ) return
+				this.$.$node_autoinstall( dep )
+			} )
+
 			return [ ... deps ]
 
 		}
