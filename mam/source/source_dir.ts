@@ -14,6 +14,7 @@ namespace $ {
 
 			for( const item of dir.sub() ) {
 				if( item.type() !== 'file' ) continue
+				if( !/^[a-z0-9]/i.test( item.name() ) ) continue
 				deps.set( item, 0 )
 			}
 

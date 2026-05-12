@@ -70,13 +70,20 @@ namespace $ {
 
 			} catch( error: any ) {
 				if( $mol_promise_like( error ) ) $mol_fail_hidden( error )
+				const path = msg.uri().pathname
+				const text = error.stack ?? String( error )
 				this.$.$mol_log3_fail({
 					place: `${ this }.GET()`,
 					message: error.message ?? String( error ),
-					stack: error.stack,
+					stack: text,
 					url: msg.uri(),
 				})
-				return msg.reply( error.stack ?? String( error ), {
+				if( /\.audit\.js$/.test( path ) ) {
+					return msg.reply( `console.error(${ JSON.stringify( text ) })`, {
+						type: 'application/javascript;charset=utf-8',
+					})
+				}
+				return msg.reply( text, {
 					code: $mol_rest_code[ 'Internal Server Error' ],
 					type: 'text/plain;charset=utf-8',
 				})
@@ -238,7 +245,11 @@ namespace $ {
 
 		test_html( file: $mol_file ) {
 			const version = file.parent().resolve( 'web.js' ).version()
-			return file.text().replace( /src="web\.js(?:\?[^"]*)?"/g, `src="web.js?v=${ version }"` )
+			const audit = file.parent().resolve( 'web.audit.js' )
+			const audit_version = audit.exists() ? audit.version() : version
+			return file.text()
+				.replace( /src="web\.js(?:\?[^"]*)?"/g, `src="web.js?v=${ version }"` )
+				.replace( /audit\.src = 'web\.audit\.js(?:\?[^']*)?'/g, `audit.src = 'web.audit.js?v=${ audit_version }'` )
 		}
 
 		OPEN( msg: $mol_rest_message ) {
@@ -247,7 +258,7 @@ namespace $ {
 
 			const path = msg.uri().pathname.replace( /\/-.*/, '' )
 			this.clients( new Map([ ... this.clients(), [ msg.port, path ] ]) )
-			this.watch( path )
+			this.watch_sync( path )
 			
 			this.$.$mol_log3_rise({
 				place: this,
@@ -259,17 +270,24 @@ namespace $ {
 		}
 
 		CLOSE( msg: $mol_rest_message ) {
+			const path = this.clients().get( msg.port )
 			const clients = new Map( this.clients() )
 			clients.delete( msg.port )
 			this.clients( clients )
+			this.$.$mol_log3_rise({
+				place: this,
+				message: 'Disconnect',
+				path,
+			})
 		}
 
 		@ $mol_mem_key
-		watch( path: string ) {
+		protected watch_files( path: string ) {
 			const pack = this.pack( path )
 			const files = new Set< $mol_file >
 			for( const slice of pack.slices() ) {
 				for( const file of slice.files() ) {
+					if( /(?:^|[\\\/])-(?:[\\\/]|$)/.test( file.path() ) ) continue
 					if( /[\\\/]-[^\\\/]*(?:[\\\/]|$)/.test( file.path() ) ) continue
 					if( /\.log$/.test( file.name() ) ) continue
 					if( /^package(?:-lock)?\.json$/.test( file.name() ) ) continue
@@ -282,6 +300,18 @@ namespace $ {
 			for( const file of files ) {
 				versions.set( file.path(), file.version() )
 			}
+			
+			return versions
+		}
+
+		watch_sync( path: string ) {
+			this.watch_versions.set( path, this.watch_files( path ) )
+			return true
+		}
+
+		@ $mol_mem_key
+		watch( path: string ) {
+			const versions = this.watch_files( path )
 
 			const prev = this.watch_versions.get( path )
 			this.watch_versions.set( path, versions )

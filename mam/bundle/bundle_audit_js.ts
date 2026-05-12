@@ -34,7 +34,7 @@ namespace $ {
 			this.log( target, Date.now() - start )
 			
 			if( errors.length ) {
-				$mol_fail_hidden( new $mol_error_mix( `Build fail ${ slice.pack().dir().relate( slice.root().dir() ) }`, ... errors ) )
+				$mol_fail_hidden( new $mol_error_mix( `Build fail ${ slice.pack().dir().relate( slice.root().dir() ) }`, {}, ... errors ) )
 			}
 
 			target.text( `console.info( '%c ▫ $mam ▫ Audit passed', 'color:forestgreen; font-weight:bolder' )` )

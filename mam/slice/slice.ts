@@ -17,7 +17,6 @@ namespace $ {
 		}
 
 		filter( file: $mol_file ) {
-			if( !/^[a-z0-9]/i.test( file.name() ) ) return false
 			return true
 		}
 

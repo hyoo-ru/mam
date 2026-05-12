@@ -37,6 +37,13 @@ namespace $ {
 				/(<\/body>|$)/, `
 				<script src="/mam/server/client/client.js" charset="utf-8"></script>
 				<script src="web.test.js" charset="utf-8"></script>
+				<script>
+					addEventListener( 'load', ()=> setTimeout( ()=> {
+						const audit = document.createElement( 'script' )
+						audit.src = 'web.audit.js'
+						document.head.appendChild( audit )
+					}, 500 ) )
+				</script>
 				$1`,
 			)
 			

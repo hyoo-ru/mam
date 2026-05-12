@@ -16,7 +16,6 @@ class $mam_server_client {
 		}
 
 		socket.onopen = ()=> {
-			if( this.closed && !this.reloading ) location.reload()
 			this.closed = false
 		}
 
