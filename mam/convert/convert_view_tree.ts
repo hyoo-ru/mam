@@ -7,7 +7,7 @@ namespace $ {
 		}
 
 		@ $mol_mem
-		generated() {
+		generated_artifacts() {
 			return [
 				this.locale(),
 				this.script_map(),

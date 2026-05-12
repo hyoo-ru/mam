@@ -24,7 +24,7 @@ namespace $ {
 		}
 		
 		@ $mol_mem
-		generated() {
+		generated_artifacts() {
 			const source = this.source()
 
 			const script = source.parent().resolve( `-bin/${ source.name() }.js` )

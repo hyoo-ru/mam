@@ -86,7 +86,7 @@ namespace $ {
 			for( const convert of this.converts( file ) ) {
 				if( !convert ) continue
 
-				for( const gen of [ ...convert.generated(), ...convert.generated_sources() ] ) {
+				for( const gen of [ ...convert.generated_artifacts(), ...convert.generated_sources() ] ) {
 					if( !this.filter( gen ) ) continue
 					if( !/\.[j]sx?$/.test( gen.name() ) ) continue
 					js.push( gen )
@@ -94,6 +94,77 @@ namespace $ {
 			}
 
 			return js
+		}
+
+		link_max(
+			graph: $mol_graph< $mol_file, { priority: number } >,
+			from: $mol_file,
+			to: $mol_file,
+			priority: number,
+		) {
+			const edge = graph.edge_out( from, to )
+			if( !edge || edge.priority < priority ) {
+				graph.link( from, to, { priority } )
+			}
+		}
+
+		collect_convert_edges(
+			graph: $mol_graph< $mol_file, { priority: number } >,
+			file: $mol_file,
+			collect: ( file: $mol_file )=> void,
+		) {
+			for (const convert of this.converts( file ) ) {
+				if( !convert ) continue
+
+				for( const gen of convert.generated_artifacts() ) {
+					if( !this.filter( gen ) ) continue
+
+					graph.link( file, gen, { priority: 0 } )
+					graph.link( gen, file, { priority: 1 } )
+				}
+
+				for( const gen of convert.generated_sources() ) {
+					if( !this.filter( gen ) ) continue
+					
+					graph.link( file, gen, { priority: 1 } )
+					graph.link( gen, file, { priority: 0 } )
+
+					collect( gen )
+				}
+			}
+		}
+
+		link_runtime_js_edges(
+			graph: $mol_graph< $mol_file, { priority: number } >,
+			file: $mol_file,
+			dep: $mol_file,
+			priority: number,
+		) {
+			for( const file_js of this.runtime_js_files( file ) ) {
+				for( const dep_js of this.runtime_js_files( dep ) ) {
+					if( file_js === dep_js ) continue
+					this.link_max( graph, file_js, dep_js, priority )
+				}
+			}
+		}
+
+		collect_source_edges(
+			graph: $mol_graph< $mol_file, { priority: number } >,
+			file: $mol_file,
+			collect: ( file: $mol_file )=> void,
+		) {
+			for( const source of this.sources( file ) ) {
+				if( !source ) continue
+
+				for( const[ dep, priority ] of source.deps() ) {
+					if( !this.filter( dep ) ) continue
+
+					this.link_max( graph, file, dep, priority )
+					this.link_runtime_js_edges( graph, file, dep, priority )
+					
+					collect( dep )
+				}
+			}
 		}
 
 		@ $mol_mem
@@ -107,54 +178,8 @@ namespace $ {
 				if( ignore.has( file ) ) return
 				ignore.add( file )
 
-				for (const convert of this.converts( file ) ) {
-					if( !convert ) continue
-
-					for( const gen of convert.generated() ) {
-						if( !this.filter( gen ) ) continue
-
-						graph.link( file, gen, { priority: 0 } )
-						graph.link( gen, file, { priority: 1 } )
-					}
-
-					for( const gen of convert.generated_sources() ) {
-						if( !this.filter( gen ) ) continue
-						
-						graph.link( file, gen, { priority: 1 } )
-						graph.link( gen, file, { priority: 0 } )
-
-						collect( gen )
-					}
-					
-				}
-
-				for( const source of this.sources( file ) ) {
-					if( !source ) continue
-
-					for( const[ dep, priority ] of source.deps() ) {
-						if( !this.filter( dep ) ) continue
-
-						const edge = graph.edge_out( file, dep )
-						if( !edge || edge.priority < priority ) {
-							graph.link( file, dep, { priority } )
-						}
-
-						for( const file_js of this.runtime_js_files( file ) ) {
-							for( const dep_js of this.runtime_js_files( dep ) ) {
-								if( file_js === dep_js ) continue
-
-								const runtime = graph.edge_out( file_js, dep_js )
-								if( !runtime || runtime.priority < priority ) {
-									graph.link( file_js, dep_js, { priority } )
-								}
-							}
-						}
-						
-						collect( dep )
-
-					}
-					
-				}
+				this.collect_convert_edges( graph, file, collect )
+				this.collect_source_edges( graph, file, collect )
 
 			}
 

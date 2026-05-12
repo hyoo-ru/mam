@@ -56,23 +56,6 @@ namespace $ {
 			this.dir_dep_add( dep_add, dep, priority )
 		}
 
-		is_type_only( node: ts_Node ) {
-			let in_type = false
-
-			for( let parent = node.parent; parent; parent = parent.parent ) {
-				if( $node.typescript.isHeritageClause( parent ) ) return false
-				if( $node.typescript.isTypeReferenceNode( parent ) ) in_type = true
-				if( $node.typescript.isTypeAliasDeclaration( parent ) ) in_type = true
-				if( $node.typescript.isInterfaceDeclaration( parent ) ) in_type = true
-				if( $node.typescript.isTypeLiteralNode( parent ) ) in_type = true
-				if( $node.typescript.isUnionTypeNode( parent ) ) in_type = true
-				if( $node.typescript.isIntersectionTypeNode( parent ) ) in_type = true
-				if( $node.typescript.isExpressionWithTypeArguments( parent ) ) in_type = true
-			}
-
-			return in_type
-		}
-
 		priority_of( node: ts_Node, ts_source: import('typescript').SourceFile, lines: readonly string[] ) {
 			const pos = ts_source.getLineAndCharacterOfPosition( node.getStart( ts_source ) )
 			const indent = /^([\s\t]*)/.exec( lines[ pos.line ] ?? '' )!
@@ -131,8 +114,6 @@ namespace $ {
 			lines: readonly string[],
 		) {
 			if( !$node.typescript.isIdentifier( node ) ) return
-
-			if( this.is_type_only( node ) ) return
 
 			const priority = this.priority_of( node, ts_source, lines )
 			this.require_dep_add( dep_add, node, priority )

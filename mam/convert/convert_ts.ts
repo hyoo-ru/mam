@@ -7,7 +7,7 @@ namespace $ {
 		}
 
 		@ $mol_mem
-		generated() {
+		generated_artifacts() {
 			return [
 				this.js(),
 				this.map(),

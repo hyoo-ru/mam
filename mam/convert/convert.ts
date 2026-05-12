@@ -18,7 +18,7 @@ namespace $ {
 		}
 
 		@ $mol_mem
-		generated(): $mol_file[] {
+		generated_artifacts(): $mol_file[] {
 			return []
 		}
 
