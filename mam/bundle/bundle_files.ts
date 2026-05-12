@@ -3,7 +3,7 @@ namespace $ {
 	export class $mam_bundle_files extends $mam_bundle {
 
 		@ $mol_mem_key
-		generated( slice: $mam_slice ) {
+		slice_artifacts( slice: $mam_slice ) {
 
 			const prefix = slice.prefix()
 			const output = slice.pack().output()

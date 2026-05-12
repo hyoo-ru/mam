@@ -3,7 +3,7 @@ namespace $ {
 	export class $mam_bundle_manifest_json extends $mam_bundle {
 
 		@ $mol_mem_key
-		generated_for_pack( pack: $mam_package ) {
+		pack_artifacts( pack: $mam_package ) {
 			const start = Date.now()
 
 			const output = pack.output()

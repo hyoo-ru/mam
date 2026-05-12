@@ -3,7 +3,7 @@ namespace $ {
 	export class $mam_bundle_package_json extends $mam_bundle {
 		
 		@ $mol_mem_key
-		generated( slice: $mam_slice ) {
+		slice_artifacts( slice: $mam_slice ) {
 			const start = Date.now()
 
 			const pack = slice.pack()

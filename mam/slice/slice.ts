@@ -198,7 +198,7 @@ namespace $ {
 		@ $mol_mem
 		bundles_generated() {
 			return ( [] as $mol_file[] ).concat(
-				... this.bundles().map( bundle => bundle.generated( this ) )
+				... this.bundles().map( bundle => bundle.artifacts( this ) )
 			)
 		}
 

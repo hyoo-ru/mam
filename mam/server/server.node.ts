@@ -97,13 +97,13 @@ namespace $ {
 			if( !matched ) return []
 
 			if( /^web\.js(?:\.map)?$/.test( matched[2] ) ) {
-				return this.web_js_generated( matched[1] )
+				return this.web_js_artifacts( matched[1] )
 			}
 
-			return this.requested_bundle_generated( matched[1], matched[2] )
+			return this.requested_bundle_artifacts( matched[1], matched[2] )
 		}
 
-		requested_bundle_generated( path: string, name: string ) {
+		requested_bundle_artifacts( path: string, name: string ) {
 			const web_prod = this.pack( path ).slice( this.$.$mam_slice_web_prod )
 			const web_test = this.pack( path ).slice( this.$.$mam_slice_web_test )
 			const node_prod = this.pack( path ).slice( this.$.$mam_slice_node_prod )
@@ -118,11 +118,11 @@ namespace $ {
 				return null
 			}
 
-			if( name === 'test.html' ) return this.bundle_generated( this.$.$mam_bundle_test_html, web_test )
-			if( name === 'index.html' ) return this.bundle_generated( this.$.$mam_bundle_index_html, web_prod )
-			if( name === 'package.json' ) return this.bundle_generated( this.$.$mam_bundle_package_json, web_prod )
-			if( name === 'manifest.json' ) return this.bundle_generated( this.$.$mam_bundle_manifest_json, web_prod )
-			if( name === 'README.md' ) return this.bundle_generated( this.$.$mam_bundle_readme, web_prod )
+			if( name === 'test.html' ) return this.bundle_artifacts( this.$.$mam_bundle_test_html, web_test )
+			if( name === 'index.html' ) return this.bundle_artifacts( this.$.$mam_bundle_index_html, web_prod )
+			if( name === 'package.json' ) return this.bundle_artifacts( this.$.$mam_bundle_package_json, web_prod )
+			if( name === 'manifest.json' ) return this.bundle_artifacts( this.$.$mam_bundle_manifest_json, web_prod )
+			if( name === 'README.md' ) return this.bundle_artifacts( this.$.$mam_bundle_readme, web_prod )
 
 			const match = name.match( /^(web(?:\.test)?|node(?:\.test)?)\.(.+)$/ )
 			if( !match ) return []
@@ -139,43 +139,43 @@ namespace $ {
 						[ ... web_test.bundles_generated() ];
 						[ ... node_prod.bundles_generated() ];
 					}
-					return this.bundle_generated(
+					return this.bundle_artifacts(
 						/\.test$/.test( match[1] ) ? this.$.$mam_bundle_test_js : this.$.$mam_bundle_js,
 						target,
 					)
 				case 'audit.js':
-					return this.bundle_generated( this.$.$mam_bundle_audit_js, target )
+					return this.bundle_artifacts( this.$.$mam_bundle_audit_js, target )
 				case 'css':
-					return this.bundle_generated( this.$.$mam_bundle_css, target )
+					return this.bundle_artifacts( this.$.$mam_bundle_css, target )
 				case 'mjs':
-					return this.bundle_generated( this.$.$mam_bundle_mjs, target )
+					return this.bundle_artifacts( this.$.$mam_bundle_mjs, target )
 				case 'd.ts':
-					return this.bundle_generated( this.$.$mam_bundle_dts, target )
+					return this.bundle_artifacts( this.$.$mam_bundle_dts, target )
 				case 'meta.tree':
-					return this.bundle_generated( this.$.$mam_bundle_meta_tree, target )
+					return this.bundle_artifacts( this.$.$mam_bundle_meta_tree, target )
 				case 'meta.json':
 				case 'deps.json':
-					return this.bundle_generated( this.$.$mam_bundle_meta, target )
+					return this.bundle_artifacts( this.$.$mam_bundle_meta, target )
 				case 'view.tree':
-					return this.bundle_generated( this.$.$mam_bundle_view_tree, target )
+					return this.bundle_artifacts( this.$.$mam_bundle_view_tree, target )
 			}
 
 			return []
 		}
 
-		web_js_generated( path: string ) {
+		web_js_artifacts( path: string ) {
 			const pack = this.pack( path )
 			const slice = pack.slice( this.$.$mam_slice_web_prod )
 			return [
-				... this.bundle_generated( this.$.$mam_bundle_meta, slice ),
-				... this.bundle_generated( this.$.$mam_bundle_js, slice ),
+				... this.bundle_artifacts( this.$.$mam_bundle_meta, slice ),
+				... this.bundle_artifacts( this.$.$mam_bundle_js, slice ),
 			]
 		}
 
-		bundle_generated< Bundle extends typeof $mam_bundle >( Bundle: Bundle, slice: $mam_slice ) {
+		bundle_artifacts< Bundle extends typeof $mam_bundle >( Bundle: Bundle, slice: $mam_slice ) {
 			const bundle = this.mam_root().bundle( Bundle )
-			const generate = ( Bundle.prototype.generated as any ).orig ?? bundle.generated
-			return generate.call( bundle, slice ) as $mol_file[]
+			const artifacts = ( Bundle.prototype.artifacts as any ).orig ?? bundle.artifacts
+			return artifacts.call( bundle, slice ) as $mol_file[]
 		}
 
 		reply_dir( msg: $mol_rest_message, dir: $mol_file ) {
@@ -344,7 +344,7 @@ namespace $ {
 			this.reload_scheduled.delete( path )
 
 			try {
-				this.web_js_generated( path )
+				this.web_js_artifacts( path )
 			} catch( error: any ) {
 				if( $mol_promise_like( error ) ) {
 					Promise.resolve( error ).then(
