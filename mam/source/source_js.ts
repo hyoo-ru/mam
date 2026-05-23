@@ -11,35 +11,39 @@ namespace $ {
 			const deps = super.deps()
 
 			const file = this.file()
-			const lines = file.text()
-				.replace( /\/\*[^]*?\*\//g, '' )
-				.replace( /\/\/.*$/gm, '' )
-				.split( '\n' )
+			const source = file.text()
 
-			for( const line of lines ) {
+			const scan = ( source: string )=> {
+				for( const line of source.split( '\n' ) ) {
 
-				const priority = this.priority( line )
-				
-				line.replace(
-					/\b(?:require|import)\(\s*['"]([^"'()]*?)['"]\s*\)|\bimport\s+(?:[^'"]+?\s+from\s+)?['"]([^"'()]*?)['"]/ig,
-					( str, path_call, path_static )=> {
-						let path = path_call || path_static
-						path = path.replace( /(\/[^\/.]+)$/, '$1.js' ).replace( /\/$/, '/index.js' )
-						if( path[0] === '.' ) path = '../' + path
+					const priority = this.priority( line )
 
-						const dep = this.root().dir().resolve( path )
-						deps.set( dep, priority )
-						return str
+					for( const token of line.matchAll( $mam_source_refs_js ) ) {
+						if( !token.groups ) continue
+
+						const path_found = token.groups.path
+						if( path_found ) {
+							let path = path_found
+							path = path.replace( /(\/[^\/.]+)$/, '$1.js' ).replace( /\/$/, '/index.js' )
+							if( path[0] === '.' ) path = '../' + path
+
+							const dep = this.root().dir().resolve( path )
+							this.dep_add( deps, dep, priority )
+						}
+
+						const name = token.groups.name
+						if( name ) this.fqn_add( deps, name, priority )
 					}
-				)
+				}
+			}
 
-				line.replace(
-					/\$([a-z][a-z0-9]*(?:[._][a-z0-9]+)*)/ig,
-					( str, fqn )=> {
-						this.fqn_add( deps, fqn, priority )
-						return str
-					}
-				)
+			for( const token of source.matchAll( $mam_source_remarks_js ) ) {
+				if( token.groups ) {
+					const remark = token[0]
+					if( /@jsx(?:Frag)?\s+\$/.test( remark ) ) scan( remark )
+				} else {
+					scan( token[0] )
+				}
 			}
 
 			return deps
