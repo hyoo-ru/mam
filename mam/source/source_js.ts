@@ -18,8 +18,7 @@ namespace $ {
 
 			for( const line of lines ) {
 
-				const indent = /^([\s\t]*)/.exec( line )!
-				const priority = -indent[ 0 ].replace( /\t/g, '    ' ).length / 4
+				const priority = this.priority( line )
 				
 				line.replace(
 					/\b(?:require|import)\(\s*['"]([^"'()]*?)['"]\s*\)|\bimport\s+(?:[^'"]+?\s+from\s+)?['"]([^"'()]*?)['"]/ig,
@@ -37,7 +36,7 @@ namespace $ {
 				line.replace(
 					/\$([a-z][a-z0-9]*(?:[._][a-z0-9]+)*)/ig,
 					( str, fqn )=> {
-						deps.set( this.lookup( fqn.replace( /[._]/g, '/' ) ), priority )
+						this.fqn_add( deps, fqn, priority )
 						return str
 					}
 				)

@@ -3,7 +3,7 @@ namespace $ {
 	export class $mam_source_view_ts extends $mam_source {
 
 		static match( file: $mol_file ): boolean {
-			return /\.view\.ts$/.test( file.name() )
+			return /\.view(?:\.css)?\.tsx?$/.test( file.name() )
 		}
 		
 		@ $mol_mem
@@ -12,7 +12,7 @@ namespace $ {
 			
 			const file = this.file()
 			
-			const tree = this.$.$mol_file.absolute( file.path().replace( /\.ts$/ , '\.tree' ) )
+			const tree = this.$.$mol_file.absolute( file.path().replace( /(?:\.css)?\.tsx?$/ , '\.tree' ) )
 			deps.set( tree, 0 )
 
 			return deps

@@ -23,8 +23,7 @@ namespace $ {
 			
 			lines.forEach(
 				( line )=> {
-					var indent = /^([\s\t]*)/.exec( line )!
-					var priority = -indent[ 0 ].replace( /\t/g , '    ' ).length / 4
+					var priority = this.priority( line )
 					
 					line.replace(
 						/(?:--|\[)([a-z][a-z0-9]+(?:[_][a-z0-9]+)+)/ig , ( str , name )=> {

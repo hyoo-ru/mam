@@ -27,27 +27,66 @@ namespace $ {
 			return new Map< $mol_file, number >()
 		}
 
+		priority( line: string ) {
+			const indent = /^([\s\t]*)/.exec( line )!
+			return - indent[ 0 ].replace( /\t/g, '    ' ).length / 4
+		}
+
+		dep_add( deps: Map< $mol_file, number >, dep: $mol_file, priority: number ) {
+			const existed = deps.get( dep )
+			if( !existed || existed < priority ) deps.set( dep, priority )
+		}
+
+		main_file( dir: $mol_file ) {
+			for( const name of [
+				dir.name() + '.view.tree',
+				dir.name() + '.ts',
+				dir.name() + '.tsx',
+				dir.name() + '.js',
+			] ) {
+				const file = dir.resolve( name )
+				if( file.exists() ) return file
+			}
+			return null
+		}
+
+		fqn_add( deps: Map< $mol_file, number >, fqn: string, priority: number ) {
+			const dep = this.lookup( fqn.replace( /[._]/g, '/' ) )
+			this.dep_add( deps, dep, priority )
+
+			if( dep.type() !== 'file' ) return
+
+			const owner = dep.parent()
+			if( this.main_file( owner )?.path() === dep.path() ) {
+				this.dep_add( deps, owner, priority )
+			}
+		}
+
 		lookup( path: string | readonly string[] ): $mol_file {
 
 			const path_text = typeof path === 'string' ? path : path.join( '/' )
+			const target = /\.\w+$/.test( path_text )
+				? path_text
+				: path_text + '/' + path_text.replace( /.*\//, '' )
+			let dep = this.root().dir().resolve( target )
 
-			const dir = this.root().dir().resolve( path_text + '/' + path_text.replace( /.*\//, '' ) ) // dir duplicatation for the case when submodules should be independent from the parent 
+			while( !dep.exists() ) {
+				if( this.root().pack( dep ).ensure() ) return dep
 
-			const lookup = ( dir: $mol_file ): $mol_file => {
-
-				if( dir.exists() ) return dir
-				if( this.root().pack( dir ).ensure() ) return dir
-	
-				const parent = dir.parent()
-
+				const parent = dep.parent()
 				if( parent === this.root().dir() ) {
-					throw new Error( `Absent dependency: ${ dir.relate() }, (${ path_text })` )
+					throw new Error( `Absent dependency: ${ dep.relate() }, (${ path_text })` )
 				}
-
-				return lookup( parent )
+				dep = parent
 			}
-			
-			return lookup( dir )
+
+			const relate = dep.relate( this.root().dir() )
+			if( dep.type() === 'dir' && relate !== path_text && relate !== target ) {
+				const main = this.main_file( dep )
+				if( main ) return main
+			}
+
+			return dep
 		}
 
 	}

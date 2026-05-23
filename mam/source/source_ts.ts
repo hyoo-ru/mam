@@ -1,6 +1,8 @@
 namespace $ {
 
 	type ts_Node = import('typescript').Node
+	type ts_Identifier = import('typescript').Identifier
+	type ts_SourceFile = import('typescript').SourceFile
 
 	export class $mam_source_ts extends $mam_source {
 
@@ -11,21 +13,14 @@ namespace $ {
 		@ $mol_mem
 		deps() {
 			const deps = this.ts_source_deps().mam_deps
-			
-			const file = this.file()
+			const name = this.file().name().split( '.' )
 
-			let name_parts = file.name().split('.')
-
-			while( name_parts.length > 2 ) {
-
-				name_parts.splice( -2, 1 )
-
-				const base = name_parts.slice( 0, -1 ).join( '.' )
+			while( name.length > 2 ) {
+				name.splice( -2, 1 )
 				for( const ext of [ '.ts', '.tsx' ] ) {
-					const dep = file.parent().resolve( base + ext )
-					if( dep.exists() ) deps.set( dep, 10 )
+					const dep = this.file().parent().resolve( name.slice( 0, -1 ).join( '.' ) + ext )
+					if( dep.exists() ) this.dep_add( deps, dep, 10 )
 				}
-
 			}
 
 			return deps
@@ -34,120 +29,82 @@ namespace $ {
 		@ $mol_mem
 		ts_source() {
 			const file = this.file()
-			const target = this.root().ts_options().target!
-			return $node.typescript.createSourceFile( file.path(), file.text(), target )
+			return $node.typescript.createSourceFile( file.path(), file.text(), this.root().ts_options().target!, true )
 		}
 
-		dir_dep_add( dep_add: ( dep: $mol_file, priority: number )=> void, dep: $mol_file, priority: number ) {
-			if( dep.type() !== 'dir' ) return
-			const base = dep.name() + '.'
-
-			for( const item of dep.sub() ) {
-				if( item.type() !== 'file' ) continue
-				if( !item.name().startsWith( base ) ) continue
-				dep_add( item, priority )
-			}
+		priority_of( node: ts_Node, source: ts_SourceFile, lines: readonly string[] ) {
+			const pos = source.getLineAndCharacterOfPosition( node.getStart( source ) )
+			return this.priority( lines[ pos.line ] ?? '' )
 		}
 
-		fqn_add( dep_add: ( dep: $mol_file, priority: number )=> void, fqn: string, priority: number ) {
-			const path = fqn.replace( /[._]/g, '/' )
-			const dep = this.lookup( path )
-			dep_add( dep, priority )
-			this.dir_dep_add( dep_add, dep, priority )
+		fqn( node: ts_Identifier ) {
+			return String( node.escapedText ).match( /\$([^$]*)/ )?.[ 1 ] ?? null
 		}
 
-		priority_of( node: ts_Node, ts_source: import('typescript').SourceFile, lines: readonly string[] ) {
-			const pos = ts_source.getLineAndCharacterOfPosition( node.getStart( ts_source ) )
-			const indent = /^([\s\t]*)/.exec( lines[ pos.line ] ?? '' )!
-			return - indent[ 0 ].replace( /\t/g, '    ' ).length / 4
+		path_add( deps: Map< $mol_file, number >, path: string, priority: number ) {
+			const dep = path[0] === '.'
+				? this.file().resolve( path )
+				: this.root().dir().resolve( path )
+			this.dep_add( deps, dep, priority )
 		}
 
-		implicit_deps_add( dep_add: ( dep: $mol_file, priority: number )=> void ) {
-			const file = this.file()
+		node_dep_add( node_deps: Set< string >, node: ts_Identifier ) {
+			const ts = $node.typescript
+			const parent = node.parent
 
-			if( /\.tsx$/.test( file.ext() ) ) {
-				dep_add( this.lookup( 'mol/jsx' ), 0 )
-			}
-
-			if( /\.test\.tsx?$/.test( file.name() ) && file.relate( this.root().dir() ) !== 'mol/test/test.test.ts' ) {
-				dep_add( this.lookup( 'mol/test' ), 0 )
-			}
-		}
-
-		require_dep_add( dep_add: ( dep: $mol_file, priority: number )=> void, node: import('typescript').Identifier, priority: number ) {
-			if( String( node.escapedText ) !== 'require' ) return
-			if( !node.parent || !$node.typescript.isCallExpression( node.parent ) ) return
-			const arg = node.parent.arguments[ 0 ]
-			if( !$node.typescript.isStringLiteral( arg ) ) return
-
-			dep_add( this.file().resolve( arg.text ), priority )
-		}
-
-		fqn_of( node: import('typescript').Identifier ) {
-			return String( node.escapedText ).match( /\$([^$]*)/ )?.[1] ?? null
-		}
-		
-		node_dep_add( node_deps: Set< string >, node: import('typescript').Identifier ) {
-			const parent = ( node.parent as any )?.name?.escapedText?.[0] === '$'
-				? node.parent.parent
-				: node.parent
-
-			if( parent && $node.typescript.isPropertyAccessExpression( parent ) ) {
+			if( ts.isPropertyAccessExpression( parent ) ) {
 				node_deps.add( String( parent.name.escapedText ) )
-				return
-			}
-			
-			if(
-				parent &&
-				$node.typescript.isElementAccessExpression( parent )
-				&& $node.typescript.isStringLiteral( parent.argumentExpression )
-			) {
+			} else if( ts.isElementAccessExpression( parent ) && ts.isStringLiteral( parent.argumentExpression ) ) {
 				node_deps.add( parent.argumentExpression.text )
 			}
 		}
 
-		identifier_visit(
-			dep_add: ( dep: $mol_file, priority: number )=> void,
+		implicit_deps_add( deps: Map< $mol_file, number > ) {
+			const file = this.file()
+
+			if( /\.tsx$/.test( file.ext() ) ) this.dep_add( deps, this.lookup( 'mol/jsx' ), 0 )
+
+			if( /\.test\.tsx?$/.test( file.name() ) && file.relate( this.root().dir() ) !== 'mol/test/test.test.ts' ) {
+				this.dep_add( deps, this.lookup( 'mol/test' ), 0 )
+			}
+		}
+
+		node_visit(
+			deps: Map< $mol_file, number >,
 			node_deps: Set< string >,
 			node: ts_Node,
-			ts_source: import('typescript').SourceFile,
+			source: ts_SourceFile,
 			lines: readonly string[],
 		) {
-			if( !$node.typescript.isIdentifier( node ) ) return
+			const ts = $node.typescript
+			const priority = this.priority_of( node, source, lines )
 
-			const priority = this.priority_of( node, ts_source, lines )
-			this.require_dep_add( dep_add, node, priority )
+			if( ts.isImportDeclaration( node ) && ts.isStringLiteral( node.moduleSpecifier ) ) {
+				this.path_add( deps, node.moduleSpecifier.text, priority )
+			}
 
-			const fqn = this.fqn_of( node )
-			if( !fqn ) return
+			if( ts.isCallExpression( node ) && ts.isIdentifier( node.expression ) && node.expression.escapedText === 'require' ) {
+				const arg = node.arguments[ 0 ]
+				if( ts.isStringLiteral( arg ) ) this.path_add( deps, arg.text, priority )
+			}
 
-			if( fqn === 'node' ) this.node_dep_add( node_deps, node )
-			this.fqn_add( dep_add, fqn, priority )
+			if( ts.isIdentifier( node ) ) {
+				const fqn = this.fqn( node )
+				if( fqn === 'node' ) this.node_dep_add( node_deps, node )
+				if( fqn ) this.fqn_add( deps, fqn, priority )
+			}
+
+			node.forEachChild( child => this.node_visit( deps, node_deps, child, source, lines ) )
 		}
 
 		@ $mol_mem
 		ts_source_deps() {
-			const file = this.file()
 			const mam_deps = new Map< $mol_file, number >()
-			const node_deps: Set< string > = new Set
+			const node_deps = new Set< string >
+			const source = this.ts_source()
 
-			if( !/tsx?$/.test( file.ext() ) ) return { mam_deps, node_deps }
-
-			const ts_source = this.ts_source()
-			const lines = file.text().split( '\n' )
-
-			const dep_add = ( dep: $mol_file, priority: number )=> {
-				const existed = mam_deps.get( dep )
-				if( !existed || existed < priority ) mam_deps.set( dep, priority )
-			}
-
-			const visit = ( node: ts_Node )=> {
-				this.identifier_visit( dep_add, node_deps, node, ts_source, lines )
-				node.forEachChild( visit )
-			}
-
-			this.implicit_deps_add( dep_add )
-			visit( ts_source )
+			this.implicit_deps_add( mam_deps )
+			this.node_visit( mam_deps, node_deps, source, source, this.file().text().split( '\n' ) )
 
 			return { mam_deps, node_deps }
 		}
