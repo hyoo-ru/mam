@@ -8,6 +8,7 @@ namespace $ {
 	})
 
 	export let $mam_source_remarks_css = $mol_regexp.from({
+		inline: [ '//', repeat( char_any ), line_end ],
 		block: [ '/*', repeat( char_any ), '*/' ],
 	})
 

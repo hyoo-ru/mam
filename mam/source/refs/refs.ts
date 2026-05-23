@@ -24,8 +24,10 @@ namespace $ {
 
 	export let $mam_source_refs_css = $mol_regexp.from({
 
-		fqn: [ { name: [ word, repeat_greedy([ /[._]/, word ]) ] } ],
+		attr: [ /(?:--|\[)/, { name: /[a-z][a-z0-9]*(?:_[a-z0-9]+)+/ } ],
+
+		fqn: [ '$', { name: /[a-z][a-z0-9]*(?:[._][a-z0-9]+)+/ } ],
 		
-	})
+	}, { ignoreCase: true })
 
 }

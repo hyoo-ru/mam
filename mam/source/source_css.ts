@@ -16,31 +16,26 @@ namespace $ {
 				deps.set( tree, 0 )
 			}
 
-			var lines = String( this.file().text() )
-			.replace( /\/\*[^]*?\*\//g , '' ) // drop block comments
-			.replace( /\/\/.*$/gm , '' ) // drop inline comments
-			.split( '\n' )
-			
-			lines.forEach(
-				( line )=> {
-					var priority = this.priority( line )
-					
-					line.replace(
-						/(?:--|\[)([a-z][a-z0-9]+(?:[_][a-z0-9]+)+)/ig , ( str , name )=> {
+			const scan = ( source: string )=> {
+				for( const line of source.split( '\n' ) ) {
+					const priority = this.priority( line )
 
+					for( const token of line.matchAll( $mam_source_refs_css ) ) {
+						if( !token.groups ) continue
+
+						const name = token.groups.name
+						if( token.groups.attr ) {
 							deps.set( this.lookup( name.replace( /[._-]/g , '/' ) ), priority )
-							return str
-						}
-					)
-					line.replace(
-						/\$([a-z][a-z0-9]*(?:[._][a-z0-9]+)+)/ig , ( str , name )=> {
-
+						} else if( token.groups.fqn ) {
 							deps.set( this.lookup( name.replace( /[._]/g , '/' ) ), priority )
-							return str
 						}
-					)
+					}
 				}
-			)
+			}
+
+			for( const token of String( this.file().text() ).matchAll( $mam_source_remarks_css ) ) {
+				if( !token.groups ) scan( token[0] )
+			}
 
 			return deps
 		}
