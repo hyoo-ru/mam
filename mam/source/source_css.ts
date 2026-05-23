@@ -2,6 +2,29 @@ namespace $ {
 
 	export class $mam_source_css extends $mam_source {
 
+		static refs = (()=> {
+			const { repeat_greedy, latin_only } = $mol_regexp
+
+			const word = repeat_greedy( latin_only, 1 )
+			const attr_name = [ word, repeat_greedy([ '_', word ], 1 ) ] as const
+			const fqn_name = [ word, repeat_greedy([ /[._]/, word ], 1 ) ] as const
+			const attr_mark = $mol_regexp.vary([ '--', '[' ])
+
+			return $mol_regexp.from({
+				attr: [ attr_mark, { name: attr_name } ],
+				fqn: [ '$', { name: fqn_name } ],
+			}, { ignoreCase: true })
+		})()
+
+		static remarks = (()=> {
+			const { repeat, char_any, line_end } = $mol_regexp
+
+			return $mol_regexp.from({
+				inline: [ '//', repeat( char_any ), line_end ],
+				block: [ '/*', repeat( char_any ), '*/' ],
+			})
+		})()
+
 		static match( file: $mol_file ): boolean {
 			return /\.css?$/.test( file.name() )
 		}
@@ -20,7 +43,7 @@ namespace $ {
 				for( const line of source.split( '\n' ) ) {
 					const priority = this.priority( line )
 
-					for( const token of line.matchAll( $mam_source_refs_css ) ) {
+					for( const token of line.matchAll( $mam_source_css.refs ) ) {
 						if( !token.groups ) continue
 
 						const name = token.groups.name
@@ -33,7 +56,7 @@ namespace $ {
 				}
 			}
 
-			for( const token of String( this.file().text() ).matchAll( $mam_source_remarks_css ) ) {
+			for( const token of String( this.file().text() ).matchAll( $mam_source_css.remarks ) ) {
 				if( !token.groups ) scan( token[0] )
 			}
 
