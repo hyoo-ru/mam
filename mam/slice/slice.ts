@@ -102,23 +102,18 @@ namespace $ {
 			const ignore = new Set<$mol_file>()
 			const graph = new $mol_graph< $mol_file, { priority: number } >()
 
-			const collect_dir = ( dir: $mol_file )=> {
+			const collect = ( file: $mol_file )=> {
 
-				if( dir !== this.root().dir() ) collect( dir.parent() )
-				const main = new Map< string, $mol_file >()
+				if( ignore.has( file ) ) return
+				ignore.add( file )
 
-				for( const item of this.direct_files( dir ) ) {
-					collect( item )
+				graph.nodes.add( file )
 
-					const main_name = item.name().replace( /\.(?:web|node)\./, '.' )
-					const main_file = main.get( main_name )
-					if( main_file ) this.link_max( graph, item, main_file, 10 )
-					else main.set( item.name(), item )
+				if( file.type() === 'dir' ) {
+					if( file !== this.root().dir() ) collect( file.parent() )
+					for( const item of this.direct_files( file ) ) collect( item )
+					return
 				}
-
-			}
-
-			const collect_file = ( file: $mol_file )=> {
 
 				if( !file.exists() ) return
 
@@ -133,7 +128,6 @@ namespace $ {
 							: file.parent()
 						if( dep === owner ) continue
 
-						collect( dep )
 						const entries = dep.type() === 'dir' ? this.direct_files( dep ) : [ dep ]
 						for( const entry of entries ) {
 							if( entry === file ) continue
@@ -154,22 +148,6 @@ namespace $ {
 				}
 
 			}
-			
-			const collect = ( file: $mol_file )=> {
-
-				if( ignore.has( file ) ) return
-				ignore.add( file )
-
-				graph.nodes.add( file )
-
-				if( file.type() === 'dir' ) {
-					collect_dir( file )
-					return
-				}
-
-				collect_file( file )
-
-			}
 
 			collect( this.pack().dir() )
 			
@@ -178,35 +156,30 @@ namespace $ {
 			return graph
 		}
 
-		output_files( file: $mol_file ) {
-			const files = [ file ]
-			if( /\.d\.ts$/.test( file.name() ) ) return files
-			if( !file.exists() ) return files
-
-			for( const convert of this.converts( file ) ) {
-				if( !convert ) continue
-
-				for( const gen of convert.generated_artifacts() ) {
-					if( !this.filter( gen ) ) continue
-					files.push( gen )
-				}
-
-				for( const gen of convert.generated_sources() ) {
-					if( !this.filter( gen ) ) continue
-					files.push( gen )
-				}
-			}
-
-			return files
-		}
-
 		@ $mol_mem
 		files() {
 			const files = new Set< $mol_file >()
 
 			for( const file of this.graph().sorted ) {
 				if( file.type() !== 'file' ) continue
-				for( const output of this.output_files( file ) ) files.add( output )
+				files.add( file )
+
+				if( /\.d\.ts$/.test( file.name() ) ) continue
+				if( !file.exists() ) continue
+
+				for( const convert of this.converts( file ) ) {
+					if( !convert ) continue
+
+					for( const gen of convert.generated_artifacts() ) {
+						if( !this.filter( gen ) ) continue
+						files.add( gen )
+					}
+
+					for( const gen of convert.generated_sources() ) {
+						if( !this.filter( gen ) ) continue
+						files.add( gen )
+					}
+				}
 			}
 
 			return files
