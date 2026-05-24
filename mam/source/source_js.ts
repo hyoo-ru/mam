@@ -51,6 +51,7 @@ namespace $ {
 						const path_found = token.groups.path
 						if( path_found ) {
 							let path = path_found
+							if( $node_internal_check( path ) ) continue
 							path = path.replace( /(\/[^\/.]+)$/, '$1.js' ).replace( /\/$/, '/index.js' )
 							if( path[0] === '.' ) path = '../' + path
 

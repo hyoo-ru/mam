@@ -33,6 +33,8 @@ namespace $ {
 		}
 
 		path_add( deps: Map< $mol_file, number >, path: string, priority: number ) {
+			if( $node_internal_check( path ) ) return
+
 			const dep = path[0] === '.'
 				? this.file().resolve( path )
 				: this.root().dir().resolve( path )
@@ -76,6 +78,16 @@ namespace $ {
 
 			if( ts.isCallExpression( node ) && ts.isIdentifier( node.expression ) && node.expression.escapedText === 'require' ) {
 				const arg = node.arguments[ 0 ]
+				if( ts.isStringLiteral( arg ) ) this.path_add( deps, arg.text, priority )
+			}
+
+			if( ts.isCallExpression( node ) && node.expression.kind === ts.SyntaxKind.ImportKeyword ) {
+				const arg = node.arguments[ 0 ]
+				if( ts.isStringLiteral( arg ) ) this.path_add( deps, arg.text, priority )
+			}
+
+			if( ts.isImportTypeNode( node ) && ts.isLiteralTypeNode( node.argument ) ) {
+				const arg = node.argument.literal
 				if( ts.isStringLiteral( arg ) ) this.path_add( deps, arg.text, priority )
 			}
 

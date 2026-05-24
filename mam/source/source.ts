@@ -29,7 +29,7 @@ namespace $ {
 
 		dep_add( deps: Map< $mol_file, number >, dep: $mol_file, priority: number ) {
 			const existed = deps.get( dep )
-			if( !existed || existed < priority ) deps.set( dep, priority )
+			if( existed === undefined || existed < priority ) deps.set( dep, priority )
 		}
 
 		fqn_add( deps: Map< $mol_file, number >, fqn: string, priority: number ) {
