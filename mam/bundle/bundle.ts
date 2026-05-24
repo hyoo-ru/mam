@@ -40,6 +40,10 @@ namespace $ {
 			})
 
 		}
+
+		js_bootstrap() {
+			return this.root().dir().resolve( 'mam.jam.js' ).text()
+		}
 		
 	}
 

@@ -94,16 +94,6 @@ namespace $ {
 				if( !/^[a-z0-9]/i.test( item.name() ) ) return false
 				return this.filter( item )
 			} )
-			// .sort( ( left, right )=>
-			// 	left.name().length - right.name().length
-			// 	|| left.name().localeCompare( right.name() )
-			// )
-		}
-
-		module_dir( file: $mol_file ) {
-			return file.parent().name()[0] === '-'
-				? file.parent().parent()
-				: file.parent()
 		}
 
 		@ $mol_mem_key
@@ -115,20 +105,8 @@ namespace $ {
 
 				for( const[ dep, priority ] of source.deps() ) {
 					if( !this.filter( dep ) ) continue
-
-					if( dep.type() === 'file' ) {
-						deps.push([ dep, priority ])
-						continue
-					}
-
-					// Self module deps only name the current module declaration.
-					if( dep.path() === this.module_dir( file ).path() ) continue
-
-					// Directory deps expand to module files so variants can depend on base files.
-					for( const dep_file of this.module_files( dep ) ) {
-						if( dep_file.path() === file.path() ) continue
-						deps.push([ dep_file, priority ])
-					}
+					if( dep.path() === file.path() ) continue
+					deps.push([ dep, priority ])
 				}
 			}
 
@@ -165,8 +143,12 @@ namespace $ {
 				ignore.add( file )
 
 				if( file.type() === 'dir' ) {
+					graph.nodes.add( file )
 					if( file !== this.root().dir() ) collect( file.parent() )
-					this.module_files( file ).forEach( collect )
+					for( const mod of this.module_files( file ) ) {
+						collect( mod )
+						this.link_max( graph, file, mod, 0 )
+					}
 					return
 				}
 
@@ -190,17 +172,19 @@ namespace $ {
 		files() {
 			const files = new Set< $mol_file >()
 
-			for( const file of this.graph().sorted ) {
-				if( file.type() !== 'file' ) continue
+			const add = ( file: $mol_file )=> {
+				if( file.type() !== 'file' ) return
 				files.add( file )
 
-				if( /\.d\.ts$/.test( file.name() ) ) continue
-				if( !file.exists() ) continue
+				if( /\.d\.ts$/.test( file.name() ) ) return
+				if( !file.exists() ) return
 
 				for( const gen of this.file_generated_artifacts( file ) ) {
 					files.add( gen )
 				}
 			}
+
+			for( const file of this.graph().sorted ) add( file )
 
 			return files
 		}

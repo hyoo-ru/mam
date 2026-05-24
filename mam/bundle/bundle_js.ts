@@ -19,8 +19,12 @@ namespace $ {
 			} else {
 				concater.add( 'function require'+'( path ){ return $node[ path ] }' )
 			}
+			concater.add( this.js_bootstrap(), 'mam.jam.js' )
 
-			const files = [ ...slice.files() ].filter( file => /\.[j]sx?$/.test( file.name() ) )
+			const files = [ ...slice.files() ].filter( file => {
+				if( file.relate( this.root().dir() ) === 'mam.jam.js' ) return false
+				return /\.[j]sx?$/.test( file.name() )
+			} )
 
 			for( const file of files ) {
 				const file_map = file.parent().resolve( file.name() + '.map' )

@@ -1,10 +1,5 @@
 namespace $ {
 
-	export let $mam_source_line = $mol_regexp.from([
-		$mol_regexp.begin,
-		{ indent: $mol_regexp.repeat_greedy( '\t', 1 ) },
-	])
-
 	/** Source file dependencies extractor. */
 	export class $mam_source extends $mol_object2 {
 
@@ -37,29 +32,9 @@ namespace $ {
 			if( !existed || existed < priority ) deps.set( dep, priority )
 		}
 
-		main_file( dir: $mol_file ) {
-			for( const name of [
-				dir.name() + '.view.tree',
-				dir.name() + '.ts',
-				dir.name() + '.tsx',
-				dir.name() + '.js',
-			] ) {
-				const file = dir.resolve( name )
-				if( file.exists() ) return file
-			}
-			return null
-		}
-
 		fqn_add( deps: Map< $mol_file, number >, fqn: string, priority: number ) {
 			const dep = this.lookup( fqn.replace( /[._]/g, '/' ) )
 			this.dep_add( deps, dep, priority )
-
-			if( dep.type() !== 'file' ) return
-
-			const owner = dep.parent()
-			if( this.main_file( owner )?.path() === dep.path() ) {
-				this.dep_add( deps, owner, priority )
-			}
 		}
 
 		lookup( path: string ): $mol_file {
@@ -75,11 +50,6 @@ namespace $ {
 					throw new Error( `Absent dependency: ${ dep.relate() }, (${ path })` )
 				}
 				dep = parent
-			}
-
-			const relate = dep.relate( this.root().dir() )
-			if( dep.type() === 'dir' && relate !== path && relate !== target ) {
-				return this.main_file( dep ) ?? dep
 			}
 
 			return dep

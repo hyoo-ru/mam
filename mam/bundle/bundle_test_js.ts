@@ -34,6 +34,8 @@ namespace $ {
 			} else {
 				concater.add( 'function require'+'( path ){ return $node[ path ] }' )
 			}
+			concater.add( this.js_bootstrap(), 'mam.jam.js' )
+			files = files.filter( file => file.relate( root_dir ) !== 'mam.jam.js' )
 
 			const boot_rank = ( file: $mol_file )=> {
 				switch( file.relate( root_dir ) ) {
