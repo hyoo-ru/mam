@@ -62,12 +62,9 @@ namespace $ {
 			}
 		}
 
-		lookup( path: string | readonly string[] ): $mol_file {
+		lookup( path: string ): $mol_file {
 
-			const path_text = typeof path === 'string' ? path : path.join( '/' )
-			const target = /\.\w+$/.test( path_text )
-				? path_text
-				: path_text + '/' + path_text.replace( /.*\//, '' )
+			const target = path + '/' + path.replace( /.*\//, '' )
 			let dep = this.root().dir().resolve( target )
 
 			while( !dep.exists() ) {
@@ -75,15 +72,14 @@ namespace $ {
 
 				const parent = dep.parent()
 				if( parent === this.root().dir() ) {
-					throw new Error( `Absent dependency: ${ dep.relate() }, (${ path_text })` )
+					throw new Error( `Absent dependency: ${ dep.relate() }, (${ path })` )
 				}
 				dep = parent
 			}
 
 			const relate = dep.relate( this.root().dir() )
-			if( dep.type() === 'dir' && relate !== path_text && relate !== target ) {
-				const main = this.main_file( dep )
-				if( main ) return main
+			if( dep.type() === 'dir' && relate !== path && relate !== target ) {
+				return this.main_file( dep ) ?? dep
 			}
 
 			return dep

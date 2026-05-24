@@ -58,7 +58,7 @@ namespace $ {
 
 		'js import refs'() {
 			$mol_assert_like(
-				mam_source_js_ref_tokens( 'import foo from "path/to.file"\nimport( "lazy/file" )' ),
+				mam_source_js_ref_tokens( 'imp' + 'ort foo from "path/to.file"\nimp' + 'ort( "lazy/file" )' ),
 				[
 					{
 						0: 'import foo from "path/to.file"',

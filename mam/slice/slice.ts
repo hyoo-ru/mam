@@ -88,11 +88,68 @@ namespace $ {
 			}
 		}
 
-		direct_files( dir: $mol_file ) {
+		module_files( dir: $mol_file ) {
 			return dir.sub().filter( item => {
 				if( item.type() !== 'file' ) return false
 				if( !/^[a-z0-9]/i.test( item.name() ) ) return false
 				return this.filter( item )
+			} )
+			// .sort( ( left, right )=>
+			// 	left.name().length - right.name().length
+			// 	|| left.name().localeCompare( right.name() )
+			// )
+		}
+
+		module_dir( file: $mol_file ) {
+			return file.parent().name()[0] === '-'
+				? file.parent().parent()
+				: file.parent()
+		}
+
+		@ $mol_mem_key
+		file_deps( file: $mol_file ) {
+			const deps = [] as [ $mol_file, number ][]
+
+			for( const source of this.sources( file ) ) {
+				if( !source ) continue
+
+				for( const[ dep, priority ] of source.deps() ) {
+					if( !this.filter( dep ) ) continue
+
+					if( dep.type() === 'file' ) {
+						deps.push([ dep, priority ])
+						continue
+					}
+
+					// Self module deps only name the current module declaration.
+					if( dep.path() === this.module_dir( file ).path() ) continue
+
+					// Directory deps expand to module files so variants can depend on base files.
+					for( const dep_file of this.module_files( dep ) ) {
+						if( dep_file.path() === file.path() ) continue
+						deps.push([ dep_file, priority ])
+					}
+				}
+			}
+
+			for( const gen of this.file_generated_sources( file ) ) {
+				deps.push([ gen, 1 ])
+			}
+
+			return deps
+		}
+
+		file_generated_sources( file: $mol_file ) {
+			return this.converts( file ).flatMap( convert => {
+				if( !convert ) return []
+				return convert.generated_sources().filter( gen => this.filter( gen ) )
+			} )
+		}
+
+		file_generated_artifacts( file: $mol_file ) {
+			return this.converts( file ).flatMap( convert => {
+				if( !convert ) return []
+				return convert.generated_artifacts().filter( gen => this.filter( gen ) )
 			} )
 		}
 
@@ -102,49 +159,22 @@ namespace $ {
 			const ignore = new Set<$mol_file>()
 			const graph = new $mol_graph< $mol_file, { priority: number } >()
 
-			const collect = ( file: $mol_file )=> {
+			const collect = ( file: $mol_file ): void => {
 
 				if( ignore.has( file ) ) return
 				ignore.add( file )
 
-				graph.nodes.add( file )
-
 				if( file.type() === 'dir' ) {
 					if( file !== this.root().dir() ) collect( file.parent() )
-					for( const item of this.direct_files( file ) ) collect( item )
+					this.module_files( file ).forEach( collect )
 					return
 				}
 
-				if( !file.exists() ) return
+				graph.nodes.add( file )
 
-				for( const source of this.sources( file ) ) {
-					if( !source ) continue
-
-					for( const[ dep, priority ] of source.deps() ) {
-						if( !this.filter( dep ) ) continue
-						
-						const owner = file.parent().name()[0] === '-'
-							? file.parent().parent()
-							: file.parent()
-						if( dep === owner ) continue
-
-						const entries = dep.type() === 'dir' ? this.direct_files( dep ) : [ dep ]
-						for( const entry of entries ) {
-							if( entry === file ) continue
-							collect( entry )
-							this.link_max( graph, file, entry, priority )
-						}
-					}
-				}
-
-				for( const convert of this.converts( file ) ) {
-					if( !convert ) continue
-
-					for( const gen of convert.generated_sources() ) {
-						if( !this.filter( gen ) ) continue
-						collect( gen )
-						this.link_max( graph, file, gen, 1 )
-					}
+				for( const[ dep, priority ] of this.file_deps( file ) ) {
+					collect( dep )
+					this.link_max( graph, file, dep, priority )
 				}
 
 			}
@@ -167,18 +197,8 @@ namespace $ {
 				if( /\.d\.ts$/.test( file.name() ) ) continue
 				if( !file.exists() ) continue
 
-				for( const convert of this.converts( file ) ) {
-					if( !convert ) continue
-
-					for( const gen of convert.generated_artifacts() ) {
-						if( !this.filter( gen ) ) continue
-						files.add( gen )
-					}
-
-					for( const gen of convert.generated_sources() ) {
-						if( !this.filter( gen ) ) continue
-						files.add( gen )
-					}
+				for( const gen of this.file_generated_artifacts( file ) ) {
+					files.add( gen )
 				}
 			}
 

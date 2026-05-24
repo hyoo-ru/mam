@@ -13,15 +13,6 @@ namespace $ {
 		@ $mol_mem
 		deps() {
 			const deps = this.ts_source_deps().mam_deps
-			const name = this.file().name().split( '.' )
-
-			while( name.length > 2 ) {
-				name.splice( -2, 1 )
-				for( const ext of [ '.ts', '.tsx' ] ) {
-					const dep = this.file().parent().resolve( name.slice( 0, -1 ).join( '.' ) + ext )
-					if( dep.exists() ) this.dep_add( deps, dep, 10 )
-				}
-			}
 
 			return deps
 		}
