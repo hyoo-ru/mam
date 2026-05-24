@@ -14,7 +14,7 @@ namespace $ {
 			const target = slice.pack().output().resolve( `${ prefix }.d.ts` )
 			
 			const sources = [ ... slice.files() ].filter( file => {
-				if( !$node.fs.existsSync( file.path() ) ) return false
+				if( !file.exists() ) return false
 				return /\.d\.ts$/.test( file.name() )
 			} )
 			if( sources.length === 0 ) return []
@@ -23,7 +23,7 @@ namespace $ {
 			
 			sources.forEach(
 				function( src ) {
-					if( ! $node.fs.existsSync( src.path() ) || ! src.text() ) return
+					if( !src.text() ) return
 					concater.add( src.text(), src.relate( target.parent() ) )
 				}
 			)
