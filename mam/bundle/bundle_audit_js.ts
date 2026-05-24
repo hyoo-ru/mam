@@ -44,16 +44,42 @@ namespace $ {
 
 		@ $mol_mem_key
 		checker( slice: $mam_slice ) {
+			return this.checker_rpc( slice )?.remote() ?? null
+		}
+
+		@ $mol_mem_key
+		checker_rpc( slice: $mam_slice ) {
 			const paths = this.ts_paths( slice )
 			if( !paths.length ) return null
 
-			const checker = new this.$.$mam_checker
-			checker.paths = () => paths
-			checker.root_path = () => this.root().dir().path()
-			checker.options = () => this.root().ts_options()
-			return checker
+			const handlers: $mam_checker_remote = {
+				changes: changes => this.checker_changes_apply( changes ),
+				status: ()=> {},
+			}
+
+			const workerData: $mam_checker_worker_data = {
+				paths,
+				root: this.root().dir().path(),
+				options: this.root().ts_options(),
+			}
+
+			return this.$.$mol_rpc_worker.make< typeof $mol_rpc_worker< $mam_checker_shared > >({
+				options: $mol_const({
+					resourceLimits: {
+						maxOldGenerationSizeMb: this.checker_max_mem(),
+					},
+					workerData,
+				}),
+				uri: () => __filename,
+				handlers: () => handlers,
+			})
 		}
 
+		checker_max_mem() {
+			return Number( this.$.$mol_env().MAM_CHECKER_MAX_MEM || this.$.$mol_env().MOL_BUILD_CHECKER_MAX_MEM || '2560' )
+		}
+
+		@ $mol_action
 		checker_changes_apply( changes: $mam_checker_changes ) {
 			for( const [ path, data ] of changes.writes ) {
 				this.$.$mol_file.relative( path ).text( data, 'virt' )

@@ -66,12 +66,12 @@ namespace $ {
 
 		@ $mol_mem_key
 		sources( file: $mol_file ) {
-			return this.source_classes().map( ctor => this.root().source([ ctor, file ]) )
+			return this.source_classes().flatMap( ctor => this.root().source([ ctor, file ]) ?? [] )
 		}
 
 		@ $mol_mem_key
 		converts( file: $mol_file ) {
-			return this.convert_classes().map( ctor => this.root().convert([ ctor, file ]) )
+			return this.convert_classes().flatMap( ctor => this.root().convert([ ctor, file ]) ?? [] )
 		}
 
 		@ $mol_mem
@@ -96,8 +96,6 @@ namespace $ {
 			const deps = [] as [ $mol_file, number ][]
 
 			for( const source of this.sources( file ) ) {
-				if( !source ) continue
-
 				for( const[ dep, priority ] of source.deps() ) {
 					if( !this.filter( dep ) ) continue
 					if( dep.path() === file.path() ) continue
@@ -115,17 +113,13 @@ namespace $ {
 		}
 
 		file_generated_sources( file: $mol_file ) {
-			return this.converts( file ).flatMap( convert => {
-				if( !convert ) return []
-				return convert.generated_sources().filter( gen => this.filter( gen ) )
-			} )
+			return this.converts( file ).flatMap( convert => convert.generated_sources()
+				.filter( gen => this.filter( gen ) ) )
 		}
 
 		file_generated_artifacts( file: $mol_file ) {
-			return this.converts( file ).flatMap( convert => {
-				if( !convert ) return []
-				return convert.generated_artifacts().filter( gen => this.filter( gen ) )
-			} )
+			return this.converts( file ).flatMap( convert => convert.generated_artifacts()
+				.filter( gen => this.filter( gen ) ) )
 		}
 
 		@ $mol_mem

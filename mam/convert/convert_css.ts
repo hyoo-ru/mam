@@ -6,6 +6,7 @@ namespace $ {
 			return /css?$/.test( file.ext() )
 		}
 
+		@ $mol_mem
 		generated_sources() {
 			const source = this.source()
 

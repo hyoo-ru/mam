@@ -23,6 +23,8 @@ namespace $ {
 
 			const files = [ ...slice.files() ].filter( file => {
 				if( file.relate( this.root().dir() ) === 'mam.jam.js' ) return false
+				if( /[\\\/]-view\.tree[\\\/]/.test( file.path() ) && !$node.fs.existsSync( file.path() ) ) return false
+				if( !file.exists() ) return false
 				return /\.[j]sx?$/.test( file.name() )
 			} )
 

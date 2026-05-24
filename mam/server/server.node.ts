@@ -15,7 +15,7 @@ namespace $ {
 		}
 
 		protected watch_versions = new Map< string, Map< string, unknown > >()
-		protected reload_scheduled = new Set< string >()
+		protected reload_scheduled = new Map< string, Set< string > >()
 
 		@ $mol_mem_key
 		pack( path: string ) {
@@ -130,6 +130,10 @@ namespace $ {
 			const target = slice( match[1] )
 			if( !target ) return []
 
+			if( /^locale=[^/]+\.json$/.test( match[2] ) ) {
+				return this.bundle_artifacts( this.$.$mam_bundle_locale, target )
+			}
+
 			switch( match[2] ) {
 				case 'js':
 				case 'js.map':
@@ -176,8 +180,7 @@ namespace $ {
 
 		bundle_artifacts< Bundle extends typeof $mam_bundle >( Bundle: Bundle, slice: $mam_slice ) {
 			const bundle = this.mam_root().bundle( Bundle )
-			const artifacts = ( Bundle.prototype.artifacts as any ).orig ?? bundle.artifacts
-			return artifacts.call( bundle, slice ) as $mol_file[]
+			return bundle.artifacts( slice ) as $mol_file[]
 		}
 
 		reply_dir( msg: $mol_rest_message, dir: $mol_file ) {
@@ -287,27 +290,43 @@ namespace $ {
 		protected watch_files( path: string ) {
 			const pack = this.pack( path )
 			const files = new Set< $mol_file >
+			const skip = ( file: $mol_file )=> {
+				if( /(?:^|[\\\/])-(?:[\\\/]|$)/.test( file.path() ) ) return true
+				if( /[\\\/]-[^\\\/]*(?:[\\\/]|$)/.test( file.path() ) ) return true
+				if( /\.log$/.test( file.name() ) ) return true
+				if( /^package(?:-lock)?\.json$/.test( file.name() ) ) return true
+				if( /\.[cm]?tsx?\.js(?:\.map)?$/.test( file.name() ) ) return true
+				return false
+			}
 			for( const slice of pack.slices() ) {
+				for( const file of slice.graph().sorted ) {
+					if( skip( file ) ) continue
+					files.add( file )
+				}
 				for( const file of slice.files() ) {
-					if( /(?:^|[\\\/])-(?:[\\\/]|$)/.test( file.path() ) ) continue
-					if( /[\\\/]-[^\\\/]*(?:[\\\/]|$)/.test( file.path() ) ) continue
-					if( /\.log$/.test( file.name() ) ) continue
-					if( /^package(?:-lock)?\.json$/.test( file.name() ) ) continue
-					if( /\.[cm]?tsx?\.js(?:\.map)?$/.test( file.name() ) ) continue
+					if( skip( file ) ) continue
 					files.add( file )
 				}
 			}
 			
 			const versions = new Map< string, unknown >
-			for( const file of files ) {
-				versions.set( file.path(), file.version() )
+			const version = ( file: $mol_file )=> {
+				if( file.type() !== 'dir' ) return file.version()
+				file.watcher()
+				return [
+					file.version(),
+					... file.sub().map( child => `${ child.name() }:${ child.type() }` ),
+				].join( '\n' )
 			}
-			
+			for( const file of files ) {
+				versions.set( file.path(), version( file ) )
+			}
 			return versions
 		}
 
 		watch_sync( path: string ) {
-			this.watch_versions.set( path, this.watch_files( path ) )
+			const versions = this.watch_files( path )
+			this.watch_versions.set( path, versions )
 			return true
 		}
 
@@ -336,10 +355,15 @@ namespace $ {
 		}
 
 		reload_schedule( path: string, changed: readonly string[] ) {
-			if( this.reload_scheduled.has( path ) ) return
-			this.reload_scheduled.add( path )
+			const scheduled = this.reload_scheduled.get( path )
+			if( scheduled ) {
+				for( const file of changed ) scheduled.add( file )
+				return
+			}
 
-			new this.$.$mol_after_timeout( 50, ()=> this.reload( path, changed ) )
+			this.reload_scheduled.set( path, new Set( changed ) )
+
+			new this.$.$mol_after_timeout( 50, ()=> this.reload( path, [ ... this.reload_scheduled.get( path )! ] ) )
 		}
 
 		reload( path: string, changed: readonly string[] ) {
@@ -347,6 +371,14 @@ namespace $ {
 
 			try {
 				this.web_js_artifacts( path )
+				if( changed.some( file => /\.locale=[^/]+\.json$/.test( file ) ) ) {
+					const pack = this.pack( path )
+					this.bundle_artifacts(
+						this.$.$mam_bundle_locale,
+						pack.slice( this.$.$mam_slice_web_prod ),
+					)
+				}
+				this.watch_sync( path )
 			} catch( error: any ) {
 				if( $mol_promise_like( error ) ) {
 					Promise.resolve( error ).then(

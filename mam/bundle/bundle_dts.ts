@@ -13,14 +13,17 @@ namespace $ {
 
 			const target = slice.pack().output().resolve( `${ prefix }.d.ts` )
 			
-			const sources = [ ... slice.files() ].filter( file => /\.d\.ts$/.test( file.name() ) )
+			const sources = [ ... slice.files() ].filter( file => {
+				if( !$node.fs.existsSync( file.path() ) ) return false
+				return /\.d\.ts$/.test( file.name() )
+			} )
 			if( sources.length === 0 ) return []
 			
 			const concater = new $mol_sourcemap_builder( target.parent().path() )
 			
 			sources.forEach(
 				function( src ) {
-					if( ! src.exists() || ! src.text() ) return
+					if( ! $node.fs.existsSync( src.path() ) || ! src.text() ) return
 					concater.add( src.text(), src.relate( target.parent() ) )
 				}
 			)
