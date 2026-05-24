@@ -42,10 +42,14 @@ namespace $ {
 			name = json.name || name
 			
 			try {
-				
-				const published = ( [] as string[] ).concat( JSON.parse(
+
+				const versions = JSON.parse(
 					this.$.$mol_exec( '', 'npm', 'view', name, 'versions', '--json' ).stdout.toString()
-				) ).slice(-1)[0].split('.').map( Number )
+				)
+				const published = ( Array.isArray( versions ) ? versions : [ versions ] )
+					.at( -1 )!
+					.split( '.' )
+					.map( Number )
 				
 				if( published[0] > version[0] ) {
 					version = published

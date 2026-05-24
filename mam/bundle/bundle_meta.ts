@@ -8,8 +8,10 @@ namespace $ {
 
 			const prefix = slice.prefix()
 			const meta = slice.pack().output().resolve( `${prefix}.meta.json` )
+			const deps_json = slice.pack().output().resolve( `${prefix}.deps.json` )
 			const graph = slice.graph()
 			const files = [ ... slice.files() ]
+			const root_dir = this.root().dir()
 
 			const deps_in = {} as Record< string, Record< string, number > >
 			for( const [ dep, pair ] of graph.edges_in ) {
@@ -46,20 +48,43 @@ namespace $ {
 				size[ file.relate() ] = file.size()
 			}
 
+			const sloc = {} as Record< string, number >
+			for( const file of files ) {
+				if( /\/-/.test( file.path() ) ) continue
+				if( !file.exists() ) continue
+
+				const ext = file.name().replace( /^.*\./, '' )
+				const count = file.text().trim().split( /[\n\r]\s*/ ).length
+				sloc[ ext ] = ( sloc[ ext ] || 0 ) + count
+			}
+
+			const deps = {} as Record< string, Record< string, number > >
+			for( const file of graph.nodes ) {
+				deps[ file.relate( root_dir ) ] = {}
+				for( const [ dep, priority ] of slice.file_deps( file ) ) {
+					deps[ file.relate( root_dir ) ][ dep.relate( root_dir ) ] = priority
+				}
+			}
+
 			const json = {
 				deps_in,
 				deps_out,
 				order: files.map( file => file.relate() ),
 				size,
+				files: files.map( file => file.relate( root_dir ) ),
+				mods: [ ... graph.sorted ].map( file => file.relate( root_dir ) ),
+				sloc,
+				deps,
 			}
 			
 			const text = JSON.stringify( json, null, '\t' )
 
 			meta.text( text )
+			deps_json.text( text )
 
 			this.log( meta, Date.now() - start )
 
-			return [ meta ]
+			return [ meta, deps_json ]
 		}
 
 	}

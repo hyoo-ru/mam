@@ -149,6 +149,8 @@ namespace $ {
 					return this.bundle_artifacts( this.$.$mam_bundle_css, target )
 				case 'mjs':
 					return this.bundle_artifacts( this.$.$mam_bundle_mjs, target )
+				case 'baza':
+					return this.bundle_artifacts( this.$.$mam_bundle_baza, target )
 				case 'd.ts':
 					return this.bundle_artifacts( this.$.$mam_bundle_dts, target )
 				case 'meta.tree':

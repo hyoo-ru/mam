@@ -33,7 +33,7 @@ namespace $ {
 
 			for( const file of pack.sub() ) {
 				if( !/\.meta\.tree$/.test( file.name() ) ) continue
-				decls = decls.concat( this.$.$mol_tree2_from_string( file.text(), file.path() ).kids )
+				decls.push( ... this.$.$mol_tree2_from_string( file.text(), file.path() ).kids )
 			}
 
 			return decls.length

@@ -51,6 +51,7 @@ namespace $ {
 				this.$.$mam_bundle_meta,
 				this.$.$mam_bundle_js,
 				this.$.$mam_bundle_mjs,
+				this.$.$mam_bundle_baza,
 				this.$.$mam_bundle_view_tree,
 				this.$.$mam_bundle_meta_tree,
 				this.$.$mam_bundle_locale,
@@ -59,6 +60,7 @@ namespace $ {
 				this.$.$mam_bundle_manifest_json,
 				this.$.$mam_bundle_readme,
 				this.$.$mam_bundle_files,
+				this.$.$mam_bundle_cordova,
 			]
 		}
 
