@@ -40,8 +40,6 @@ namespace $ {
 		transpile_out() {
 			const source = this.source()
 
-			console.time(source.path())
-
 			const res = $node.typescript.transpileModule( source.text(), {
 				compilerOptions: this.root().ts_options(),
 				fileName: source.path(),
@@ -60,7 +58,6 @@ namespace $ {
 					)
 				) )
 			}
-			// console.timeEnd(source.path())
 
 			return res
 		}
