@@ -27,6 +27,8 @@ namespace $ {
 			} )
 
 			for( const file of files ) {
+				if( prefix === 'node' && /node_modules\//.test( file.relate( this.root().dir() ) ) ) continue
+
 				const file_map = file.parent().resolve( file.name() + '.map' )
 				const content = file.text().replace( /^\/\/#\ssourceMappingURL=.*$/mg, '' )
 				
