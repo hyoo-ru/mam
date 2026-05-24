@@ -23,6 +23,7 @@ namespace $ {
 		@ $mol_mem
 		source_classes(): ( typeof $mam_source )[]  {
 			return [
+				this.$.$mam_source_dir,
 				this.$.$mam_source_js,
 				this.$.$mam_source_css,
 				this.$.$mam_source_view_tree,
@@ -88,14 +89,6 @@ namespace $ {
 			}
 		}
 
-		module_files( dir: $mol_file ) {
-			return dir.sub().filter( item => {
-				if( item.type() !== 'file' ) return false
-				if( !/^[a-z0-9]/i.test( item.name() ) ) return false
-				return this.filter( item )
-			} )
-		}
-
 		@ $mol_mem_key
 		file_deps( file: $mol_file ) {
 			const deps = [] as [ $mol_file, number ][]
@@ -110,8 +103,10 @@ namespace $ {
 				}
 			}
 
-			for( const gen of this.file_generated_sources( file ) ) {
-				deps.push([ gen, 1 ])
+			if( file.type() === 'file' ) {
+				for( const gen of this.file_generated_sources( file ) ) {
+					deps.push([ gen, 1 ])
+				}
 			}
 
 			return deps
@@ -141,16 +136,6 @@ namespace $ {
 
 				if( ignore.has( file ) ) return
 				ignore.add( file )
-
-				if( file.type() === 'dir' ) {
-					graph.nodes.add( file )
-					if( file !== this.root().dir() ) collect( file.parent() )
-					for( const mod of this.module_files( file ) ) {
-						collect( mod )
-						this.link_max( graph, file, mod, 0 )
-					}
-					return
-				}
 
 				graph.nodes.add( file )
 
