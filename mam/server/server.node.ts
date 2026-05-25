@@ -10,12 +10,11 @@ namespace $ {
 		}
 
 		@ $mol_mem
-		clients( next = new Map< $mol_rest_port, string >() ) {
-			return next
+		watch() {
+			const watch = new this.$.$mam_server_watch
+			watch.host = $mol_const( this )
+			return watch
 		}
-
-		protected watch_versions = new Map< string, Map< string, unknown > >()
-		protected reload_scheduled = new Map< string, Set< string > >()
 
 		@ $mol_mem_key
 		pack( path: string ) {
@@ -36,7 +35,8 @@ namespace $ {
 		file( path: string ) {
 			const root = this.mam_root().dir()
 			const file = root.resolve( decodeURIComponent( path ).replace( /^\/+/, '' ) )
-			if( !file.path().startsWith( root.path() ) ) $mol_fail( new Error( 'Path is out of root' ) )
+			const relative = file.relate( root )
+			if( relative === '..' || relative.startsWith( '../' ) ) $mol_fail( new Error( 'Path is out of root' ) )
 			return file
 		}
 
@@ -262,151 +262,13 @@ namespace $ {
 			if( !protocol ) return ''
 
 			const path = msg.uri().pathname.replace( /\/-.*/, '' )
-			this.clients( new Map([ ... this.clients(), [ msg.port, path ] ]) )
-			this.watch_sync( path )
-			
-			this.$.$mol_log3_rise({
-				place: this,
-				message: 'Connect',
-				path,
-			})
+			this.watch().open( msg.port, path )
 
 			return protocol
 		}
 
 		CLOSE( msg: $mol_rest_message ) {
-			const path = this.clients().get( msg.port )
-			const clients = new Map( this.clients() )
-			clients.delete( msg.port )
-			this.clients( clients )
-			this.$.$mol_log3_rise({
-				place: this,
-				message: 'Disconnect',
-				path,
-			})
-		}
-
-		@ $mol_mem_key
-		protected watch_files( path: string ) {
-			const pack = this.pack( path )
-			const files = new Set< $mol_file >
-			const skip = ( file: $mol_file )=> {
-				if( /(?:^|[\\\/])-(?:[\\\/]|$)/.test( file.path() ) ) return true
-				if( /[\\\/]-[^\\\/]*(?:[\\\/]|$)/.test( file.path() ) ) return true
-				if( /\.log$/.test( file.name() ) ) return true
-				if( /^package(?:-lock)?\.json$/.test( file.name() ) ) return true
-				if( /\.[cm]?tsx?\.js(?:\.map)?$/.test( file.name() ) ) return true
-				return false
-			}
-			for( const slice of pack.slices() ) {
-				for( const file of slice.graph().sorted ) {
-					if( skip( file ) ) continue
-					files.add( file )
-				}
-				for( const file of slice.files() ) {
-					if( skip( file ) ) continue
-					files.add( file )
-				}
-			}
-			
-			const versions = new Map< string, unknown >
-			const version = ( file: $mol_file )=> {
-				if( file.type() !== 'dir' ) return file.version()
-				file.watcher()
-				return [
-					file.version(),
-					... file.sub().map( child => `${ child.name() }:${ child.type() }` ),
-				].join( '\n' )
-			}
-			for( const file of files ) {
-				versions.set( file.path(), version( file ) )
-			}
-			return versions
-		}
-
-		watch_sync( path: string ) {
-			const versions = this.watch_files( path )
-			this.watch_versions.set( path, versions )
-			return true
-		}
-
-		@ $mol_mem_key
-		watch( path: string ) {
-			const versions = this.watch_files( path )
-
-			const prev = this.watch_versions.get( path )
-			this.watch_versions.set( path, versions )
-
-			if( !prev ) return true
-			
-			const changed = [] as string[]
-			for( const [ file, version ] of versions ) {
-				if( prev.get( file ) === version ) continue
-				changed.push( file )
-			}
-			for( const file of prev.keys() ) {
-				if( versions.has( file ) ) continue
-				changed.push( file )
-			}
-			if( !changed.length ) return true
-
-			this.reload_schedule( path, changed )
-			return true
-		}
-
-		reload_schedule( path: string, changed: readonly string[] ) {
-			const scheduled = this.reload_scheduled.get( path )
-			if( scheduled ) {
-				for( const file of changed ) scheduled.add( file )
-				return
-			}
-
-			this.reload_scheduled.set( path, new Set( changed ) )
-
-			new this.$.$mol_after_timeout( 50, ()=> this.reload( path, [ ... this.reload_scheduled.get( path )! ] ) )
-		}
-
-		reload( path: string, changed: readonly string[] ) {
-			this.reload_scheduled.delete( path )
-
-			try {
-				this.web_js_artifacts( path )
-				if( changed.some( file => /\.locale=[^/]+\.json$/.test( file ) ) ) {
-					const pack = this.pack( path )
-					this.bundle_artifacts(
-						this.$.$mam_bundle_locale,
-						pack.slice( this.$.$mam_slice_web_prod ),
-					)
-				}
-				this.watch_sync( path )
-			} catch( error: any ) {
-				if( $mol_promise_like( error ) ) {
-					Promise.resolve( error ).then(
-						()=> this.reload( path, changed ),
-						()=> this.reload( path, changed ),
-					)
-					return
-				}
-				this.$.$mol_log3_fail({
-					place: `${this}.reload()`,
-					message: error.message ?? String( error ),
-					stack: error.stack,
-					path,
-				})
-			}
-
-			this.$.$mol_log3_rise({
-				place: this,
-				message: '$mam_obsolete',
-				path,
-				changed: changed.slice( 0, 10 ),
-			})
-
-			for( const [ port, client_path ] of this.clients() ) {
-				if( client_path !== path ) continue
-				port.send_text( '$mam_obsolete' )
-			}
-
+			this.watch().close( msg.port )
 		}
 
 		@ $mol_mem
@@ -505,9 +367,7 @@ namespace $ {
 		_auto() {
 			this.slave_servers()
 			this.repl()
-			for( const path of new Set( this.clients().values() ) ) {
-				this.watch( path )
-			}
+			this.watch()._auto()
 		}
 
 		static serve() {
