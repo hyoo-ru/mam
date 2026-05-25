@@ -67,17 +67,10 @@ namespace $ {
 			const skip = ( file: $mol_file )=> {
 				if( /(?:^|[\\\/])-(?:[\\\/]|$)/.test( file.path() ) ) return true
 				if( /[\\\/]-[^\\\/]*(?:[\\\/]|$)/.test( file.path() ) ) return true
-				if( /\.log$/.test( file.name() ) ) return true
-				if( /^package(?:-lock)?\.json$/.test( file.name() ) ) return true
-				if( /\.[cm]?tsx?\.js(?:\.map)?$/.test( file.name() ) ) return true
 				return false
 			}
 			for( const slice of pack.slices() ) {
 				for( const file of slice.graph().sorted ) {
-					if( skip( file ) ) continue
-					files.add( file )
-				}
-				for( const file of slice.files() ) {
 					if( skip( file ) ) continue
 					files.add( file )
 				}
