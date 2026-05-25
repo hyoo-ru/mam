@@ -409,7 +409,102 @@ namespace $ {
 
 		}
 
+		@ $mol_mem
+		slave_commands( next = [] as string[] ) {
+			return next
+		}
+
+		@ $mol_mem
+		slave_servers() {
+			return this.slave_commands().map( command => this.slave_server( command ) )
+		}
+
+		@ $mol_mem_key
+		slave_server( command: string ) {
+			const [ path, ... args ] = command.split( ' ' )
+			const launch = `node ./${ path }/-/node.js ${ args.join( ' ' ) }`
+
+			const prev = $mol_wire_probe( ()=> this.slave_server( command ) )
+			if( prev ) prev.destructor()
+
+			try {
+				this.requested_bundle_artifacts( path, 'node.js' )
+				this.requested_bundle_artifacts( path, 'node.audit.js' )
+				this.requested_bundle_artifacts( path, 'node.test.js' )
+			} catch( error: any ) {
+				if( $mol_fail_catch( error ) ) {
+					this.$.$mol_log3_fail({
+						place: `${ this }.slave_server`,
+						stack: error.stack,
+						message: error.message ?? error,
+					})
+				}
+				return null
+			}
+
+			this.$.$mol_log3_come({
+				place: this,
+				message: 'Start',
+				command: launch,
+			})
+
+			const server = $node[ 'child_process' ].spawn(
+				'node',
+				[ '--enable-source-maps', '--trace-uncaught', `./${ path }/-/node.js`, ... args ],
+				{
+					stdio: [ 'pipe', 'inherit', 'inherit' ],
+				},
+			)
+
+			return Object.assign( server, {
+				destructor: ()=> {
+					if( server.killed ) return
+					server.kill()
+					this.$.$mol_log3_done({
+						place: this,
+						message: 'Stopped',
+						command: launch,
+					})
+				},
+			} )
+		}
+
+		@ $mol_mem
+		repl() {
+			const terminal = $node.readline.createInterface({
+				input: process.stdin,
+				output: process.stdout,
+				history: [],
+				tabSize: 4,
+				prompt: '',
+			})
+			terminal.prompt()
+
+			const hint = 'start: + path/to/module args\nstop:  - path/to/module args'
+
+			terminal
+				.on( 'line', line => {
+					if( !line.trim() ) return
+
+					const [ action, ... params ] = line.split( ' ' )
+					const command = params.join( ' ' )
+
+					switch( action ) {
+						case '+': return this.slave_commands([ ... this.slave_commands(), command ])
+						case '-': return this.slave_commands( this.slave_commands().filter( cmd => cmd !== command ) )
+						case '?':
+						default: return console.log( hint )
+					}
+				} )
+				.on( 'SIGINT', ()=> process.exit( 0 ) )
+				.on( 'close', ()=> process.exit( 0 ) )
+
+			return terminal
+		}
+
 		_auto() {
+			this.slave_servers()
+			this.repl()
 			for( const path of new Set( this.clients().values() ) ) {
 				this.watch( path )
 			}
