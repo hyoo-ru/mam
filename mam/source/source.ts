@@ -53,6 +53,7 @@ namespace $ {
 				if( this.root().pack( dep ).ensure() ) return dep
 
 				const parent = dep.parent()
+				if( parent.type() === 'dir' ) parent.sub()
 				if( parent === this.root().dir() ) {
 					throw new Error( `Absent dependency: ${ dep.relate() }, (${ path })` )
 				}

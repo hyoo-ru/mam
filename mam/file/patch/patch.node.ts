@@ -30,10 +30,11 @@ namespace $ {
 
 		File_base.flush = function( this: typeof $mol_file_base & any ) {
 			for( const file of this.changed ) {
-				const parent = file.parent()
-
 				try {
-					if( $mol_wire_probe( ()=> parent.sub() ) ) parent.sub( null )
+					for( let parent = file.parent(); ; parent = parent.parent() ) {
+						if( $mol_wire_probe( ()=> parent.sub() ) ) parent.sub( null )
+						if( parent === parent.parent() ) break
+					}
 					this.reset_subtree( file )
 				} catch( error ) {
 					if( $mol_fail_catch( error ) ) $mol_fail_log( error )
