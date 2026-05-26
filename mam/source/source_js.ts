@@ -53,10 +53,9 @@ namespace $ {
 							let path = path_found
 							if( $node_internal_check( path ) ) continue
 							path = path.replace( /(\/[^\/.]+)$/, '$1.js' ).replace( /\/$/, '/index.js' )
-							if( path[0] === '.' ) path = '../' + path
 
-							const dep = this.root().dir().resolve( path )
-							this.dep_add( deps, dep, priority )
+							const dep = this.path_resolve( path )
+							if( dep ) this.dep_add( deps, dep, priority )
 						}
 
 						const name = token.groups.name

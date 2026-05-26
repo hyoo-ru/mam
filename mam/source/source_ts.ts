@@ -33,12 +33,8 @@ namespace $ {
 		}
 
 		path_add( deps: Map< $mol_file, number >, path: string, priority: number ) {
-			if( $node_internal_check( path ) ) return
-
-			const dep = path[0] === '.'
-				? this.file().resolve( path )
-				: this.root().dir().resolve( path )
-			this.dep_add( deps, dep, priority )
+			const dep = this.path_resolve( path )
+			if( dep ) this.dep_add( deps, dep, priority )
 		}
 
 		node_dep_add( node_deps: Set< string >, node: ts_Identifier ) {
@@ -55,7 +51,7 @@ namespace $ {
 		implicit_deps_add( deps: Map< $mol_file, number > ) {
 			const file = this.file()
 
-			if( /\.tsx$/.test( file.ext() ) ) this.dep_add( deps, this.lookup( 'mol/jsx' ), 0 )
+			if( /\.tsx$/.test( file.name() ) ) this.dep_add( deps, this.lookup( 'mol/jsx' ), 0 )
 
 			if( /\.test\.tsx?$/.test( file.name() ) && file.relate( this.root().dir() ) !== 'mol/test/test.test.ts' ) {
 				this.dep_add( deps, this.lookup( 'mol/test' ), 0 )

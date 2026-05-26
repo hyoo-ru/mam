@@ -37,6 +37,13 @@ namespace $ {
 			this.dep_add( deps, dep, priority )
 		}
 
+		path_resolve( path: string ) {
+			if( $node_internal_check( path ) ) return null
+			return path[0] === '.'
+				? this.file().parent().resolve( path )
+				: this.root().dir().resolve( path )
+		}
+
 		lookup( path: string ): $mol_file {
 
 			const target = path + '/' + path.replace( /.*\//, '' )
