@@ -1,5 +1,7 @@
 namespace $ {
 
+	$mam_file_patch()
+
 	if( $mol_rpc_worker.is_main() ) {
 	
 		const root = new $mam_root
