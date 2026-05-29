@@ -1,7 +1,6 @@
 namespace $ {
 
-	type GraphqlLib = typeof import( 'graphql' )
-	type DocumentNode = ReturnType< GraphqlLib[ 'parse' ] >
+	type DocumentNode = ReturnType< typeof import( 'graphql' )[ 'parse' ] >
 	type DefinitionNode = DocumentNode[ 'definitions' ][ number ]
 	type TypeNode = { kind: string, type?: TypeNode, name?: { value: string } }
 	type OpNode = {
@@ -91,7 +90,7 @@ namespace $ {
 
 		@ $mol_mem
 		gql_lib() {
-			return $node.graphql as GraphqlLib
+			return $node.graphql as typeof import( 'graphql' )
 		}
 
 		@ $mol_mem
