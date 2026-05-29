@@ -20,6 +20,23 @@ namespace $ {
 			)
 		},
 
+		'js refs with digits'() {
+			$mol_assert_like(
+				mam_source_js_ref_tokens( '$'+'hyoo_mol_ttt4_a' ),
+				[
+					{
+						0: '$'+'hyoo_mol_ttt4_a',
+						string: '',
+						fqn: '$'+'hyoo_mol_ttt4_a',
+						name: 'hyoo_mol_ttt4_a',
+						req: '',
+						imp: '',
+						path: '',
+					},
+				]
+			)
+		},
+
 		'js string refs ignored'() {
 			$mol_assert_like(
 				mam_source_js_ref_tokens( '["$'+'foo_bar"]' ),

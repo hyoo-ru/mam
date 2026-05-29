@@ -3,9 +3,9 @@ namespace $ {
 	export class $mam_source_js extends $mam_source {
 
 		static refs = (()=> {
-			const { repeat_greedy, word_break_only, or, latin_only, space_only } = $mol_regexp
+			const { repeat_greedy, word_break_only, or, space_only } = $mol_regexp
 
-			const word = repeat_greedy( latin_only, 1 )
+			const word = repeat_greedy( /[a-zA-Z0-9]/, 1 )
 			const spaces = repeat_greedy( space_only )
 			const spaces_req = repeat_greedy( space_only, 1 )
 			const string_single = repeat_greedy( /[^']/ )
@@ -36,7 +36,6 @@ namespace $ {
 		@ $mol_mem
 		deps() {
 			const deps = super.deps()
-
 			const file = this.file()
 			const source = file.text()
 

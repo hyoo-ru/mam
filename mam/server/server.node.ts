@@ -187,8 +187,8 @@ namespace $ {
 			const pack = this.pack( path )
 			const slice = pack.slice( this.$.$mam_slice_web_prod )
 			return [
-				... this.bundle_artifacts( this.$.$mam_bundle_meta, slice ),
 				... this.bundle_artifacts( this.$.$mam_bundle_js, slice ),
+				... this.bundle_artifacts( this.$.$mam_bundle_meta, slice ),
 			]
 		}
 

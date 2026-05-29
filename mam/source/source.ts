@@ -17,7 +17,6 @@ namespace $ {
 			return undefined as any as $mol_file
 		}
 
-		@ $mol_mem
 		deps() {
 			return new Map< $mol_file, number >()
 		}

@@ -31,11 +31,24 @@ namespace $ {
 		File_base.flush = function( this: typeof $mol_file_base & any ) {
 			for( const file of this.changed ) {
 				try {
+					const base = $node.path.resolve( this.base || $node.process.cwd() ).replace( /\\/g, '/' )
+					const inside_base = ( file: $mol_file_base )=> {
+						const path = file.path()
+						return path === base || path.startsWith( base + '/' )
+					}
 					for( let parent = file.parent(); ; parent = parent.parent() ) {
 						if( $mol_wire_probe( ()=> parent.sub() ) ) parent.sub( null )
 						if( parent === parent.parent() ) break
 					}
 					this.reset_subtree( file )
+					if( file.type() === 'dir' && inside_base( file ) ) {
+						;( file as any ).watcher()
+						for( const child of file.sub() ) {
+							if( child.type() === 'dir' && inside_base( child ) ) {
+								;( child as any ).watcher()
+							}
+						}
+					}
 				} catch( error ) {
 					if( $mol_fail_catch( error ) ) $mol_fail_log( error )
 				}
