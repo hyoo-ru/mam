@@ -21,7 +21,6 @@
   },
   "dependencies": {
     "graphql": "^16.14.0",
-    "lazy": "^1.0.11",
     "lru-cache": "11.2.7",
     "mam": "*",
     "openapi-typescript": "^7.13.0",
