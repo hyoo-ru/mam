@@ -72,26 +72,12 @@ namespace $ {
 
 		@ $mol_mem
 		types_text(): string {
-			return $mol_wire_sync( this ).generate_types( this.spec() )
-		}
-
-		// openapi-typescript v7 — pure ESM, dynamic import. Метод async, через
-		// $mol_wire_sync синхронизуется. autoinstall ставит пакет если нужно.
-		async generate_types( spec: unknown ): Promise< string > {
+			// openapi-typescript v7 — pure ESM, dynamic import плохо живёт внутри
+			// graph-collection fiber-фазы. Вызываем CLI синхронно через $mol_exec,
+			// читаем stdout — там готовый TS.
 			this.$.$node_autoinstall( 'openapi-typescript' )
-			const mod = await import( 'openapi-typescript' ) as Record< string, unknown >
-			const fn = ( mod.default ?? mod.openapiTS ?? mod ) as ( spec: unknown ) => unknown
-			const ast = await fn( spec )
-			return typeof ast === 'string' ? ast : this.ast_to_text( ast as readonly unknown[] )
-		}
-
-		ast_to_text( ast: readonly unknown[] ): string {
-			const ts = $node.typescript as typeof import( 'typescript' )
-			const file = ts.createSourceFile( 'out.d.ts', '', ts.ScriptTarget.Latest, false, ts.ScriptKind.TS )
-			const printer = ts.createPrinter({ newLine: ts.NewLineKind.LineFeed })
-			return ast
-				.map( node => printer.printNode( ts.EmitHint.Unspecified, node as Parameters< typeof printer.printNode >[ 1 ], file ) )
-				.join( '\n' )
+			const source = this.source()
+			return this.$.$mol_exec( source.parent().path(), `npx openapi-typescript ${ source.name() }` ).stdout.toString()
 		}
 
 		@ $mol_mem
