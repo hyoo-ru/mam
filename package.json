@@ -20,7 +20,10 @@
     "node": ">=24.0.0"
   },
   "dependencies": {
+    "graphql": "*",
     "lru-cache": "11.2.7",
-    "mam": "*"
+    "mam": "*",
+    "openapi-typescript": "*",
+    "yaml": "*"
   }
 }

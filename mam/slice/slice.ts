@@ -30,6 +30,8 @@ namespace $ {
 				this.$.$mam_source_view_ts,
 				this.$.$mam_source_ts,
 				this.$.$mam_source_meta_tree,
+				this.$.$mam_source_gql,
+				this.$.$mam_source_openapi,
 			]
 		}
 
@@ -42,6 +44,8 @@ namespace $ {
 				this.$.$mam_convert_css,
 				this.$.$mam_convert_bin,
 				this.$.$mam_convert_ts,
+				this.$.$mam_convert_gql,
+				this.$.$mam_convert_openapi,
 			]
 		}
 
