@@ -9,7 +9,7 @@
 			"type": "node",
 			"request": "launch",
 			"name": "Dev Server",
-			"runtimeArgs": ["--inspect-brk=9229"],
+			"runtimeArgs": ["--inspect=9229"],
 			"port": 9229,
 			"program": "${workspaceRoot}/mol/build/-/node.js"
 		},

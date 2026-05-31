@@ -9,86 +9,56 @@ namespace $ {
 		}
 
 		@ $mol_mem_key
-		pack( dir : $mol_file ) {
-			
+		pack( dir: $mol_file ) {
 			const pack = new this.$.$mam_package
-			
 			pack.root = $mol_const( this )
 			pack.dir = $mol_const( dir )
+
+			pack.ensure()
 			
 			return pack
 		}
 
-		@ $mol_mem_key
-		source( Source : typeof $mam_source ) {
-			return Source.create(
-				source => source.root = $mol_const( this )
-			)	
-		}	
-
 		@ $mol_mem
-		sources() {
-			return [
-				this.source( this.$.$mam_source_dir ) ,
-				this.source( this.$.$mam_source_js ) ,
-				this.source( this.$.$mam_source_ts ) ,
-			]
+		ensure() {
+			const ensure = new this.$.$mam_ensure
+			ensure.root = $mol_const( this )
+			return ensure
 		}
 
-		@ $mol_mem
-		ts_config() {
+		@ $mol_mem_key
+		source< Source extends typeof $mam_source >( [ Source, file ]: [ Source, $mol_file ] ) {
+			if( !Source.match( file ) ) return null
+			
+			const source = new Source
+			source.root = $mol_const( this )
+			source.file = $mol_const( file )
+			return source as InstanceType< Source >
+		}
 
-			const path = this.dir().resolve( 'tsconfig.json' ).path()
+		@ $mol_mem_key
+		convert< Convert extends typeof $mam_convert >( [ Convert, file ]: [ Convert, $mol_file ] ) {
+			if( !Convert.match( file ) ) return null
+			
+			const convert = new Convert
+			convert.root = $mol_const( this )
+			convert.source = $mol_const( file )
+			return convert as InstanceType< Convert >
+		}
 
-			const config = $node.typescript.readConfigFile(
-				path ,
-				( path : string )=> this.$.$mol_file.absolute( path ).text()
-			)
-
-			if( config.error ) {
-				throw new Error(
-					$node.typescript.formatDiagnosticsWithColorAndContext(
-						[ config.error ] ,
-						{
-							getCanonicalFileName: ( path : string )=> path,
-							getCurrentDirectory: $node.typescript.sys.getCurrentDirectory,
-							getNewLine: () => $node.typescript.sys.newLine,
-						}
-					)
-				)
-			}
-
-			return config.config
+		@ $mol_mem_key
+		bundle< Bundle extends typeof $mam_bundle >( Bundle: Bundle ) {
+			const bundle = new Bundle
+			bundle.root = $mol_const( this )
+			return bundle as InstanceType< Bundle >
 		}
 
 		@ $mol_mem
 		ts_options() {
-
-			const options = $node.typescript.convertCompilerOptionsFromJson(
-				this.ts_config().compilerOptions ,
-				"." ,
-				'tsconfig.json'
-			)
-
-			if( options.errors.length ) {
-				throw new Error(
-					$node.typescript.formatDiagnosticsWithColorAndContext(
-						options.errors ,
-						{
-							getCanonicalFileName: ( path : string )=> path,
-							getCurrentDirectory: $node.typescript.sys.getCurrentDirectory,
-							getNewLine: () => $node.typescript.sys.newLine,
-						}
-					)
-				)
-			}
-
-			return options.options
-		}
-
-		@ $mol_mem
-		ts_registry() {
-			return $node.typescript.createDocumentRegistry()
+			const rawOptions = JSON.parse( this.dir().resolve( 'tsconfig.json' ).text() + '').compilerOptions
+			const res = $node.typescript.convertCompilerOptionsFromJson( rawOptions, ".", 'tsconfig.json' )
+			if( res.errors.length ) throw res.errors
+			return res.options
 		}
 
 	}

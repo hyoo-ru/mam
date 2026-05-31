@@ -2,23 +2,25 @@ namespace $ {
 
 	export class $mam_source_dir extends $mam_source {
 
-		match( file : $mol_file ) {
+		static match( file: $mol_file ): boolean {
 			return file.type() === 'dir'
 		}
 
-		@ $mol_mem_key
-		deps( source : $mol_file ) {
+		@ $mol_mem
+		deps() {
+			const deps = super.deps()
+			const dir = this.file()
 			
-			if( !source.exists() ) return super.deps( source )
-			if( source.type() !== 'dir' ) return super.deps( source )
-			
-			const deps = new Map< $mol_file , number >()
+			const items = dir.sub().slice().sort( ( left, right )=> left.name().length - right.name().length )
 
-			for( const item of source.sub() ) {
+			for( const item of items ) {
 				if( item.type() !== 'file' ) continue
-				deps.set( item , 0 )
+				if( !/^[a-z0-9]/i.test( item.name() ) ) continue
+				deps.set( item, 0 )
 			}
-			
+
+			if( dir !== this.root().dir() ) deps.set( dir.parent(), Number.MIN_SAFE_INTEGER )
+
 			return deps
 		}
 

@@ -1,21 +1,22 @@
 {
 	"compilerOptions": {
-		"target": "ES2017",
+		"target": "ESNext",
 		"jsx": "react",
-		"module": "commonjs",
-		"moduleResolution": "node",
+		"module": "ESNext",
+		"moduleResolution": "bundler",
+		"esModuleInterop": true,
 		"noEmitHelpers": true,
 		"experimentalDecorators": true,
 		"noImplicitAny": true,
-		"suppressImplicitAnyIndexErrors": true,
 		"alwaysStrict": true,
 		"strict": true,
 		"allowUnusedLabels": true,
-		"removeComments" : true ,
+		"removeComments" : false ,
 		"sourceMap" : true ,
 		"inlineSources" : true ,
 		"declaration" : true,
-		"skipLibCheck" : true,
+		"skipLibCheck" : false,
+		"skipDefaultLibCheck" : true,
 		"types" : ["node"]
 	},
 	"include": [
@@ -23,7 +24,8 @@
 		"**/*.tsx"
 	],
 	"exclude": [
-		"node_modules",
+		"**/node_modules",
+		"**/.*/",
 		"**/-/*"
 	],
 	"atom": {

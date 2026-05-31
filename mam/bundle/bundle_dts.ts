@@ -2,23 +2,38 @@ namespace $ {
 
 	export class $mam_bundle_dts extends $mam_bundle {
 
-		@ $mol_mem
-		generated() {
+		@ $mol_mem_key
+		slice_artifacts( slice: $mam_slice ) {
+			const start = Date.now()
 
-			const prefix = this.prefix()
-			const script = this.pack().output().resolve( `${prefix}.d.ts` ) 
-			const map = this.pack().output().resolve( `${prefix}.d.ts.map` ) 
+			// const script = this.pack().output().resolve( `${prefix}.d.ts` )
+			// const map = this.pack().output().resolve( `${prefix}.d.ts.map` )
 
-			// generate bundle
+			const prefix = slice.prefix()
+
+			const target = slice.pack().output().resolve( `${ prefix }.d.ts` )
 			
-			this.$.$mol_log3_done({
-				place : '$mam_bundle_dts.generated()' ,
-				message : 'Built',
-				file : script.relate(),
-				// sources : [ ... this.files() ].map(s=>s.relate()),
-			})
+			const sources = [ ... slice.files() ].filter( file => {
+				if( !file.exists() ) return false
+				return /\.d\.ts$/.test( file.name() )
+			} )
+			if( sources.length === 0 ) return []
 			
-			return [ script , map ]
+			const concater = new $mol_sourcemap_builder( target.parent().path() )
+			
+			sources.forEach(
+				function( src ) {
+					if( !src.text() ) return
+					concater.add( src.text(), src.relate( target.parent() ) )
+				}
+			)
+			
+			target.text( concater.content + '\nexport = $;' )
+			
+			this.log( target, Date.now() - start )
+			
+			return [ target ]
+			// return [ script, map ]
 		}
 
 	}

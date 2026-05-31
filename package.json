@@ -1,12 +1,11 @@
 {
   "description": "Simple MAM project",
   "scripts": {
-    "postinstall": "mam mol/build",
-    "start": "node ./mol/build/-/node.js"
+    "start": "npm update && mam"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/eigenmethod/mam.git"
+    "url": "git+https://github.com/hyoo-ru/mam.git"
   },
   "keywords": [
     "mam"
@@ -14,13 +13,14 @@
   "author": "jin",
   "license": "UNLICENSED",
   "bugs": {
-    "url": "https://github.com/eigenmethod/mam/issues"
+    "url": "https://github.com/hyoo-ru/mam/issues"
   },
-  "homepage": "https://github.com/eigenmethod/mam#readme",
+  "homepage": "https://github.com/hyoo-ru/mam#readme",
   "engines": {
-    "node": ">=10.0.0"
+    "node": ">=24.0.0"
   },
   "dependencies": {
+    "lru-cache": "11.2.7",
     "mam": "*"
   }
 }
