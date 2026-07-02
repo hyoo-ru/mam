@@ -20,48 +20,16 @@ namespace $ {
 			return true
 		}
 
-		@ $mol_mem
-		source_classes(): ( typeof $mam_source )[]  {
-			return [
-				this.$.$mam_source_dir,
-				this.$.$mam_source_js,
-				this.$.$mam_source_css,
-				this.$.$mam_source_view_tree,
-				this.$.$mam_source_view_ts,
-				this.$.$mam_source_ts,
-				this.$.$mam_source_meta_tree,
-			]
+		source_classes() {
+			return this.root().source_classes()
 		}
 
-		@ $mol_mem
-		convert_classes(): ( typeof $mam_convert )[]  {
-			return [
-				this.$.$mam_convert_meta_tree,
-				this.$.$mam_convert_view_tree,
-				this.$.$mam_convert_glsl,
-				this.$.$mam_convert_css,
-				this.$.$mam_convert_bin,
-				this.$.$mam_convert_ts,
-			]
+		convert_classes() {
+			return this.root().convert_classes()
 		}
 
-		@ $mol_mem
-		bundle_classes(): ( typeof $mam_bundle )[] {
-			return [
-				this.$.$mam_bundle_meta,
-				this.$.$mam_bundle_js,
-				this.$.$mam_bundle_mjs,
-				this.$.$mam_bundle_baza,
-				this.$.$mam_bundle_view_tree,
-				this.$.$mam_bundle_meta_tree,
-				this.$.$mam_bundle_locale,
-				this.$.$mam_bundle_index_html,
-				this.$.$mam_bundle_package_json,
-				this.$.$mam_bundle_manifest_json,
-				this.$.$mam_bundle_readme,
-				this.$.$mam_bundle_files,
-				this.$.$mam_bundle_cordova,
-			]
+		bundle_classes() {
+			return this.root().bundle_classes()
 		}
 
 		@ $mol_mem_key
@@ -168,6 +136,12 @@ namespace $ {
 			for( const file of this.graph().sorted ) add( file )
 
 			return files
+		}
+
+		/** Все исходники слайса, на которые срабатывает данный лоадер. */
+		@ $mol_mem_key
+		files_of< Source extends typeof $mam_source >( Source: Source ) {
+			return [ ...this.files() ].filter( file => Source.match( file ) )
 		}
 
 		@ $mol_mem

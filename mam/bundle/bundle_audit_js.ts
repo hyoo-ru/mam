@@ -92,7 +92,7 @@ namespace $ {
 		@ $mol_mem_key
 		ts_paths( slice: $mam_slice ) {
 
-			const sources = [ ...slice.files() ].filter( src => /tsx?$/.test( src.ext() ) )
+			const sources = [ ...slice.files_of( this.$.$mam_source_ts ) ]
 
 			if( /node/.test( slice.prefix() ) ) {
 				const lines = [] as string[]

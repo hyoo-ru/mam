@@ -16,8 +16,9 @@ namespace $ {
 					$.$mam_server.serve()
 				} else {
 
-					// Один root на все перезапуски задачи после suspend, иначе плодятся worker-треды чекера
-					const root = $mam_start_root ??= new $mam_root
+					// Один root на все перезапуски задачи после suspend, иначе плодятся worker-треды чекера.
+					// Класс берётся из контекста — кастомный сборщик подменяет его через $.$mam_root
+					const root = $mam_start_root ??= new $.$mam_root
 
 					for( const path of args ) {
 

@@ -18,14 +18,8 @@ namespace $ {
 			return this.dir().resolve( '-' )
 		}
 
-		@ $mol_mem
-		slice_classes(): ( typeof $mam_slice )[] {
-			return [
-				this.$.$mam_slice_web_prod,
-				this.$.$mam_slice_node_prod,
-				this.$.$mam_slice_web_test,
-				this.$.$mam_slice_node_test,
-			]
+		slice_classes() {
+			return this.root().slice_classes()
 		}
 
 		@ $mol_mem_key
