@@ -86,8 +86,31 @@ namespace $ {
 		}
 
 		file_generated_artifacts( file: $mol_file ) {
-			return this.converts( file ).flatMap( convert => convert.generated_artifacts()
+			return this.converts( file ).flatMap( convert => convert.artifacts_for( this )
 				.filter( gen => this.filter( gen ) ) )
+		}
+
+		/** Имена npm/node-пакетов, используемых исходниками слайса. */
+		@ $mol_mem
+		node_deps(): string[] {
+
+			const deps = new Set< string >()
+
+			for( const file of this.files() ) {
+
+				const file_deps = this.root().source( [ this.$.$mam_source_ts, file ] )?.ts_source_deps().node_deps
+				file_deps?.forEach( dep => deps.add( dep ) )
+
+			}
+
+			deps.forEach( dep => {
+				if( $node_internal_check( dep ) ) return
+				if( dep === 'internal' ) return
+				this.$.$node_autoinstall( dep )
+			} )
+
+			return [ ... deps ]
+
 		}
 
 		@ $mol_mem

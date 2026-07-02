@@ -28,6 +28,11 @@ namespace $ {
 			return []
 		}
 
+		/** Артефакты с учётом слайса — для конвертов, чей результат зависит от среды/набора файлов. */
+		artifacts_for( slice: $mam_slice ): $mol_file[] {
+			return this.generated_artifacts()
+		}
+
 	}
 
 }

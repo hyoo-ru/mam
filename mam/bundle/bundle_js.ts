@@ -33,8 +33,8 @@ namespace $ {
 				const file_map = file.parent().resolve( file.name() + '.map' )
 				const content = file.text().replace( /^\/\/#\ssourceMappingURL=.*$/mg, '' )
 				
-				// чанк $mam_convert_npm сам регистрируется в $node, обёртка ему не нужна
-				const self_registering = /\/-mam\/web\.js$/.test( file.relate( this.root().dir() ) )
+				// чанк $mam_convert_npm сам регистрируется в $npm, обёртка ему не нужна
+				const self_registering = /\/-mam\//.test( file.relate( this.root().dir() ) )
 
 				const isCommonJs = !self_registering && /typeof +exports|module\.exports|\bexports\.\w+\s*=/.test( content )
 					

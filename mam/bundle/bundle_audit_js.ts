@@ -94,20 +94,23 @@ namespace $ {
 
 			const sources = [ ...slice.files_of( this.$.$mam_source_ts ) ]
 
-			if( /node/.test( slice.prefix() ) ) {
-				const lines = [] as string[]
-				
-				for( let dep of ( slice as $mam_slice_node ).node_deps() ) {
-					lines.push( '\t' + JSON.stringify( dep ) + ': typeof import\( ' + JSON.stringify( dep ) + ' )' )
-				}
-				
-				if( lines.length > 0 ) {
-				
-					const node_types = slice.pack().dir().resolve( `-node/deps.d.ts` )
-					node_types.text( 'interface $node {\n ' + lines.join( '\n' ) + '\n}' )
-					sources.push( node_types )
+			const lines = [] as string[]
 
-				}
+			for( let dep of slice.node_deps() ) {
+				lines.push( '\t' + JSON.stringify( dep ) + ': typeof import\( ' + JSON.stringify( dep ) + ' )' )
+			}
+
+			if( lines.length > 0 ) {
+
+				const is_node = /node/.test( slice.prefix() )
+
+				const decls = [ 'interface $npm {\n ' + lines.join( '\n' ) + '\n}' ]
+				if( is_node ) decls.push( 'interface $node {\n ' + lines.join( '\n' ) + '\n}' )
+
+				const types = slice.pack().dir().resolve( `-${ is_node ? 'node' : 'web' }/deps.d.ts` )
+				types.text( decls.join( '\n' ) )
+				sources.push( types )
+
 			}
 
 			return sources.map( src => src.path() )

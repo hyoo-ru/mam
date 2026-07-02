@@ -37,19 +37,44 @@ namespace $ {
 			if( dep ) this.dep_add( deps, dep, priority )
 		}
 
-		node_dep_add( deps: Map< $mol_file, number >, node_deps: Set< string >, node: ts_Identifier, priority: number ) {
+		node_dep_add(
+			deps: Map< $mol_file, number >,
+			node_deps: Set< string >,
+			node_dep_members: Map< string, Set< string > | null >,
+			node: ts_Identifier,
+			priority: number,
+		) {
 			const ts = $node.typescript
 			const parent = node.parent
 
 			let name = ''
-			if( ts.isPropertyAccessExpression( parent ) ) {
+			if( ts.isPropertyAccessExpression( parent ) && parent.expression === node ) {
 				name = String( parent.name.escapedText )
-			} else if( ts.isElementAccessExpression( parent ) && ts.isStringLiteral( parent.argumentExpression ) ) {
+			} else if( ts.isElementAccessExpression( parent ) && parent.expression === node && ts.isStringLiteral( parent.argumentExpression ) ) {
 				name = parent.argumentExpression.text
 			}
 			if( !name ) return
 
 			node_deps.add( name )
+
+			// использованные члены пакета — для tree-shaking; null — пакет нужен целиком
+			const outer = parent.parent
+			let member = ''
+			if( ts.isPropertyAccessExpression( outer ) && outer.expression === parent ) {
+				member = String( outer.name.escapedText )
+			} else if( ts.isElementAccessExpression( outer ) && outer.expression === parent && ts.isStringLiteral( outer.argumentExpression ) ) {
+				member = outer.argumentExpression.text
+			}
+
+			if( member ) {
+				let existed = node_dep_members.get( name )
+				if( existed !== null ) {
+					if( !existed ) node_dep_members.set( name, existed = new Set() )
+					existed.add( member )
+				}
+			} else {
+				node_dep_members.set( name, null )
+			}
 
 			if( $node_internal_check( name ) ) return
 			if( name === 'internal' ) return
@@ -73,6 +98,7 @@ namespace $ {
 		node_visit(
 			deps: Map< $mol_file, number >,
 			node_deps: Set< string >,
+			node_dep_members: Map< string, Set< string > | null >,
 			node: ts_Node,
 			source: ts_SourceFile,
 			lines: readonly string[],
@@ -101,23 +127,24 @@ namespace $ {
 
 			if( ts.isIdentifier( node ) ) {
 				const fqn = this.fqn( node )
-				if( fqn === 'node' ) this.node_dep_add( deps, node_deps, node, priority )
+				if( fqn === 'node' || fqn === 'npm' ) this.node_dep_add( deps, node_deps, node_dep_members, node, priority )
 				if( fqn ) this.fqn_add( deps, fqn, priority )
 			}
 
-			node.forEachChild( child => this.node_visit( deps, node_deps, child, source, lines ) )
+			node.forEachChild( child => this.node_visit( deps, node_deps, node_dep_members, child, source, lines ) )
 		}
 
 		@ $mol_mem
 		ts_source_deps() {
 			const mam_deps = new Map< $mol_file, number >()
 			const node_deps = new Set< string >
+			const node_dep_members = new Map< string, Set< string > | null >()
 			const source = this.ts_source()
 
 			this.implicit_deps_add( mam_deps )
-			this.node_visit( mam_deps, node_deps, source, source, this.file().text().split( '\n' ) )
+			this.node_visit( mam_deps, node_deps, node_dep_members, source, source, this.file().text().split( '\n' ) )
 
-			return { mam_deps, node_deps }
+			return { mam_deps, node_deps, node_dep_members }
 		}
 
 	}

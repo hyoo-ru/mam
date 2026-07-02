@@ -12,29 +12,6 @@ namespace $ {
 			return 'node'
 		}
 
-		@ $mol_mem
-		node_deps(): string[] {
-			
-			const deps = new Set< string >()
-			const sources = this.files()
-			
-			for( let file of sources ) {
-				
-				const file_deps = this.root().source( [ this.$.$mam_source_ts, file ] )?.ts_source_deps().node_deps
-				file_deps?.forEach( dep => deps.add( dep ) )
-
-			}
-
-			deps.forEach( dep => {
-				if( $node_internal_check( dep ) ) return
-				if( dep === 'internal' ) return
-				this.$.$node_autoinstall( dep )
-			} )
-
-			return [ ... deps ]
-
-		}
-
 	}
 
 	export class $mam_slice_node_prod extends $mam_slice_node {
