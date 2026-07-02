@@ -33,7 +33,10 @@ namespace $ {
 				const file_map = file.parent().resolve( file.name() + '.map' )
 				const content = file.text().replace( /^\/\/#\ssourceMappingURL=.*$/mg, '' )
 				
-				const isCommonJs = /typeof +exports|module\.exports|\bexports\.\w+\s*=/.test( content )
+				// чанк $mam_convert_npm сам регистрируется в $node, обёртка ему не нужна
+				const self_registering = /\/-mam\/web\.js$/.test( file.relate( this.root().dir() ) )
+
+				const isCommonJs = !self_registering && /typeof +exports|module\.exports|\bexports\.\w+\s*=/.test( content )
 					
 				if( isCommonJs ) {
 					concater.add( `\nvar $node = $node || {}\nvoid function( module ) { var exports = module.${''}exports = this; function require( id ) { return $node[ id.replace( /^.\\//, "` + file.parent().relate( this.root().dir().resolve( 'node_modules' ) ) + `/" ) ] }; \n`, '-' )

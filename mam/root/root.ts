@@ -43,6 +43,7 @@ namespace $ {
 				this.$.$mam_convert_css,
 				this.$.$mam_convert_bin,
 				this.$.$mam_convert_ts,
+				this.$.$mam_convert_npm,
 			]
 		}
 

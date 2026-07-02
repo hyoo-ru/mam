@@ -37,15 +37,27 @@ namespace $ {
 			if( dep ) this.dep_add( deps, dep, priority )
 		}
 
-		node_dep_add( node_deps: Set< string >, node: ts_Identifier ) {
+		node_dep_add( deps: Map< $mol_file, number >, node_deps: Set< string >, node: ts_Identifier, priority: number ) {
 			const ts = $node.typescript
 			const parent = node.parent
 
+			let name = ''
 			if( ts.isPropertyAccessExpression( parent ) ) {
-				node_deps.add( String( parent.name.escapedText ) )
+				name = String( parent.name.escapedText )
 			} else if( ts.isElementAccessExpression( parent ) && ts.isStringLiteral( parent.argumentExpression ) ) {
-				node_deps.add( parent.argumentExpression.text )
+				name = parent.argumentExpression.text
 			}
+			if( !name ) return
+
+			node_deps.add( name )
+
+			if( $node_internal_check( name ) ) return
+			if( name === 'internal' ) return
+
+			this.$.$node_autoinstall( name )
+
+			// пакет входит в граф своим package.json — на нём срабатывает $mam_convert_npm
+			this.dep_add( deps, this.root().dir().resolve( `node_modules/${ name }/package.json` ), priority )
 		}
 
 		implicit_deps_add( deps: Map< $mol_file, number > ) {
@@ -89,7 +101,7 @@ namespace $ {
 
 			if( ts.isIdentifier( node ) ) {
 				const fqn = this.fqn( node )
-				if( fqn === 'node' ) this.node_dep_add( node_deps, node )
+				if( fqn === 'node' ) this.node_dep_add( deps, node_deps, node, priority )
 				if( fqn ) this.fqn_add( deps, fqn, priority )
 			}
 
