@@ -21,9 +21,6 @@
   },
   "dependencies": {
     "esbuild": "^0.28.1",
-    "lazy": "^1.0.11",
-    "lru-cache": "11.2.7",
-    "mam": "*",
-    "yaml": "^2.9.0"
+    "mam": "*"
   }
 }
