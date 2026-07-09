@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "lru-cache": "11.2.7",
-    "mam": "*"
+    "mam": "*",
+    "typescript": "6.0.3"
   }
 }
