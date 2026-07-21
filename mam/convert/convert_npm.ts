@@ -32,7 +32,7 @@ namespace $ {
 				const source = this.root().source( [ this.$.$mam_source_ts, file ] )
 				if( !source ) continue
 
-				const file_members = source.ts_source_deps().node_dep_members.get( name )
+				const file_members = source.ts_source_deps().npm.members.get( name )
 				if( file_members === undefined ) continue
 				if( file_members === null ) return null
 

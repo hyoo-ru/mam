@@ -98,7 +98,7 @@ namespace $ {
 
 			for( const file of this.files() ) {
 
-				const file_deps = this.root().source( [ this.$.$mam_source_ts, file ] )?.ts_source_deps().node_deps
+				const file_deps = this.root().source( [ this.$.$mam_source_ts, file ] )?.ts_source_deps().npm.deps
 				file_deps?.forEach( dep => deps.add( dep ) )
 
 			}
