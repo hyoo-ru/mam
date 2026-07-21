@@ -1,6 +1,6 @@
 namespace $ {
 
-	$mam_file_patch()
+	$.$mol_file = $mam_file
 
 	let $mam_start_root = null as null | $mam_root
 

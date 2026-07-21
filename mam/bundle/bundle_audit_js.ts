@@ -96,7 +96,7 @@ namespace $ {
 
 			const lines = [] as string[]
 
-			for( let dep of slice.node_deps() ) {
+			for( const dep of slice.node_deps() ) {
 				lines.push( '\t' + JSON.stringify( dep ) + ': typeof import\( ' + JSON.stringify( dep ) + ' )' )
 			}
 
