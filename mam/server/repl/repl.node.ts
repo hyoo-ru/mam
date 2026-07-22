@@ -18,6 +18,10 @@ namespace $ {
 
 		@ $mol_mem
 		terminal() {
+
+			// Без TTY (CI, docker, фон) EOF на stdin мгновенно убил бы сервер через 'close'
+			if( !process.stdin.isTTY ) return null
+
 			const terminal = $node.readline.createInterface({
 				input: process.stdin,
 				output: process.stdout,
