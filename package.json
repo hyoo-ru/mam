@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "esbuild": "^0.28.1",
-    "mam": "*"
+    "mam": "*",
+    "typescript": "6.0.3"
   }
 }
