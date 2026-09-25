@@ -85,8 +85,8 @@ namespace $ {
 
 		@ $mol_mem
 		ts_options() {
-			const rawOptions = JSON.parse( this.dir().resolve( 'tsconfig.json' ).text() + '').compilerOptions
-			const res = $node.typescript.convertCompilerOptionsFromJson( rawOptions, ".", 'tsconfig.json' )
+			const config = JSON.parse( this.dir().resolve( 'tsconfig.json' ).text() )
+			const res = $node.typescript.parseJsonConfigFileContent( config, $node.typescript.sys, this.dir().path() )
 			if( res.errors.length ) throw res.errors
 			return res.options
 		}
