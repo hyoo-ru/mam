@@ -77,7 +77,17 @@ namespace $ {
 			const pack = new this.$.$mam_package
 			pack.root = $mol_const( this )
 			pack.dir = $mol_const( dir )
+
+			pack.ensure()
+
 			return pack
+		}
+
+		@ $mol_mem
+		ensure() {
+			const ensure = new this.$.$mam_ensure
+			ensure.root = $mol_const( this )
+			return ensure
 		}
 
 		@ $mol_mem_key
