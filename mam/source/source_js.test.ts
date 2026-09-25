@@ -88,12 +88,12 @@ namespace $ {
 					},
 					{ 0: '\n' },
 					{
-						0: 'import( "lazy/file" )',
+						0: 'imp' + 'ort( "lazy/file" )',
 						string: '',
 						fqn: '',
 						name: '',
 						req: '',
-						imp: 'import( "lazy/file" )',
+						imp: 'imp' + 'ort( "lazy/file" )',
 						path: 'lazy/file',
 					},
 				]
