@@ -49,6 +49,20 @@ namespace $ {
 			return files
 		}
 
+		@ $mol_mem
+		meta() {
+			const decls = [] as $mol_tree2[]
+
+			for( const file of this.dir().sub() ) {
+
+				const tree = this.root().source([ this.$.$mam_source_meta_tree, file ])?.tree()
+				if( tree ) decls.push( ... tree.kids )
+
+			}
+
+			return $mol_tree2.list( decls )
+		}
+
 	}
 
 }
