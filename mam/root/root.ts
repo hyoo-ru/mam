@@ -54,6 +54,8 @@ namespace $ {
 		bundle_test_classes(): ( typeof $mam_bundle )[] {
 			return [
 				this.$.$mam_bundle_test_js,
+				this.$.$mam_bundle_audit_js,
+				this.$.$mam_bundle_dts,
 			]
 		}
 

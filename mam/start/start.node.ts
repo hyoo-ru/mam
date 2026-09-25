@@ -2,11 +2,18 @@ namespace $ {
 
 	$.$mol_file = $mam_file
 
+	let $mam_start_root = null as null | $mam_root
+
 	export function $mam_start() {
+
+		if( !$mol_rpc_worker.is_main() ) {
+			new $mol_wire_atom( '$mam_checker', ()=> $.$mol_one.$mam_checker.start() ).fresh()
+			return
+		}
 
 		try {
 
-			const root = new $.$mam_root
+			const root = $mam_start_root ??= new $.$mam_root
 
 			for( const path of process.argv.slice( 2 ) ) {
 				root.pack( root.dir().resolve( path ) ).bundles_generated()
