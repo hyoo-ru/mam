@@ -37,6 +37,9 @@ namespace $ {
 		deps() {
 			const deps = super.deps()
 			const file = this.file()
+
+			if( /(^|\/)node_modules\//.test( file.relate( this.root().dir() ) ) ) return deps
+
 			const source = file.text()
 
 			const scan = ( source: string )=> {
