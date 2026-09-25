@@ -39,7 +39,9 @@ namespace $ {
 				}
 
 				tree.select( 'deploy' ).kids.forEach( ( deploy: $mol_tree2 ) => {
-					addFilesRecursive( root_dir.resolve( deploy.text().replace( /^\//, '' ) ) )
+					const mod = root_dir.resolve( deploy.text().replace( /^\//, '' ) )
+					this.root().ensure().ensure( mod.parent().path() )
+					addFilesRecursive( mod )
 				} )
 				
 			} )
