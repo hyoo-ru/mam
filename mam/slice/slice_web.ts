@@ -12,6 +12,14 @@ namespace $ {
 			return 'web'
 		}
 
+		@ $mol_mem
+		bundle_classes(): ( typeof $mam_bundle )[] {
+			return [
+				...super.bundle_classes(),
+				this.$.$mam_bundle_css,
+			]
+		}
+
 	}
 
 	export class $mam_slice_web_prod extends $mam_slice_web {
