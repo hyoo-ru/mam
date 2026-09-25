@@ -80,11 +80,11 @@ namespace $ {
 
 			if( prefix === 'node.test' ) {
 				const res = $node['child_process'].spawnSync(
-					'node',
+					process.execPath,
 					[ '--enable-source-maps', '--trace-uncaught', target.relate( root_dir ) ],
-					{ cwd: root_dir.path(), shell: true, stdio: 'inherit' },
+					{ cwd: root_dir.path(), stdio: 'inherit' },
 				)
-				if( res.error || res.status ) throw res.error ?? new Error( res.stderr?.toString() || 'Test failed' )
+				if( res.error || res.status ) throw res.error ?? new Error( 'Test failed' )
 			}
 			
 			return [ target, targetMap ]
