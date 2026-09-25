@@ -120,6 +120,7 @@ namespace $ {
 		@ $mol_mem
 		files() {
 			const files = new Set< $mol_file >()
+			const errors = [] as Error[]
 
 			const add = ( file: $mol_file )=> {
 				if( file.type() !== 'file' ) return
@@ -128,12 +129,22 @@ namespace $ {
 				if( /\.d\.ts$/.test( file.name() ) ) return
 				if( !file.exists() ) return
 
-				for( const gen of this.file_generated_artifacts( file ) ) {
-					files.add( gen )
+				try {
+					for( const gen of this.file_generated_artifacts( file ) ) {
+						files.add( gen )
+					}
+				} catch( error ) {
+					if( $mol_promise_like( error ) ) $mol_fail_hidden( error )
+					errors.push( error as Error )
 				}
 			}
 
 			for( const file of this.graph().sorted ) add( file )
+
+			if( errors.length ) {
+				const root = this.root().dir()
+				$mol_fail_hidden( new $mol_error_mix( `Build fail ${ this.pack().dir().relate( root ) }`, {}, ...errors ) )
+			}
 
 			return files
 		}
