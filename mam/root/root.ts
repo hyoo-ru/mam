@@ -27,12 +27,14 @@ namespace $ {
 				this.$.$mam_source_view_tree,
 				this.$.$mam_source_view_ts,
 				this.$.$mam_source_ts,
+				this.$.$mam_source_meta_tree,
 			]
 		}
 
 		@ $mol_mem
 		convert_classes(): ( typeof $mam_convert )[] {
 			return [
+				this.$.$mam_convert_meta_tree,
 				this.$.$mam_convert_view_tree,
 				this.$.$mam_convert_glsl,
 				this.$.$mam_convert_css,
@@ -44,9 +46,19 @@ namespace $ {
 		@ $mol_mem
 		bundle_classes(): ( typeof $mam_bundle )[] {
 			return [
+				this.$.$mam_bundle_meta,
 				this.$.$mam_bundle_js,
+				this.$.$mam_bundle_mjs,
+				this.$.$mam_bundle_baza,
 				this.$.$mam_bundle_view_tree,
+				this.$.$mam_bundle_meta_tree,
 				this.$.$mam_bundle_locale,
+				this.$.$mam_bundle_index_html,
+				this.$.$mam_bundle_package_json,
+				this.$.$mam_bundle_manifest_json,
+				this.$.$mam_bundle_readme,
+				this.$.$mam_bundle_files,
+				this.$.$mam_bundle_cordova,
 			]
 		}
 
@@ -54,6 +66,7 @@ namespace $ {
 		bundle_test_classes(): ( typeof $mam_bundle )[] {
 			return [
 				this.$.$mam_bundle_test_js,
+				this.$.$mam_bundle_test_html,
 				this.$.$mam_bundle_audit_js,
 				this.$.$mam_bundle_dts,
 			]
