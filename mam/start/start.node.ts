@@ -13,9 +13,16 @@ namespace $ {
 
 		try {
 
+			const args = process.argv.slice( 2 )
+
+			if( args.every( arg => /^[^=]+=/.test( arg ) ) ) {
+				$.$mam_server.serve()
+				return
+			}
+
 			const root = $mam_start_root ??= new $.$mam_root
 
-			for( const path of process.argv.slice( 2 ) ) {
+			for( const path of args ) {
 				root.pack( root.dir().resolve( path ) ).bundles_generated()
 			}
 
