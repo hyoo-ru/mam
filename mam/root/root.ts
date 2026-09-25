@@ -23,6 +23,9 @@ namespace $ {
 			return [
 				this.$.$mam_source_dir,
 				this.$.$mam_source_js,
+				this.$.$mam_source_css,
+				this.$.$mam_source_view_tree,
+				this.$.$mam_source_view_ts,
 				this.$.$mam_source_ts,
 			]
 		}
@@ -30,6 +33,10 @@ namespace $ {
 		@ $mol_mem
 		convert_classes(): ( typeof $mam_convert )[] {
 			return [
+				this.$.$mam_convert_view_tree,
+				this.$.$mam_convert_glsl,
+				this.$.$mam_convert_css,
+				this.$.$mam_convert_bin,
 				this.$.$mam_convert_ts,
 			]
 		}
@@ -38,6 +45,8 @@ namespace $ {
 		bundle_classes(): ( typeof $mam_bundle )[] {
 			return [
 				this.$.$mam_bundle_js,
+				this.$.$mam_bundle_view_tree,
+				this.$.$mam_bundle_locale,
 			]
 		}
 
