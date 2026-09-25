@@ -63,6 +63,11 @@ namespace $ {
 			return $mol_tree2.list( decls )
 		}
 
+		@ $mol_mem
+		ensure() {
+			return this.root().ensure().ensure( this.dir().path() )
+		}
+
 	}
 
 }
