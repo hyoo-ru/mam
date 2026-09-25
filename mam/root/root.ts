@@ -56,6 +56,7 @@ namespace $ {
 				this.$.$mam_bundle_locale,
 				this.$.$mam_bundle_index_html,
 				this.$.$mam_bundle_package_json,
+				this.$.$mam_bundle_npm_deps,
 				this.$.$mam_bundle_manifest_json,
 				this.$.$mam_bundle_readme,
 				this.$.$mam_bundle_files,
