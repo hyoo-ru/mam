@@ -18,7 +18,7 @@ namespace $ {
 
 		filter( file: $mol_file ) {
 			if( !super.filter( file ) ) return false
-			if( /\.test\./.test( file.name() ) ) return false
+			if( /\.(test|dev)\./.test( file.name() ) ) return false
 			return true
 		}
 		
