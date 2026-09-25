@@ -28,6 +28,10 @@ namespace $ {
 			return []
 		}
 
+		artifacts_for( slice: $mam_slice ): $mol_file[] {
+			return this.generated_artifacts()
+		}
+
 	}
 
 }
