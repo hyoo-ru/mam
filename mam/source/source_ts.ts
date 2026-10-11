@@ -4,12 +4,17 @@ namespace $ {
 	type ts_Identifier = import('typescript').Identifier
 	type ts_SourceFile = import('typescript').SourceFile
 
+	export type $mam_source_ts_deps = {
+		mam_deps: Map< $mol_file, number >
+		npm: $mam_source_ts_npm
+	}
+
 	export class $mam_source_ts extends $mam_source {
 
 		static match( file: $mol_file ): boolean {
 			return /tsx?$/.test( file.ext() )
 		}
-		
+
 		@ $mol_mem
 		deps() {
 			const deps = this.ts_source_deps().mam_deps
@@ -37,15 +42,15 @@ namespace $ {
 			if( dep ) this.dep_add( deps, dep, priority )
 		}
 
-		node_dep_add( node_deps: Set< string >, node: ts_Identifier ) {
-			const ts = $node.typescript
-			const parent = node.parent
+		npm_dep_add( deps: Map< $mol_file, number >, name: string, priority: number ) {
 
-			if( ts.isPropertyAccessExpression( parent ) ) {
-				node_deps.add( String( parent.name.escapedText ) )
-			} else if( ts.isElementAccessExpression( parent ) && ts.isStringLiteral( parent.argumentExpression ) ) {
-				node_deps.add( parent.argumentExpression.text )
-			}
+			if( $node_internal_check( name ) ) return
+			if( name === 'internal' ) return
+
+			this.$.$node_autoinstall( name )
+
+			// пакет входит в граф своим package.json — на нём срабатывает $mam_convert_npm
+			this.dep_add( deps, this.root().dir().resolve( `node_modules/${ name }/package.json` ), priority )
 		}
 
 		implicit_deps_add( deps: Map< $mol_file, number > ) {
@@ -59,8 +64,7 @@ namespace $ {
 		}
 
 		node_visit(
-			deps: Map< $mol_file, number >,
-			node_deps: Set< string >,
+			ctx: $mam_source_ts_deps,
 			node: ts_Node,
 			source: ts_SourceFile,
 			lines: readonly string[],
@@ -69,43 +73,57 @@ namespace $ {
 			const priority = this.priority_of( node, source, lines )
 
 			if( ts.isImportDeclaration( node ) && ts.isStringLiteral( node.moduleSpecifier ) ) {
-				this.path_add( deps, node.moduleSpecifier.text, priority )
+				this.path_add( ctx.mam_deps, node.moduleSpecifier.text, priority )
 			}
 
 			if( ts.isCallExpression( node ) && ts.isIdentifier( node.expression ) && node.expression.escapedText === 'require' ) {
 				const arg = node.arguments[ 0 ]
-				if( ts.isStringLiteral( arg ) ) this.path_add( deps, arg.text, priority )
+				if( ts.isStringLiteral( arg ) ) this.path_add( ctx.mam_deps, arg.text, priority )
 			}
 
 			if( ts.isCallExpression( node ) && node.expression.kind === ts.SyntaxKind.ImportKeyword ) {
 				const arg = node.arguments[ 0 ]
-				if( ts.isStringLiteral( arg ) ) this.path_add( deps, arg.text, priority )
+				if( ts.isStringLiteral( arg ) ) this.path_add( ctx.mam_deps, arg.text, priority )
 			}
 
 			if( ts.isImportTypeNode( node ) && ts.isLiteralTypeNode( node.argument ) ) {
 				const arg = node.argument.literal
-				if( ts.isStringLiteral( arg ) ) this.path_add( deps, arg.text, priority )
+				if( ts.isStringLiteral( arg ) ) this.path_add( ctx.mam_deps, arg.text, priority )
 			}
 
 			if( ts.isIdentifier( node ) ) {
+
 				const fqn = this.fqn( node )
-				if( fqn === 'node' ) this.node_dep_add( node_deps, node )
-				if( fqn ) this.fqn_add( deps, fqn, priority )
+
+				if( fqn === 'node' || fqn === 'npm' ) {
+					const name = ctx.npm.dep_note( node )
+					if( name ) this.npm_dep_add( ctx.mam_deps, name, priority )
+				}
+
+				if( fqn ) this.fqn_add( ctx.mam_deps, fqn, priority )
+
+				ctx.npm.ident_note( node )
+
 			}
 
-			node.forEachChild( child => this.node_visit( deps, node_deps, child, source, lines ) )
+			node.forEachChild( child => this.node_visit( ctx, child, source, lines ) )
 		}
 
 		@ $mol_mem
-		ts_source_deps() {
-			const mam_deps = new Map< $mol_file, number >()
-			const node_deps = new Set< string >
+		ts_source_deps(): $mam_source_ts_deps {
+
+			const ctx: $mam_source_ts_deps = {
+				mam_deps: new Map(),
+				npm: new this.$.$mam_source_ts_npm,
+			}
+
 			const source = this.ts_source()
 
-			this.implicit_deps_add( mam_deps )
-			this.node_visit( mam_deps, node_deps, source, source, this.file().text().split( '\n' ) )
+			this.implicit_deps_add( ctx.mam_deps )
+			this.node_visit( ctx, source, source, this.file().text().split( '\n' ) )
+			ctx.npm.aliases_apply()
 
-			return { mam_deps, node_deps }
+			return ctx
 		}
 
 	}

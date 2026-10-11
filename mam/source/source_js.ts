@@ -37,6 +37,10 @@ namespace $ {
 		deps() {
 			const deps = super.deps()
 			const file = this.file()
+
+			// содержимое npm-пакетов самодостаточно, регэксп-скан дал бы ложные зависимости
+			if( /(^|\/)node_modules\//.test( file.relate( this.root().dir() ) ) ) return deps
+
 			const source = file.text()
 
 			const scan = ( source: string )=> {
