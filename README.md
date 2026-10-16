@@ -24,16 +24,8 @@ This is the base **MAM** project.
 
 ```sh
 mkdir mam && cd mam # makes empty directory
-npm exec mam # starts dev server with hot reload
+npm exec mam@latest # starts dev server with hot reload
 start http://localhost:9080/hyoo/todomvc/-/test.html # checkout, build and open some project
-```
-
-# Installation
-
-**Checkout this repo (~2s):**
-
-```sh
-git clone https://github.com/hyoo-ru/mam.git ./mam && cd mam
 ```
 
 ## Linux limits
@@ -47,37 +39,16 @@ fs.inotify.max_user_watches=524288
 fs.file-max=500000
 ```
 
-# Development server
-
-**Install node modules and build dev server from actual sources**
-
-```sh
-npm install
-```
-
-**Start dev server:**
-
-```sh
-npm start
-```
-
-**Open simple $mol based ToDoMVC application:**
-
-```sh
-start http://localhost:9080/hyoo/todomvc/-/test.html
-```
-
 # Manual build
 
-* Execute `npm start hyoo/todomvc` to build standalone ToDoMVC application at `hyoo/todomvc/-`.
-* Execute `npm start mol/regexp` to build standalone $mol_regexp library at `mol/regexp/-`.
+* Execute `npm exec mam@latest hyoo/todomvc` to build standalone ToDoMVC application at `hyoo/todomvc/-`.
+* Execute `npm exec mam@latest mol/regexp` to build standalone $mol_regexp library at `mol/regexp/-`.
 
 # NPM Integration
 
 ## Publish to NPM
 
 ```sh
-npm start mol/regexp
 npm publish mol/regexp/-
 ```
 
