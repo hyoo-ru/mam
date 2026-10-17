@@ -1,0 +1,5 @@
+namespace $ {
+
+	$.$mam_start = ()=> {}
+
+}
