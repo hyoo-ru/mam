@@ -20,6 +20,7 @@
     "node": ">=24.0.0"
   },
   "dependencies": {
+    "esbuild": "^0.28.1",
     "lru-cache": "11.2.7",
     "mam": "*",
     "typescript": "6.0.3"
