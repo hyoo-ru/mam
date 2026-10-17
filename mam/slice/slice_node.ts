@@ -1,0 +1,65 @@
+namespace $ {
+
+	export class $mam_slice_node extends $mam_slice {
+
+		filter( file: $mol_file ) {
+			if( !super.filter( file ) ) return false
+			if( /\.web\./.test( file.name() ) ) return false
+			return true
+		}
+
+		prefix() {
+			return 'node'
+		}
+
+		@ $mol_mem
+		node_deps(): string[] {
+
+			const deps = new Set< string >()
+
+			for( const file of this.files() ) {
+				const file_deps = this.root().source( [ this.$.$mam_source_ts, file ] )?.ts_source_deps().node_deps
+				file_deps?.forEach( dep => deps.add( dep ) )
+			}
+
+			deps.forEach( dep => {
+				if( $node_internal_check( dep ) ) return
+				if( dep === 'internal' ) return
+				this.$.$node_autoinstall( dep )
+			} )
+
+			return [ ... deps ]
+
+		}
+
+	}
+
+	export class $mam_slice_node_prod extends $mam_slice_node {
+
+		filter( file: $mol_file ) {
+			if( !super.filter( file ) ) return false
+			if( /\.(test|dev)\./.test( file.name() ) ) return false
+			return true
+		}
+		
+	}
+
+	export class $mam_slice_node_test extends $mam_slice_node {
+
+		prefix() {
+			return 'node.test'
+		}
+
+		filter( file: $mol_file ) {
+			if( !super.filter( file ) ) return false
+			// if( /\.test\./.test( file.name() ) ) return false
+			return true
+		}
+
+		bundle_classes() {
+			return this.root().bundle_test_classes()
+		}
+
+	}
+
+}
