@@ -1,6 +1,4 @@
-# AGENTS.md
-
-## Wordspace overview
+# Wordspace overview
 
 This workspace is the MAM codebase: a large set of Abstract Modules (MAM modules) - directories with sources on different languages which has cross-language dependencies from other MAM module. MAM builder tracks dependencies across MAM modules through its usage by FQN (Fully Qualified Name). FQN bidirectionally maps to file paths. Examples:
 - In JS/TS: `$acme_project_tool` -> `/acme/project/tool/`
@@ -10,7 +8,7 @@ All sources from MAM module are bundled to relevant bundle. File names may have 
 
 MAM doesn't different applications, components, modules, projects etch. Any MAM module can be fractal decomposed to inner MAM modules, which can be extracted to different repos with inner MAM modules etc. `meta.tree` sources define from which repo MAM builder should pull sources. Whole build logic is defined in `$mol_build`.
 
-## Working conventions
+# Working conventions
 
 - Read `README.md` in any MAM module to understand how to work with it right.
 - Use [](.editorconfig) and [](.vscode/settings.json) to format sources right.
@@ -22,27 +20,54 @@ MAM doesn't different applications, components, modules, projects etch. Any MAM 
 - New modules should be self-contained and should usually include a minimal by complete tests for non trivial logic and `demo` submodule for widgets.
 - Avoid adding broad abstractions unless the local module already uses them.
 
-## Build and Test
+# Build and test module
 
 To build any module to standalone bundle and test it in nodejs use `mam` like:
 
-	npm exec mam@latest path/to/module
+```sh
+npm exec mam@latest path/to/module
+```
 
-## Common Patterns in Examples
+# Common patterns in examples
 
-Standalone global function:
+## TypeScript module
 
 ```ts
+namespace $ {
+	export let $my_foo = 1
+}
+```
+
+## TypeScript Module with runtime overrides
+
+```ts
+namespace $.$$ {
+	export let $my_foo = 2
+}
+```
+
+Namespaces `$` and `$$` is the same in runtime.
+
+## Standalone global function
+
+```ts
+	/** Sums two numbers */
 	export function $my_sum( left: number, right: number ) {
 		return left + right
 	}
 ```
-	
-Global function with dependencies uses context to take its:
+
+## Global function with dependencies from context
 
 ```ts
+	/** Increments number */
 	export function $my_inc( this: $, val: number ) {
-		return this.$.$my_sum( val, val )
+		return this.$my_sum( val, val )
 	}
 ```
 
+## Run global function from context
+
+```ts
+	$.$my_inc( 5 ) // 6
+```
