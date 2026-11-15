@@ -1,8 +1,7 @@
 {
   "description": "Simple MAM project",
   "scripts": {
-    "postinstall": "mam mol/build",
-    "start": "node ./mol/build/-/node.js"
+    "start": "npm update && mam"
   },
   "repository": {
     "type": "git",
@@ -18,9 +17,11 @@
   },
   "homepage": "https://github.com/hyoo-ru/mam#readme",
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=24.0.0"
   },
   "dependencies": {
-    "mam": "*"
+    "lru-cache": "11.2.7",
+    "mam": "*",
+    "typescript": "6.0.3"
   }
 }
