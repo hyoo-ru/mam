@@ -29,6 +29,20 @@
 			"}"
 		]
 	},
+	"MAM function definition": {
+		"scope": "javascript,typescript",
+		"isFileTemplate": true,
+		"prefix": "func",
+		"body": [
+			"namespace $ {",
+			"\texport function $${RELATIVE_FILEPATH/[\\\\/\\\\][^\\\\/\\\\]+$|([\\\\/\\\\])/${1:+_}/g}( this: $$1 ) {",
+			"\t\t",
+			"\t\t$0",
+			"\t\t",
+			"\t}",
+			"}"
+		]
+	},
 	"$mol_view extend": {
 		"scope": "javascript,typescript",
 		"isFileTemplate": true,
