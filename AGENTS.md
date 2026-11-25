@@ -17,7 +17,7 @@ MAM doesn't different applications, components, modules, projects etch. Any MAM 
 - Prefer MAM modules rather than native API or NPM dependencies.
 - Keep directory structure and naming aligned with surrounding modules and their namespace conventions.
 - For browser or UI work, follow the patterns already used in the same module family.
-- New modules should be self-contained and should usually include a minimal by complete tests for non trivial logic and `demo` submodule for widgets.
+- New modules should be self-contained and should usually include a minimal but complete tests for non trivial logic and `demo` submodule for widgets.
 - Avoid adding broad abstractions unless the local module already uses them.
 
 # Build and test module
