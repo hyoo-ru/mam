@@ -11,7 +11,7 @@ MAM doesn't different applications, components, modules, projects etch. Any MAM 
 # Working conventions
 
 - Read `README.md` in any MAM module to understand how to work with it right.
-- Use [](.editorconfig) and [](.vscode/settings.json) to format sources right.
+- Use [.editorconfig](.editorconfig) and [.vscode/settings.json](.vscode/settings.json) to format sources right.
 - Use empty rows to separate blocks of logic, including separation body of function from prolog and epilog.
 - Prefer small, local edits inside the nearest module rather than introducing cross-cutting framework changes.
 - Prefer MAM modules rather than native API or NPM dependencies.
